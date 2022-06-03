@@ -1,18 +1,45 @@
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FilledInput } from '@mui/material'
+import { useLocation } from 'react-router-dom'
+import isRoomIdValid from '../utils/checkValidRoomId'
+import { generateSlug } from 'random-word-slugs'
 
 const Rooms = () => {
 
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search)
+    const searchRoomID = searchParams.get("room")
+
+    const [roomId, setRoomId] = useState("");
     const [name, setName] = useState("")
     const [password, setPassword] = useState("")
+    const [isCreating, setIsCreating] = useState(true)
+
+    // check whether the room id in search params is valid or not. If it is, then proceed to join room else proceed to create a new room while giving an error like "room id is not valid" 
+
+    useEffect(() => {
+        if (isRoomIdValid(searchRoomID)) {
+            // join room -> joins given room id
+            setRoomId(searchRoomID)
+            // display join instead of create
+            setIsCreating(false)
+        } else {
+            // create room -> generates new room id
+            const slug_word = generateSlug();
+            setRoomId(slug_word)
+            // display create instead of join
+        }
+    }, [location])
+
 
     return (
         <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', backgroundColor: "#0E1525", color: 'whitesmoke' }}>
             <h1 style={{ textShadow: "rgba(255,255,255,0.58) 0px 0px 13px" }}>
-                Create Room
+                {isCreating ? "Create Room" : "Join Room"}
             </h1>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <Box
@@ -56,7 +83,7 @@ const Rooms = () => {
                         label="Password (optional)"
                         type={'password'}
                         value={password}
-                        onChange={(e)=>setPassword(e.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
                         variant="outlined"
                         inputProps={{ sx: { color: 'whitesmoke' } }}
                         InputLabelProps={{

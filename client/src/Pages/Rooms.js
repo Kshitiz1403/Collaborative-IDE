@@ -2,7 +2,6 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import React, { useEffect, useState } from 'react'
-import { FilledInput } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 import isRoomIdValid from '../utils/checkValidRoomId'
 import { generateSlug } from 'random-word-slugs'
@@ -66,7 +65,6 @@ const Rooms = () => {
                 >
                     <TextField
                         required
-                        id="outlined-basic"
                         label="What do you want to be called?"
                         autoComplete='off'
                         variant="outlined"
@@ -96,7 +94,6 @@ const Rooms = () => {
                         autoFocus
                     />
                     <TextField
-                        id="outlined-basic"
                         label="Password (optional)"
                         type={'password'}
                         value={password}
@@ -125,7 +122,7 @@ const Rooms = () => {
                         }}
                     />
                 </Box>
-                <Button variant={!name.length == 0 ? 'contained' : 'outlined'} style={{ borderColor: 'whitesmoke', color: 'whitesmoke', margin: 8 }}>
+                <Button variant={!name.length == 0 ? 'contained' : 'outlined'} style={{ borderColor: 'whitesmoke', color: 'whitesmoke', margin: 8 }} >
                     Join/Create
                 </Button>
             </div>

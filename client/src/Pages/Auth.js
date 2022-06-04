@@ -1,13 +1,22 @@
-import { Button, Link, TextField, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 import validator from 'validator'
 import axios from 'axios'
 import { API_URL } from '../App'
 import Snacker from '../Components/Snacker/Snacker'
+import { useLocation, useNavigate } from 'react-router-dom'
+import useAuth from '../utils/useAuth'
 
 const Auth = () => {
 
+    const { setIsAuthenticated } = useAuth();
+
+    let navigate = useNavigate()
+    const { state } = useLocation()
     const [isLoggingIn, setIsLoggingIn] = useState(true)
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
@@ -25,8 +34,9 @@ const Auth = () => {
         axios.post(`${API_URL}/auth/login`, {
             username: username, password: password
         }).then(res => {
-            sessionStorage.setItem("accessToken", res.data.accessToken)
-            console.log(res.data)
+            localStorage.setItem("accessToken", res.data.accessToken)
+            setIsAuthenticated(true)
+            navigate(state?.path || '/')
         }).catch(err => {
             setErrorMsg(err.response.data.message)
             showErrorModal()
@@ -45,7 +55,9 @@ const Auth = () => {
         axios.post(`${API_URL}/auth/register`, {
             username, password, email
         }).then(res => {
-            sessionStorage.setItem("accessToken", res.data.accessToken)
+            localStorage.setItem("accessToken", res.data.accessToken)
+            navigate(state?.path || '/')
+            setIsAuthenticated(true)
             console.log(res.data)
         }).catch(err => {
             setErrorMsg(err.response.data.message)

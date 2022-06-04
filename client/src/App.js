@@ -4,6 +4,8 @@ import Monaco from './Monaco';
 import HomePage from './Pages/HomePage';
 import CustomRoutes from './Routes/CustomRoutes';
 
+export const API_URL = "http://localhost:4000"
+
 function App() {
   return (
     <div>

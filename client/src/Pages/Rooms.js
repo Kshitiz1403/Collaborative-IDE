@@ -6,6 +6,7 @@ import { FilledInput } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 import isRoomIdValid from '../utils/checkValidRoomId'
 import { generateSlug } from 'random-word-slugs'
+import Snacker from '../Components/Snacker/Snacker'
 
 const Rooms = () => {
 
@@ -18,22 +19,35 @@ const Rooms = () => {
     const [name, setName] = useState("")
     const [password, setPassword] = useState("")
     const [isCreating, setIsCreating] = useState(true)
+    const [errorModal, setIsErrorModal] = useState(false)
 
     // check whether the room id in search params is valid or not. If it is, then proceed to join room else proceed to create a new room while giving an error like "room id is not valid" 
 
     useEffect(() => {
-        if (isRoomIdValid(searchRoomID)) {
-            // join room -> joins given room id
-            setRoomId(searchRoomID)
-            // display join instead of create
-            setIsCreating(false)
+
+        if (searchParams.has("room") && searchParams.get("room")) {
+            if (isRoomIdValid(searchParams.get("room"))) {
+                // join
+                setRoomId(searchParams.get("room"))
+
+                // display join instead of create
+                setIsCreating(false)
+
+            } else {
+                // joining using invalid room id => throw error and proceed to creating new room id 
+                setIsErrorModal(true)
+
+                const slug_word = generateSlug();
+                setRoomId(slug_word)
+            }
         } else {
-            // create room -> generates new room id
+            // create room => create a new room id
             const slug_word = generateSlug();
             setRoomId(slug_word)
-            // display create instead of join
         }
+
     }, [location])
+
 
 
     return (
@@ -41,6 +55,9 @@ const Rooms = () => {
             <h1 style={{ textShadow: "rgba(255,255,255,0.58) 0px 0px 13px" }}>
                 {isCreating ? "Create Room" : "Join Room"}
             </h1>
+
+            <Snacker open={errorModal} message={"Invalid room"} onClose={() => setIsErrorModal(false)} />
+
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <Box
                     sx={{

@@ -6,10 +6,10 @@ import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 import validator from 'validator'
 import axios from 'axios'
-import { API_URL } from '../App'
-import Snacker from '../Components/Snacker/Snacker'
+import { API_URL } from '../../App'
+import Snacker from '../../Components/Snacker/Snacker'
 import { useLocation, useNavigate } from 'react-router-dom'
-import useAuth from '../utils/useAuth'
+import useAuth from '../../utils/useAuth'
 import './Auth.css'
 
 const Auth = () => {
@@ -111,7 +111,6 @@ const Auth = () => {
                     InputLabelProps={{
                         style: { color: "#9e9c89", },
                     }}
-                // style={{backgroundColor:'#1c2333', color:'whitesmoke', }}
                 />
                 {!isLoggingIn && <TextField
                     onChange={event => setEmail(event.target.value)}
@@ -138,7 +137,6 @@ const Auth = () => {
                     name="password"
                     type="password"
                     size='small'
-                    // style={{backgroundColor:'#1c2333'}}
                     inputProps={{ sx: { color: 'whitesmoke', background: '#1c2333' } }}
                     InputLabelProps={{
                         style: { color: "#9e9c89" },

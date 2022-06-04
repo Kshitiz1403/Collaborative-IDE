@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Auth from '../Pages/Auth'
+import Auth from '../Pages/Auth/Auth'
 import Collaborate from '../Pages/Collaborate'
 import Dashboard from '../Pages/Dashboard/Dashboard'
 import HomePage from '../Pages/HomePage'

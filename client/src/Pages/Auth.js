@@ -25,6 +25,7 @@ const Auth = () => {
         axios.post(`${API_URL}/auth/login`, {
             username: username, password: password
         }).then(res => {
+            sessionStorage.setItem("accessToken", res.data.accessToken)
             console.log(res.data)
         }).catch(err => {
             setErrorMsg(err.response.data.message)
@@ -44,6 +45,7 @@ const Auth = () => {
         axios.post(`${API_URL}/auth/register`, {
             username, password, email
         }).then(res => {
+            sessionStorage.setItem("accessToken", res.data.accessToken)
             console.log(res.data)
         }).catch(err => {
             setErrorMsg(err.response.data.message)

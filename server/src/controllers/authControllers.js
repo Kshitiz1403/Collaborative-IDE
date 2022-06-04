@@ -1,6 +1,8 @@
-import validator from "validator";
-
+import dotenv from "dotenv";
+dotenv.config()
 import db from "../db.js";
+import validator from "validator";
+import jsonwebtoken from "jsonwebtoken"
 
 export const register = (req, res) => {
     const { username, email, password } = req.body;
@@ -13,7 +15,9 @@ export const register = (req, res) => {
             console.log(err)
             return res.status(400).send({ message: "Username or email is taken" })
         }
-        return res.send(result)
+        const accessToken = jsonwebtoken.sign({ username: username }, process.env.jsonwebtokensecret)
+
+        return res.send({ accessToken })
     })
 
 }
@@ -24,10 +28,13 @@ export const login = (req, res) => {
     db.query("SELECT * FROM users WHERE username=? AND password=?", [username, password], (err, result) => {
         if (err) {
             console.log(err)
-            return res.status(400).send(err)
+            return res.status(400).send({ message: err })
         }
         if (result.length > 0) {
-            return res.send(result)
+
+            const accessToken = jsonwebtoken.sign({ username: username }, process.env.jsonwebtokensecret)
+
+            return res.send({ accessToken })
         }
         return res.status(400).send({ message: "Wrong username/password combination" })
     })

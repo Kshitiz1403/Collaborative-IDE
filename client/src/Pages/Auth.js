@@ -22,7 +22,7 @@ const Auth = () => {
 
     const login = () => {
         setIsErrorShown(false)
-        axios.post(`${API_URL}/login`, {
+        axios.post(`${API_URL}/auth/login`, {
             username: username, password: password
         }).then(res => {
             console.log(res.data)
@@ -41,7 +41,7 @@ const Auth = () => {
             showErrorModal()
             return
         }
-        axios.post(`${API_URL}/register`, {
+        axios.post(`${API_URL}/auth/register`, {
             username, password, email
         }).then(res => {
             console.log(res.data)

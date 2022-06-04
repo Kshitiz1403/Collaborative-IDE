@@ -10,6 +10,7 @@ import { API_URL } from '../App'
 import Snacker from '../Components/Snacker/Snacker'
 import { useLocation, useNavigate } from 'react-router-dom'
 import useAuth from '../utils/useAuth'
+import './Auth.css'
 
 const Auth = () => {
 
@@ -36,7 +37,7 @@ const Auth = () => {
         }).then(res => {
             localStorage.setItem("accessToken", res.data.accessToken)
             setIsAuthenticated(true)
-            navigate(state?.path || '/')
+            navigate(state?.path || '/', { replace: true })
         }).catch(err => {
             setErrorMsg(err.response.data.message)
             showErrorModal()
@@ -56,7 +57,7 @@ const Auth = () => {
             username, password, email
         }).then(res => {
             localStorage.setItem("accessToken", res.data.accessToken)
-            navigate(state?.path || '/')
+            navigate(state?.path || '/', { replace: true })
             setIsAuthenticated(true)
             console.log(res.data)
         }).catch(err => {
@@ -80,16 +81,16 @@ const Auth = () => {
                 sx={{
                     minWidth: 300,
                     minHeight: 300,
-                    backgroundColor: 'whitesmoke',
-                    borderColor: 'primary.main',
-                    borderWidth: 2,
-                    borderStyle: 'solid',
+                    // backgroundColor: 'whitesmoke',
+                    // borderColor: '#9e9c89',
+                    // borderWidth: 2,
+                    // borderStyle: 'solid',
                     display: 'flex',
                     flexDirection: 'column',
                     p: 4,
                     borderRadius: 2
                 }}>
-                <Typography variant='h6' style={{ textAlign: 'center' }}>
+                <Typography variant='h6' style={{ textAlign: 'center', color: 'whitesmoke' }}>
                     {isLoggingIn ? "Log In" : "Signup"}
                 </Typography>
                 <TextField
@@ -103,6 +104,14 @@ const Auth = () => {
                     value={username}
                     autoFocus
                     autoComplete='off'
+                    size='small'
+                    sx={{ backgroundColor: '#1c2333', }}
+
+                    inputProps={{ sx: { color: 'whitesmoke', overflow: 'hidden' } }}
+                    InputLabelProps={{
+                        style: { color: "#9e9c89", },
+                    }}
+                // style={{backgroundColor:'#1c2333', color:'whitesmoke', }}
                 />
                 {!isLoggingIn && <TextField
                     onChange={event => setEmail(event.target.value)}
@@ -112,7 +121,12 @@ const Auth = () => {
                     id="email"
                     label="Email"
                     name="email"
+                    size='small'
                     value={email}
+                    inputProps={{ sx: { color: 'whitesmoke', backgroundColor: '#1c2333' } }}
+                    InputLabelProps={{
+                        style: { color: "#9e9c89" },
+                    }}
                 />}
                 <TextField
                     onChange={event => setPassword(event.target.value)}
@@ -123,6 +137,12 @@ const Auth = () => {
                     label="Password"
                     name="password"
                     type="password"
+                    size='small'
+                    // style={{backgroundColor:'#1c2333'}}
+                    inputProps={{ sx: { color: 'whitesmoke', background: '#1c2333' } }}
+                    InputLabelProps={{
+                        style: { color: "#9e9c89" },
+                    }}
                 />
                 {isLoggingIn && <Button type="button" variant='contained' onClick={login} style={{ marginTop: 20, marginBottom: 20 }}>
                     Log In

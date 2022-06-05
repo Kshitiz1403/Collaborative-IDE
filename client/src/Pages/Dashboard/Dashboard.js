@@ -33,7 +33,8 @@ const Dashboard = () => {
     const createProjectDirectory = () => {
         api.post('/create', {
             "username": username,
-            "projectname": projectName
+            "projectname": projectName,
+            "language":selectedLanguage
         }).then(res => { console.log(res); setSuccessMsg(res.data); setIsSuccess(true) }).catch(err => { console.log(err); setErrorMsg(err.response.data); setIsError(true) })
     }
 

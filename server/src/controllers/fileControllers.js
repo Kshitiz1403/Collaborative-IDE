@@ -14,21 +14,27 @@ export const createUserDirectory = async (dirName) => {
 
 
 export const createProjectDirectory = (req, res) => {
-    const createProjectDirectoryUtil = (username, projectname) => {
+    const createProjectDirectoryUtil = (username, projectname, language) => {
         return new Promise((resolve, reject) => {
             const userDirectory = projectsShareClient.getDirectoryClient(username)
             const projectDirectory = userDirectory.getDirectoryClient(projectname)
-            projectDirectory.create().then(res => {
-                resolve(`Project Directory created at ${projectname} for user ${username}`)
-            })
+            projectDirectory.create()
+                .then(res => {
+                    projectDirectory.setMetadata({ 'language': language })
+                        .then(response => resolve(`Project Directory created at ${projectname} for user ${username}`)
+                        )
+                        .catch(err => {
+                            reject((err.code).toString())
+                        })
+                })
                 .catch(err => {
                     reject((err.code).toString())
                 })
         })
     }
 
-    const { username, projectname } = req.body
-    createProjectDirectoryUtil(username, projectname).then(response => {
+    const { username, projectname, language } = req.body
+    createProjectDirectoryUtil(username, projectname, language).then(response => {
         console.log(response)
         return res.send(response)
     }).catch(err => {

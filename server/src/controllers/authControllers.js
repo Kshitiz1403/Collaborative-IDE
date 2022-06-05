@@ -1,8 +1,7 @@
-import dotenv from "dotenv";
-dotenv.config()
 import db from "../db.js";
 import validator from "validator";
 import jsonwebtoken from "jsonwebtoken"
+import { createUserDirectory } from "./fileControllers.js";
 
 export const register = (req, res) => {
     const { username, email, password } = req.body;
@@ -15,9 +14,18 @@ export const register = (req, res) => {
             console.log(err)
             return res.status(400).send({ message: "Username or email is taken" })
         }
-        const accessToken = jsonwebtoken.sign({ username: username }, process.env.jsonwebtokensecret)
 
-        return res.send({ accessToken })
+        return createUserDirectory(username).then(response => {
+            console.log(response)
+            const accessToken = jsonwebtoken.sign({ username: username }, process.env.jsonwebtokensecret)
+
+            return res.send({ accessToken })
+
+        }).catch(err => {
+            console.log(err)
+            return res.status(400).send({ message: err })
+        })
+
     })
 
 }

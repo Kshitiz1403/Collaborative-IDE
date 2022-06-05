@@ -4,15 +4,20 @@ export const AuthContext = createContext()
 
 const AuthProvider = (props) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [username, setUsername] = useState('')
+    const [accessToken, setAccessToken] = useState('')
 
     const isLoggedIn = localStorage.getItem("accessToken")
+    const usernameFromStorage = localStorage.getItem("username")
 
     useEffect(() => {
         setIsAuthenticated(isLoggedIn ? true : false)
+        setUsername(usernameFromStorage)
+        setAccessToken(isLoggedIn)
     }, [])
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, username, setUsername, accessToken }}>
             {props.children}
         </AuthContext.Provider>
     )

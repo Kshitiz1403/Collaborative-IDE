@@ -1,20 +1,17 @@
-import { verify } from "jsonwebtoken"
-import secrets from "../../secrets"
+import jsonwebtoken from "jsonwebtoken"
 
-const validateToken = (req, res, next) => {
+export const validateToken = (req, res, next) => {
     const accessToken = req.header("accessToken")
 
     if (!accessToken) return res.json({ error: "User not logged in" })
 
     try {
-        const isValidToken = verify(accessToken, secrets.jsonwebtokensecret)
+        const isValidToken = jsonwebtoken.verify(accessToken, process.env.jsonwebtokensecret)
 
         if (isValidToken) return next();
 
     }
     catch (err) {
-        return res.send({ error: err })
+        return res.status(400).send({ error: err })
     }
 }
-
-module.exports = {validateToken}

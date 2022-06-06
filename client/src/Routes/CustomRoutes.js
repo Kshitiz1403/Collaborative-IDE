@@ -6,6 +6,7 @@ import Dashboard from '../Pages/Dashboard/Dashboard'
 import HomePage from '../Pages/HomePage'
 import Rooms from '../Pages/Rooms'
 import useAuth from '../utils/useAuth'
+import RequireAuth from './RequireAuth'
 
 const CustomRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -21,7 +22,7 @@ const CustomRoutes = () => {
       } />
       <Route path='/auth' element={<Auth />} />
       <Route path='/rooms' element={<Rooms />} />
-      <Route path='/collaborate' element={<Collaborate />} />
+      <Route path='/@:username/:projectname' element={<RequireAuth><Collaborate/></RequireAuth>} />
     </Routes>
   )
 }

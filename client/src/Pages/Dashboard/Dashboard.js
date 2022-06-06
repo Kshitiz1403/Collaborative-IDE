@@ -7,8 +7,11 @@ import useAxios from '../../utils/useAxios'
 import useAuth from '../../utils/useAuth'
 import Button from '@mui/material/Button'
 import Snacker from '../../Components/Snacker/Snacker'
+import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
+
+    const navigate = useNavigate();
 
     const { username } = useAuth()
     const [isOpen, setIsOpen] = useState(false)
@@ -34,8 +37,8 @@ const Dashboard = () => {
         api.post('/create', {
             "username": username,
             "projectname": projectName,
-            "language":selectedLanguage
-        }).then(res => { console.log(res); setSuccessMsg(res.data); setIsSuccess(true) }).catch(err => { console.log(err); setErrorMsg(err.response.data); setIsError(true) })
+            "language": selectedLanguage
+        }).then(res => { setSuccessMsg(res.data); setIsSuccess(true); navigate(`/@${username}/${projectName}`) }).catch(err => { console.log(err); setErrorMsg(err.response.data); setIsError(true) })
     }
 
 

@@ -1,14 +1,14 @@
 import db from "../db.js";
 import { createProjectDirectoryUtil } from "./fileControllers.js";
 
-const createProjectInDB = (username, projectName) => {
+const createProjectInDB = (username, projectName, language) => {
     return new Promise((resolve, reject) => {
 
-        db.query("INSERT INTO projects VALUES(?,?)", [projectName, username], (err, result) => {
+        db.query("INSERT INTO projects VALUES(?,?,?)", [projectName, username, language], (err, result) => {
             if (err) {
                 reject(err);
             }
-            resolve({username, projectName});
+            resolve({username, projectName, language});
         })
     })
 }
@@ -19,7 +19,7 @@ export const createProject = (req, res) => {
 
     createProjectDirectoryUtil(username, projectname, language)
         .then(response => {
-            createProjectInDB(username, projectname)
+            createProjectInDB(username, projectname, language)
                 .then(result => {
                     return res.send(result)
                 })

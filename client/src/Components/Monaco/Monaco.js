@@ -3,8 +3,9 @@ import * as Y from 'yjs'
 import { MonacoBinding } from 'y-monaco'
 import Editor from '@monaco-editor/react'
 import { WebrtcProvider } from 'y-webrtc'
+import { CircularProgress } from '@mui/material'
 
-const Monaco = ({ roomId, height = "90vh", loadingComponent }) => {
+const Monaco = ({ roomId, height = "90vh", loadingComponent=<CircularProgress/> }) => {
 
     const [EditorRef, setEditorRef] = useState(null)
 

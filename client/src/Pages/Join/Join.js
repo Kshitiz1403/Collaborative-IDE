@@ -4,7 +4,7 @@ import useIsRoomIDPresent from '../../utils/isRoomIDPresent';
 import CircularProgress from '@mui/material/CircularProgress';
 import ErrorIcon from '@mui/icons-material/Error';
 import Snacker from '../../Components/Snacker/Snacker';
-import Monaco from '../../Monaco'
+import Monaco from '../../Components/Monaco/Monaco'
 
 
 const Join = () => {
@@ -59,7 +59,7 @@ const Join = () => {
             }
             {
                 !isLoading && isPresent &&
-                <Monaco roomId={roomID} height="100vh" loadingComponent={<CircularProgress color='success' />} />
+                <Monaco roomId={roomID} height="100vh" />
             }
         </div>
     )

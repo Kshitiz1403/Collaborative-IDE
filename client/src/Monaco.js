@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import * as Y from 'yjs'
 import { MonacoBinding } from 'y-monaco'
-// import * as monaco from 'monaco-editor'
 import Editor from '@monaco-editor/react'
 import { WebrtcProvider } from 'y-webrtc'
 
-const Monaco = () => {
+const Monaco = ({ roomId, height = "90vh", loadingComponent }) => {
 
     const [EditorRef, setEditorRef] = useState(null)
 
@@ -19,12 +18,12 @@ const Monaco = () => {
 
             let provider = null;
             try {
-                provider = new WebrtcProvider("Any room name", yDoc, {
+                provider = new WebrtcProvider(roomId, yDoc, {
                     signaling: [
                         "wss://signaling.yjs.dev",
                         'wss://y-webrtc-signaling-eu.herokuapp.com',
                         'wss://y-webrtc-signaling-us.herokuapp.com'
-                    ]
+                    ],
                 })
                 const yText = yDoc.getText("monaco")
 
@@ -48,10 +47,12 @@ const Monaco = () => {
 
     return (
         <Editor
-            height={"90vh"}
+            height={height}
             onMount={handleEditorMount}
             defaultValue="//some comment"
             defaultLanguage='javascript'
+            theme='vs-dark'
+            loading={loadingComponent}
         />
     )
 }

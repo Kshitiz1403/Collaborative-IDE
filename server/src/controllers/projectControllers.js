@@ -52,7 +52,7 @@ const createShareIdentifierUtil = (username, projectname) => {
                     reject(err.code)
                 }
                 console.log(result)
-                resolve({ username, projectname, identifier })
+                resolve({ username, projectname, share:identifier })
             })
         })
 
@@ -102,4 +102,15 @@ export const getShareIdentifier = (req, res) => {
         .catch(error => {
             return res.status(400).send(error);
         })
+}
+
+export const getIsRoomIDPresent = (req, res) => {
+    const { roomid } = req.query;
+    db.query("SELECT * FROM projects WHERE share = ?", [roomid], (err, result) => {
+        if (err) {
+            return res.status(400).send(err.code);
+        }
+        if (result.length == 0) return res.status(400).send("Roomid is not valid")
+        return res.send(result[0]);
+    })
 }

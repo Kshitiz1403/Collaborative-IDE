@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useInviteLink from '../utils/useInviteLink'
 import Navbar from '../Components/Collaborate/Navbar'
 import Monaco from '../Components/Monaco/Monaco'
+import Main from '../Components/FolderTree/Main'
 
 const Collaborate = ({ projectname }) => {
 
@@ -40,7 +41,7 @@ const Collaborate = ({ projectname }) => {
       <Navbar projectname={projectname} />
       <div style={{ display: 'flex' }}>
         <div style={{ flex: 0.1, backgroundColor: 'red' }}>
-
+          <Main/>
         </div>
         <div style={{ flex: 0.9 }}>
           <Monaco roomId={inviteLink} />

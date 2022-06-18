@@ -33,12 +33,20 @@ const Dashboard = () => {
         setIsOpen(true)
     }
 
-    const createProjectDirectory = () => {
+    const createProject = () => {
         api.post('/create', {
-            "username": username,
-            "projectname": projectName,
-            "language": selectedLanguage
-        }).then(res => { setSuccessMsg(res.data); setIsSuccess(true); navigate(`/@${username}/${projectName}`) }).catch(err => { console.log(err); setErrorMsg(err.response.data); setIsError(true) })
+            username: username,
+            projectname: projectName,
+            language: selectedLanguage
+        }).then(res => {
+            setSuccessMsg(res.data);
+            setIsSuccess(true);
+            navigate(`/@${username}/${projectName}`)
+        }).catch(err => {
+            console.log(err);
+            setErrorMsg(err.response.data);
+            setIsError(true)
+        })
     }
 
     return (
@@ -72,7 +80,7 @@ const Dashboard = () => {
                                 onChange={(e) => setProjectName(e.target.value)}
                             />
                         </div>
-                        <Button variant='contained' size='small' onClick={createProjectDirectory}>Create Project</Button>
+                        <Button variant='contained' size='small' onClick={createProject}>Create Project</Button>
                     </div>
                 </Box>
             </Modal>

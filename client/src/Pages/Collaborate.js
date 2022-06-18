@@ -3,6 +3,7 @@ import useInviteLink from '../utils/useInviteLink'
 import Navbar from '../Components/Collaborate/Navbar'
 import Monaco from '../Components/Monaco/Monaco'
 import Main from '../Components/FolderTree/Main'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const Collaborate = ({ projectname }) => {
 
@@ -37,15 +38,18 @@ const Collaborate = ({ projectname }) => {
 
 
   return (
-    <div style={{  }}>
+    <div style={{}}>
       <Navbar projectname={projectname} />
       <div style={{ display: 'flex' }}>
-        <div style={{ flex: 0.1, backgroundColor: 'red' }}>
-          <Main/>
+        <div style={{ flex: 0.1 }}>
+          <Main />
         </div>
-        <div style={{ flex: 0.9 }}>
-          <Monaco roomId={inviteLink} />
-        </div>
+        {loading && <CircularProgress />}
+        {!loading &&
+          <div style={{ flex: 0.9 }}>
+            <Monaco roomId={inviteLink} />
+          </div>
+        }
       </div>
     </div>
 

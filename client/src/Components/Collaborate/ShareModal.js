@@ -13,8 +13,7 @@ const ShareModal = ({ open, setOpen, link }) => {
     const inviteHook = useInviteLink()
 
     const copyInviteLink = () => {
-        navigator.clipboard.writeText(inviteLink)
-        setInvitationAlert(true)
+        navigator.clipboard.writeText(inviteLink).then(() => setInvitationAlert(true))
     }
 
     useEffect(() => {
@@ -22,16 +21,16 @@ const ShareModal = ({ open, setOpen, link }) => {
 
         if (open) {
             inviteHook.generateIfNotPresent()
-            .then(res=>{
-                setInviteLink(`${domain}/join/${res.share}`)
-            })
+                .then(res => {
+                    setInviteLink(`${domain}/join/${res.share}`)
+                })
         }
     }, [open])
 
 
     return (
         <>
-            <Snacker message={"Invitation URL copied"} open={invitationAlert} severity='success' onClose={() => setInvitationAlert(false)} />
+            <Snacker message={"Invitation URL copied"} open={invitationAlert} severity='success' autoHideDuration={3000} onClose={() => setInvitationAlert(false)} />
             <Modal open={open} onClose={() => setOpen(false)}>
                 <Box sx={{
                     position: 'absolute',

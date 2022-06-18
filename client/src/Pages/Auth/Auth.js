@@ -14,7 +14,7 @@ import './Auth.css'
 
 const Auth = () => {
 
-    const { setIsAuthenticated, setUsername } = useAuth();
+    const { setIsAuthenticated, setUsername, setAccessToken } = useAuth();
 
     let navigate = useNavigate()
     const { state } = useLocation()
@@ -36,6 +36,7 @@ const Auth = () => {
             username: username, password: password
         }).then(res => {
             localStorage.setItem("accessToken", res.data.accessToken)
+            setAccessToken(res.data.accessToken)
             localStorage.setItem("username", username)
             setIsAuthenticated(true)
             setUsername(username)
@@ -59,6 +60,7 @@ const Auth = () => {
             username, password, email
         }).then(res => {
             localStorage.setItem("accessToken", res.data.accessToken)
+            setAccessToken(res.data.accessToken)
             localStorage.setItem("username", username)
             navigate(state?.path || '/', { replace: true })
             setIsAuthenticated(true)

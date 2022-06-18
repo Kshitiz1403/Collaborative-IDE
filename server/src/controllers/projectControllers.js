@@ -5,7 +5,7 @@ import { generateSlug } from 'random-word-slugs'
 const createProjectInDB = (username, projectName, language) => {
     return new Promise((resolve, reject) => {
 
-        db.query("INSERT INTO projects VALUES(?,?,?)", [projectName, username, language], (err, result) => {
+        db.query("INSERT INTO projects(name, username, language) VALUES(?,?,?)", [projectName, username, language], (err, result) => {
             if (err) {
                 reject(err);
             }
@@ -52,7 +52,7 @@ const createShareIdentifierUtil = (username, projectname) => {
                     reject(err.code)
                 }
                 console.log(result)
-                resolve({ username, projectname, share:identifier })
+                resolve({ username, projectname, share: identifier })
             })
         })
 

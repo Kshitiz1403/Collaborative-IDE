@@ -1,5 +1,6 @@
 import express from 'express'
 import fileRoutes from './routes/FileRoutes.js'
+import treeRoutes from './routes/TreeRoutes.js'
 import cors from 'cors'
 
 const app = express()
@@ -17,3 +18,4 @@ app.listen(5000, () =>{
 })
 
 app.use('/files', fileRoutes);
+app.use('/tree', treeRoutes)

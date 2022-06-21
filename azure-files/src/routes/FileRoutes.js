@@ -1,10 +1,18 @@
 import { Router } from "express";
-import { deleteDirectoryOrFile } from "../controllers/filesControllers/fileControllers.js";
+import { saveDataToFile, deleteDirectoryOrFile, createFolder } from "../controllers/filesControllers/fileControllers.js";
 
 const router = Router();
 
-router.post('/delete', (req, res) => {
+router.delete('/delete', (req, res) => {
     deleteDirectoryOrFile(req, res);
+})
+
+router.post('/create', (req, res) => {
+    createFolder(req, res);
+})
+
+router.put('/save', (req, res) => {
+    saveDataToFile(req, res);
 })
 
 export default router;

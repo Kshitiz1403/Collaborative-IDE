@@ -4,7 +4,6 @@ const rootFolder = "/mnt/projects"
 
 export const getTree = (req, res) => {
     const { username, projectName } = req.query
-    console.log(username, projectName)
     const tree = dirTree(`${rootFolder}/${username}/${projectName}`)
     const treeWalker = (treeObject) => {
         if (treeObject.type == "directory") {

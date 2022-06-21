@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config()
+import "dotenv/config";
 import express, { json } from 'express';
 import cors from 'cors'
 import db from './db.js';
@@ -24,7 +23,9 @@ db.connect((err) => {
 app.use('/auth', authRoutes)
 
 app.use('/', projectRoutes)
-
+app.get('/', (req, res)=>{
+    res.send("hi")
+})
 app.listen(4000, () => {
     console.log("app running on 4000...")
 })

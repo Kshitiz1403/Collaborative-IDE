@@ -1,8 +1,6 @@
-import { ShareServiceClient} from '@azure/storage-file-share'
+import { ShareServiceClient } from '@azure/storage-file-share'
 
-const connStr = "DefaultEndpointsProtocol=https;AccountName=collaborativeidefiles;AccountKey=IE3phfYwYLHx5xdfMWjjKlsG+tTgEkkLpkAe9KcBsWw5/vJqRPTNPwh4+7O+bXk5Qva5qrsSPjgw+ASt8J4csw==;EndpointSuffix=core.windows.net"
-
-const shareServiceClient = ShareServiceClient.fromConnectionString(connStr)
+const shareServiceClient = ShareServiceClient.fromConnectionString(process.env.connectionString)
 
 const projectsShareClient = shareServiceClient.getShareClient('projects')
 

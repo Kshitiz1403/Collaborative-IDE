@@ -3,6 +3,19 @@ import fse from 'fs-extra'
 
 const rootFolder = "/mnt/projects"
 
+
+export const deleteByPathUtil = (path) => {
+    return new Promise((resolve, reject) => {
+        fsPromises.rm(path, { force: true, recursive: true })
+            .then(() => {
+                return resolve({ code: "deleted" })
+            })
+            .catch(err => {
+                return reject({ error: err })
+            })
+    })
+}
+
 export const deleteDirectoryOrFileUtil = (username, projectName, relativeFilePath) => {
     return new Promise((resolve, reject) => {
         const dPath = `${rootFolder}/${username}/${projectName}/${relativeFilePath}`
@@ -12,6 +25,18 @@ export const deleteDirectoryOrFileUtil = (username, projectName, relativeFilePat
             })
             .catch(err => {
                 return reject({ error: err })
+            })
+    })
+}
+
+export const createFolderByPathUtil = (path) => {
+    return new Promise((resolve, reject) => {
+        fse.ensureDir(path)
+            .then(() => {
+                return resolve("Folder created or already exists")
+            })
+            .catch(err => {
+                return reject(err)
             })
     })
 }
@@ -30,16 +55,53 @@ export const createFolderUtil = (username, projectName, relativeFolderPath) => {
     })
 }
 
+export const saveDataToFileByPathUtil = (path, data) => {
+    return new Promise((resolve, reject) => {
+        fse.outputFile(path, data)
+            .then(() => {
+                return resolve("The file has been saved")
+            })
+            .catch(err => {
+                return reject(err)
+            })
+    })
+}
+
 export const saveDataToFileUtil = (username, projectName, relativeFilePath, data) => {
     return new Promise((resolve, reject) => {
         const fPath = `${rootFolder}/${username}/${projectName}/${relativeFilePath}`
 
         fse.outputFile(fPath, data)
             .then(() => {
-                return resolve({ code: "The file has been saved" })
+                return resolve("The file has been saved")
             })
             .catch(err => {
-                return reject({ error: err })
+                return reject(err)
             })
     })
+}
+
+export const renameByPathUtil = (oldPath, newPath) => {
+    return new Promise((resolve, reject) => {
+        fsPromises.rename(oldPath, newPath)
+            .then(() => {
+                return resolve("Renamed")
+            }).catch(err => {
+                return reject(err)
+            })
+    })
+}
+
+export const renameUtil = (username, projectName, oldRelativePath, newRelativePath) => {
+    return new Promise((resolve, reject) => {
+        let oldPath = `${rootFolder}/${username}/${projectName}/${oldRelativePath}`
+        let newPath = `${rootFolder}/${username}/${projectName}/${newRelativePath}`
+        fsPromises.rename(oldPath, newPath)
+            .then(() => {
+                return resolve("Renamed")
+            }).catch(err => {
+                return reject(err)
+            })
+    })
+
 }

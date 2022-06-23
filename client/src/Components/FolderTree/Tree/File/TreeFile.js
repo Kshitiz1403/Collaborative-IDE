@@ -8,22 +8,41 @@ import { PlaceholderInput } from "../TreePlaceholderInput";
 
 import { FILE } from "../state/constants";
 import FILE_ICONS from "../FileIcons";
+import useFiles from "../../../../utils/useFiles";
+import useProject from "../../../../utils/useProject";
+import { getExactFilePath } from "../../utils";
 
 const File = ({ name, id, node }) => {
   const { dispatch, isImparative, onNodeClick } = useTreeContext();
+  const { activeProjectName, adminUsername } = useProject()
   const [isEditing, setEditing] = useState(false);
   const ext = useRef("");
+  const handleFiles = useFiles()
 
   let splitted = name?.split(".");
   ext.current = splitted[splitted.length - 1];
 
   const toggleEditing = () => setEditing(!isEditing);
   const commitEditing = (name) => {
-    dispatch({ type: FILE.EDIT, payload: { id, name } });
+    let oldPathObj = { str: "" }
+    getExactFilePath(node, oldPathObj)
+    let oldPath = oldPathObj.str
+    let prevFile = oldPath.split('/').pop()
+    let newPath = oldPath.slice(0, oldPath.length - prevFile.length) + name
+
+    handleFiles.rename(adminUsername, activeProjectName, oldPath, newPath).then(() => {
+      dispatch({ type: FILE.EDIT, payload: { id, name } });
+    })
     setEditing(false);
   };
   const commitDelete = () => {
-    dispatch({ type: FILE.DELETE, payload: { id } });
+    let ob = { str: "" }
+    getExactFilePath(node, ob)
+    let path = ob.str
+
+    handleFiles.deleteFile(adminUsername, activeProjectName, path).then(() => {
+      dispatch({ type: FILE.DELETE, payload: { id } });
+    })
   };
   const handleNodeClick = React.useCallback(
     (e) => {

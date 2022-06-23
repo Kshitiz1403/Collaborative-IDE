@@ -43,15 +43,18 @@ const Folder = ({ id, name, children, node }) => {
   }, [children]);
 
   const commitFolderCreation = (name) => {
-    // handleFiles.createFolderByPath(`${node.path}/${name}`).then(() => {
-    //   dispatch({ type: FOLDER.CREATE, payload: { id, name } });
-    // })
+    let ob = { str: "" }
+    getExactFilePath(node, ob)
+    handleFiles.createFolder(adminUsername, activeProjectName, ob.str + name).then(() => {
+      dispatch({ type: FOLDER.CREATE, payload: { id, name } });
+    })
   };
   const commitFileCreation = (name) => {
-    // console.log(`${node.path}/${name}`)
-    // handleFiles.saveOrCreateFileByPath(`${node.path}/${name}`).then(() => {
-    //   dispatch({ type: FILE.CREATE, payload: { id, name } });
-    // })
+    let ob = { str: "" }
+    getExactFilePath(node, ob)
+    handleFiles.saveOrCreateFile(adminUsername, activeProjectName, ob.str + name).then(() => {
+      dispatch({ type: FILE.CREATE, payload: { id, name } });
+    })
   };
 
   const commitDeleteFolder = () => {

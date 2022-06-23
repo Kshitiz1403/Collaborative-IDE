@@ -40,10 +40,39 @@ const useFiles = () => {
         })
     }
 
+    const createFolder = (username, projectName, relativePath) => {
+        return new Promise((resolve, reject) => {
+            azure.post('/files/create', {
+                username: username,
+                projectName: projectName,
+                path: relativePath
+            }).then(result => {
+                return resolve(result)
+            }).catch(err => {
+                return reject(err)
+            })
+        })
+    }
+
     const saveOrCreateFileByPath = (path, data = "") => {
         return new Promise((resolve, reject) => {
             azure.put('/files/save', {
                 path: path,
+                data: data
+            }).then(result => {
+                return resolve(result)
+            }).catch(err => {
+                return reject(err)
+            })
+        })
+    }
+
+    const saveOrCreateFile = (username, projectName, relativePath, data = "") => {
+        return new Promise((resolve, reject) => {
+            azure.put('/files/save', {
+                username: username,
+                projectName: projectName,
+                path: relativePath,
                 data: data
             }).then(result => {
                 return resolve(result)
@@ -68,8 +97,8 @@ const useFiles = () => {
     const rename = (username, projectName, oldPath, newPath) => {
         return new Promise((resolve, reject) => {
             azure.patch('/files/rename', {
-                username:username,
-                projectName:projectName,
+                username: username,
+                projectName: projectName,
                 oldPath,
                 newPath
             }).then(result => {
@@ -80,7 +109,7 @@ const useFiles = () => {
         })
     }
 
-    return { deleteByPath, deleteFile, createFolderByPath, saveOrCreateFileByPath, renameByPath, rename }
+    return { deleteByPath, deleteFile, createFolderByPath, createFolder, saveOrCreateFileByPath, saveOrCreateFile, renameByPath, rename }
 }
 
 export default useFiles;

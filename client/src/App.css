@@ -1,4 +1,8 @@
 .App {
   text-align: center;
-  background-color: #0E1525;
+  background-color: #0e1525;
+}
+* {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
 }

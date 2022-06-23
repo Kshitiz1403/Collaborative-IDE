@@ -25,7 +25,7 @@ import { getExactFilePath } from "../../utils";
 
 const FolderName = ({ isOpen, name, handleClick }) => (
   <StyledName onClick={handleClick}>
-    {isOpen ? <AiOutlineFolderOpen /> : <AiOutlineFolder />}
+    {isOpen ? <AiOutlineFolderOpen color="#ffffff" /> : <AiOutlineFolder color="#ffffff" />}
     &nbsp;&nbsp;{name}
   </StyledName>
 );

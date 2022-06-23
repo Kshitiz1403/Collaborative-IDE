@@ -6,6 +6,7 @@ import Navbar from '../Components/Collaborate/Navbar'
 import Monaco from '../Components/Monaco/Monaco'
 import Main from '../Components/FolderTree/Main'
 import CircularProgress from '@mui/material/CircularProgress'
+import colors from '../constants/colors'
 
 const Collaborate = () => {
 
@@ -60,13 +61,15 @@ const Collaborate = () => {
 
 
   return (
-    <div>
-      <Navbar projectname={activeProjectName} />
+    <div style={{ backgroundColor: colors.dark, height: '100vh', overflow:'hidden'}}>
+      <div style={{ marginBottom: 10 }}>
+        <Navbar projectname={activeProjectName} />
+      </div>
       <div style={{ display: 'flex' }}>
-        {!treeLoading && !loading && <div style={{ flex: 0.1 }}>
+        {!treeLoading && !loading && <div style={{ flex: 0.1, backgroundColor: colors.light, borderRadius: 10, color: 'white', marginRight: 10, marginLeft: 10 }}>
           <Main initialTreeState={treeState} />
         </div>}
-        {loading &&  treeLoading && <CircularProgress />}
+        {loading && treeLoading && <CircularProgress />}
         {!treeLoading && !loading &&
           <div style={{ flex: 0.9 }}>
             <Monaco roomId={inviteLink} />

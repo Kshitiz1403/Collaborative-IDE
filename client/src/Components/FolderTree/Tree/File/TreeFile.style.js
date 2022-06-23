@@ -5,5 +5,6 @@ export const StyledFile = styled.div`
   display: flex;
   align-items: center;
   font-weight: normal;
+  user-select: none;
   padding-left: ${(p) => p.theme.indent}px;
 `;

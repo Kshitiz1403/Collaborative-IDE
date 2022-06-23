@@ -8,6 +8,8 @@ import ErrorIcon from '@mui/icons-material/Error';
 import Snacker from '../../Components/Snacker/Snacker';
 import Monaco from '../../Components/Monaco/Monaco'
 import Main from '../../Components/FolderTree/Main';
+import colors from '../../constants/colors';
+import Navbar from '../../Components/Collaborate/Navbar';
 
 
 const Join = () => {
@@ -68,7 +70,10 @@ const Join = () => {
     }
 
     return (
-        <div>
+        <div style={{ backgroundColor: colors.dark, height: '100vh', overflow: 'hidden' }}>
+            <div style={{ marginBottom: 10 }}>
+                <Navbar showInvite={false} projectname={activeProjectName}/>
+            </div>
             {isLoading && <div style={{ display: 'flex', alignItems: 'center', position: 'fixed', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: 'grey', zIndex: 9999999999, opacity: 0.6, }}>
                 <CircularProgress color='inherit' />
             </div>}
@@ -81,8 +86,10 @@ const Join = () => {
             {
                 !isLoading && isPresent &&
                 <div style={{ display: 'flex' }}>
-                    <Main initialTreeState={treeState} />
-                    <Monaco roomId={roomID} height="100vh" />
+                    <div style={{ backgroundColor: colors.light, borderRadius: 10, color: 'white', marginRight: 10, marginLeft: 10 }}>
+                        <Main initialTreeState={treeState} />
+                    </div>
+                    <Monaco roomId={roomID} />
                 </div>
             }
         </div>

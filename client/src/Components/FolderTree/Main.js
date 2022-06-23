@@ -31,8 +31,12 @@ const Main = ({ initialTreeState }) => {
         }
     }, []);
 
-    return (
+    return (<div>
+        <div style={{ margin: 20, fontSize: 20, fontWeight: 'bold' }}>
+            Files
+        </div>
         <Tree data={data} onUpdate={handleUpdate} onNodeClick={handleClick} />
+    </div>
     )
 }
 

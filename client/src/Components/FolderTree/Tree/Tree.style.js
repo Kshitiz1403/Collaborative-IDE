@@ -11,12 +11,11 @@ export const StyledTree = styled.div`
 
 export const ActionsWrapper = styled.div`
   width: 100%;
-
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
   justify-content: space-between;
-
+  margin-left: 5px;
   .actions {
     display: flex;
     align-items: center;
@@ -46,10 +45,10 @@ export const ActionsWrapper = styled.div`
 `;
 
 export const StyledName = styled.div`
-  background-color: white;
   display: flex;
   align-items: center;
   cursor: pointer;
+  color: whitesmoke;
 `;
 
 export const Collapse = styled.div`
@@ -69,7 +68,7 @@ export const VerticalLine = styled.section`
     left: 1px;
     width: 0;
     height: 100%;
-    border: 1px solid #dbdbdd;
-    z-index: -1;
+    border: 0.05px solid #dbdbdd;
+    z-index: 500000;
   }
 `;

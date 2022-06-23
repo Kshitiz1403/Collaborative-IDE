@@ -114,3 +114,16 @@ export const getIsRoomIDPresent = (req, res) => {
         return res.send(result[0]);
     })
 }
+
+export const getProjectDetailsFromShareIdentifier = (req, res) => {
+    const { share } = req.query
+
+    db.query(`SELECT username,name FROM projects WHERE share = ?`, [share], (err, result) => {
+        if (err) {
+            return res.status(400).send(err.code);
+        }
+        if (result.length == 0) return res.status(400).send("Share identifier is not valid")
+        console.log(result[0])
+        return res.send(result[0]);
+    })
+}

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createProject, createShareIdentifier, getIsRoomIDPresent, getShareIdentifier } from '../controllers/projectControllers.js';
+import { createProject, createShareIdentifier, getProjectDetailsFromShareIdentifier, getIsRoomIDPresent, getShareIdentifier } from '../controllers/projectControllers.js';
 import { validateToken } from '../middlewares/authMiddleWare.js';
 
 const router = Router();
@@ -18,6 +18,10 @@ router.get('/share/get', validateToken, (req, res) => {
 
 router.get('/share/isValid', (req, res)=>{
     getIsRoomIDPresent(req, res);
+})
+
+router.get('/share/details', (req, res)=>{
+    getProjectDetailsFromShareIdentifier(req, res);
 })
 
 export default router;

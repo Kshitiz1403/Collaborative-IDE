@@ -1,15 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import useInviteLink from '../utils/useInviteLink'
+import useProject from '../utils/useProject'
+import useAzure from '../utils/useAzure'
 import Navbar from '../Components/Collaborate/Navbar'
 import Monaco from '../Components/Monaco/Monaco'
 import Main from '../Components/FolderTree/Main'
 import CircularProgress from '@mui/material/CircularProgress'
 
-const Collaborate = ({ projectname }) => {
+const Collaborate = () => {
 
   const invite = useInviteLink()
+  const { adminUsername, activeProjectName } = useProject()
   const [loading, setLoading] = useState(true)
   const [inviteLink, setInviteLink] = useState("")
+  const [treeLoading, setTreeLoading] = useState(true)
+  const [treeState, setTreeState] = useState([])
+  const azure = useAzure()
+
+  useEffect(() => {
+    if (adminUsername && activeProjectName) {
+      getTree()
+    }
+  }, [adminUsername, activeProjectName])
+
+  const getTree = () => {
+    azure.get(`/tree?username=${adminUsername}&projectName=${activeProjectName}`)
+      .then(result => {
+        console.log(JSON.stringify(JSON.parse(result.data.code), null, 4))
+        setTreeState(JSON.parse(result.data.code).files)
+        setTreeLoading(false)
+      })
+      .catch(err => console.error(err))
+  }
 
   const getInviteLink = async () => {
     const data = await invite.generateIfNotPresent()
@@ -38,14 +60,14 @@ const Collaborate = ({ projectname }) => {
 
 
   return (
-    <div style={{}}>
-      <Navbar projectname={projectname} />
+    <div>
+      <Navbar projectname={activeProjectName} />
       <div style={{ display: 'flex' }}>
-        <div style={{ flex: 0.1 }}>
-          <Main />
-        </div>
-        {loading && <CircularProgress />}
-        {!loading &&
+        {!treeLoading && !loading && <div style={{ flex: 0.1 }}>
+          <Main initialTreeState={treeState} />
+        </div>}
+        {loading &&  treeLoading && <CircularProgress />}
+        {!treeLoading && !loading &&
           <div style={{ flex: 0.9 }}>
             <Monaco roomId={inviteLink} />
           </div>

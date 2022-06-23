@@ -75,5 +75,18 @@ export const useDidMountEffect = (func, deps) => {
     }, deps);
 };
 
+export const getExactFilePath = (node, ob) => {
+    if (!(typeof node === "object" && !Array.isArray(node) && node != null)) {
+        return;
+    }
+    getExactFilePath(node.parentNode, ob);
+    if (node.type === "folder") {
+        ob.str += `${node.name}/`;
+    }
+    if (node.type === "file") {
+        ob.str += node.name;
+    }
+};
+
 export const createFile = ({ name }) => ({ name, type: "file" });
 export const createFolder = ({ name }) => ({ name, type: "folder", files: [] });

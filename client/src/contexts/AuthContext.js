@@ -12,7 +12,8 @@ const AuthProvider = (props) => {
 
     useEffect(() => {
         setIsAuthenticated(isLoggedIn ? true : false)
-        setUsername(usernameFromStorage)
+        if (usernameFromStorage)
+            setUsername(usernameFromStorage)
         setAccessToken(isLoggedIn)
     }, [])
 

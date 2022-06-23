@@ -65,7 +65,6 @@ const Auth = () => {
             navigate(state?.path || '/', { replace: true })
             setIsAuthenticated(true)
             setUsername(username)
-            console.log(res.data)
         }).catch(err => {
             setErrorMsg(err.response.data.message)
             showErrorModal()

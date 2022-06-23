@@ -4,10 +4,22 @@ import { MonacoBinding } from 'y-monaco'
 import Editor from '@monaco-editor/react'
 import { WebrtcProvider } from 'y-webrtc'
 import { CircularProgress } from '@mui/material'
+import colors from '../../constants/colors'
 
-const Monaco = ({ roomId, height = "90vh", loadingComponent=<CircularProgress/> }) => {
+const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress /> }) => {
 
     const [EditorRef, setEditorRef] = useState(null)
+
+    const handleWillMount = (monaco) => {
+        monaco.editor.defineTheme('customTheme', {
+            base: 'vs-dark',
+            inherit: true,
+            rules: [],
+            colors: {
+                'editor.background': colors.light,
+            },
+        })
+    }
 
     const handleEditorMount = (editor) => {
         setEditorRef(editor);
@@ -52,8 +64,9 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent=<CircularProgress/> 
             onMount={handleEditorMount}
             defaultValue="//some comment"
             defaultLanguage='javascript'
-            theme='vs-dark'
+            theme='customTheme'
             loading={loadingComponent}
+            beforeMount={handleWillMount}
         />
     )
 }

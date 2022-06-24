@@ -1,27 +1,14 @@
 import { Router } from 'express'
-import { createProject, createShareIdentifier, getProjectDetailsFromShareIdentifier, getIsRoomIDPresent, getShareIdentifier } from '../controllers/projectControllers.js';
+import { createProject, getProjects } from '../controllers/projectControllers/projectControllers.js';
 import { validateToken } from '../middlewares/authMiddleWare.js';
 
 const router = Router();
 
+router.get('/get', validateToken, (req, res) => {
+    getProjects(req, res);
+})
 router.post('/create', validateToken, (req, res) => {
     createProject(req, res);
-})
-
-router.post('/share/create', validateToken, (req, res) => {
-    createShareIdentifier(req, res);
-})
-
-router.get('/share/get', validateToken, (req, res) => {
-    getShareIdentifier(req, res);
-})
-
-router.get('/share/isValid', (req, res)=>{
-    getIsRoomIDPresent(req, res);
-})
-
-router.get('/share/details', (req, res)=>{
-    getProjectDetailsFromShareIdentifier(req, res);
 })
 
 export default router;

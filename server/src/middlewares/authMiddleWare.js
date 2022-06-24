@@ -7,7 +7,7 @@ export const validateToken = (req, res, next) => {
 
     try {
         const isValidToken = jsonwebtoken.verify(accessToken, process.env.jsonwebtokensecret)
-
+        req.user = isValidToken;
         if (isValidToken) return next();
 
     }

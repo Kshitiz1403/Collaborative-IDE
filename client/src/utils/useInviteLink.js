@@ -1,18 +1,15 @@
-import useAuth from "./useAuth"
 import useAxios from "./useAxios"
 import useProject from "./useProject"
 
 const useInviteLink = () => {
     const api = useAxios()
 
-    const { username } = useAuth()
     const { activeProjectName } = useProject()
 
     const getInviteLink = () => {
         return new Promise((resolve, reject) => {
             api.get('/share/get', {
                 params: {
-                    username: username,
                     projectName: activeProjectName
                 }
             })
@@ -24,7 +21,6 @@ const useInviteLink = () => {
     const generateInviteLink = () => {
         return new Promise((resolve, reject) => {
             api.post('/share/create', {
-                username: username,
                 projectName: activeProjectName
             })
                 .then(res => resolve(res.data))

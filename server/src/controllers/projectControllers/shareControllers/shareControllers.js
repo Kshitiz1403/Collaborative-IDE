@@ -1,7 +1,9 @@
+import db from "../../../db.js";
 import { createShareIdentifierUtil, getShareIdentifierUtil } from "./shareControllerUtil.js";
 
 export const createShareIdentifier = (req, res) => {
-    const { username, projectName } = req.body;
+    const { projectName } = req.body;
+    const { username } = req.user
     createShareIdentifierUtil(username, projectName)
         .then(response => {
             return res.send(response)
@@ -13,7 +15,8 @@ export const createShareIdentifier = (req, res) => {
 
 
 export const getShareIdentifier = (req, res) => {
-    const { username, projectName } = req.query;
+    const { projectName } = req.query;
+    const { username } = req.user
     getShareIdentifierUtil(username, projectName)
         .then(response => {
             return res.send(response);

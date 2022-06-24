@@ -8,13 +8,12 @@ import { PlaceholderInput } from "../TreePlaceholderInput";
 
 import { FILE } from "../state/constants";
 import FILE_ICONS from "../FileIcons";
+
 import useFiles from "../../../../utils/useFiles";
-import useProject from "../../../../utils/useProject";
 import { getExactFilePath } from "../../utils";
 
 const File = ({ name, id, node }) => {
   const { dispatch, isImparative, onNodeClick } = useTreeContext();
-  const { activeProjectName, adminUsername } = useProject()
   const [isEditing, setEditing] = useState(false);
   const ext = useRef("");
   const handleFiles = useFiles()
@@ -30,7 +29,7 @@ const File = ({ name, id, node }) => {
     let prevFile = oldPath.split('/').pop()
     let newPath = oldPath.slice(0, oldPath.length - prevFile.length) + name
 
-    handleFiles.rename(adminUsername, activeProjectName, oldPath, newPath).then(() => {
+    handleFiles.rename(oldPath, newPath).then(() => {
       dispatch({ type: FILE.EDIT, payload: { id, name } });
     })
     setEditing(false);
@@ -40,7 +39,7 @@ const File = ({ name, id, node }) => {
     getExactFilePath(node, ob)
     let path = ob.str
 
-    handleFiles.deleteFile(adminUsername, activeProjectName, path).then(() => {
+    handleFiles.deleteFile(path).then(() => {
       dispatch({ type: FILE.DELETE, payload: { id } });
     })
   };

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import useInviteLink from '../utils/useInviteLink'
 import useProject from '../utils/useProject'
-import useAzure from '../utils/useAzure'
 import Navbar from '../Components/Collaborate/Navbar'
 import Monaco from '../Components/Monaco/Monaco'
 import Main from '../Components/FolderTree/Main'
 import CircularProgress from '@mui/material/CircularProgress'
 import colors from '../constants/colors'
+import useTree from '../utils/useTree'
 
 const Collaborate = () => {
 
@@ -16,22 +16,22 @@ const Collaborate = () => {
   const [inviteLink, setInviteLink] = useState("")
   const [treeLoading, setTreeLoading] = useState(true)
   const [treeState, setTreeState] = useState([])
-  const azure = useAzure()
+  const { getTree } = useTree()
 
   useEffect(() => {
     if (adminUsername && activeProjectName) {
-      getTree()
+      handleGetTree()
     }
   }, [adminUsername, activeProjectName])
 
-  const getTree = () => {
-    azure.get(`/tree?username=${adminUsername}&projectName=${activeProjectName}`)
+  const handleGetTree = () => {
+    getTree()
       .then(result => {
-        console.log(JSON.stringify(JSON.parse(result.data.code), null, 4))
-        setTreeState(JSON.parse(result.data.code).files)
+        setTreeState(result)
         setTreeLoading(false)
+      }).catch(err => {
+        console.error(err)
       })
-      .catch(err => console.error(err))
   }
 
   const getInviteLink = async () => {
@@ -61,7 +61,7 @@ const Collaborate = () => {
 
 
   return (
-    <div style={{ backgroundColor: colors.dark, height: '100vh', overflow:'hidden'}}>
+    <div style={{ backgroundColor: colors.dark, height: '100vh', overflow: 'hidden' }}>
       <div style={{ marginBottom: 10 }}>
         <Navbar projectname={activeProjectName} />
       </div>

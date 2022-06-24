@@ -2,7 +2,8 @@ import { createProjectDirectoryUtil } from "../fileControllers.js";
 import { createProjectInDBUtil, getProjectsUtil } from "./projectControllerUtil.js";
 
 export const createProject = (req, res) => {
-    const { username, projectName, language } = req.body
+    const { projectName, language } = req.body
+    const { username } = req.user
     createProjectInDBUtil(username, projectName, language)
         .then(result => {
             createProjectDirectoryUtil(username, projectName, language)
@@ -20,7 +21,7 @@ export const createProject = (req, res) => {
 }
 
 export const getProjects = (req, res) => {
-    const { username } = req.query;
+    const { username } = req.user;
     getProjectsUtil(username).then((result) => {
         return res.send({ code: result })
     }).catch(err => {

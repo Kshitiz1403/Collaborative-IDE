@@ -19,8 +19,8 @@ import { StyledFolder } from "./TreeFolder.style";
 import { FILE, FOLDER } from "../state/constants";
 import { useTreeContext } from "../state/TreeContext";
 import { PlaceholderInput } from "../TreePlaceholderInput";
+
 import useFiles from "../../../../utils/useFiles";
-import useProject from "../../../../utils/useProject";
 import { getExactFilePath } from "../../utils";
 
 const FolderName = ({ isOpen, name, handleClick }) => (
@@ -36,7 +36,6 @@ const Folder = ({ id, name, children, node }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [childs, setChilds] = useState([]);
   const handleFiles = useFiles()
-  const { activeProjectName, adminUsername } = useProject()
 
   useEffect(() => {
     setChilds([children]);
@@ -45,14 +44,14 @@ const Folder = ({ id, name, children, node }) => {
   const commitFolderCreation = (name) => {
     let ob = { str: "" }
     getExactFilePath(node, ob)
-    handleFiles.createFolder(adminUsername, activeProjectName, ob.str + name).then(() => {
+    handleFiles.createFolder(ob.str + name).then(() => {
       dispatch({ type: FOLDER.CREATE, payload: { id, name } });
     })
   };
   const commitFileCreation = (name) => {
     let ob = { str: "" }
     getExactFilePath(node, ob)
-    handleFiles.saveOrCreateFile(adminUsername, activeProjectName, ob.str + name).then(() => {
+    handleFiles.saveOrCreateFile(ob.str + name).then(() => {
       dispatch({ type: FILE.CREATE, payload: { id, name } });
     })
   };
@@ -60,7 +59,7 @@ const Folder = ({ id, name, children, node }) => {
   const commitDeleteFolder = () => {
     let ob = { str: "" }
     getExactFilePath(node, ob)
-    handleFiles.deleteFile(adminUsername, activeProjectName, ob.str).then(() => {
+    handleFiles.deleteFile(ob.str).then(() => {
       dispatch({ type: FOLDER.DELETE, payload: { id } });
     })
   };
@@ -69,7 +68,7 @@ const Folder = ({ id, name, children, node }) => {
     getExactFilePath(node, oldPathObj)
     let oldPath = oldPathObj.str
     let newPath = oldPath.slice(0, oldPath.length - node.name.length - 1) + name
-    handleFiles.rename(adminUsername, activeProjectName, oldPath, newPath).then(() => {
+    handleFiles.rename(oldPath, newPath).then(() => {
       dispatch({ type: FOLDER.EDIT, payload: { id, name } });
     })
     setEditing(false);

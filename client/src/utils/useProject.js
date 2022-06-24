@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import useAuth from "./useAuth";
 import useAxios from "./useAxios";
 
 const useProject = () => {
@@ -9,7 +8,6 @@ const useProject = () => {
     const [adminUsername, setAdminUsername] = useState('')
 
     const api = useAxios()
-    const auth = useAuth()
 
     useEffect(() => {
         if (location.pathname.startsWith('/@')) {
@@ -38,7 +36,6 @@ const useProject = () => {
     const createProject = ( projectName, language) => {
         return new Promise((resolve, reject) => {
             api.post('/create', {
-                "username": auth.username,
                 "projectName": projectName,
                 "language": language
             }).then(result => {
@@ -50,11 +47,7 @@ const useProject = () => {
     }
     const getProjects = () => {
         return new Promise((resolve, reject) => {
-            api.get('/get', {
-                params: {
-                    username: auth.username
-                }
-            }).then(result => {
+            api.get('/get').then(result => {
                 return resolve(result);
             }).catch(err => {
                 return reject(err);

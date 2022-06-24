@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import useAzure from '../../utils/useAzure';
+import useTree from '../../utils/useTree';
 import useProject from '../../utils/useProject';
 import CircularProgress from '@mui/material/CircularProgress';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -17,8 +17,8 @@ const Join = () => {
     const pathname = location.pathname;
     const roomID = pathname.split('/').slice(-1)[0];
     const navigate = useNavigate()
-    const { activeProjectName, adminUsername, isShareIDPresent } = useProject()
-    const azure = useAzure()
+    const { activeProjectName, isShareIDPresent } = useProject()
+    const { getTree } = useTree()
 
     const [isLoading, setIsLoading] = useState(true)
     const [isPresent, setIsPresent] = useState(true)
@@ -29,25 +29,22 @@ const Join = () => {
     // if it does, continue to the page, else fallback to a different page
 
     useEffect(() => {
-        isShareIDPresent
+        isShareIDPresent(roomID)
             .catch(err => handleShareIDNotPresent())
     }, [])
 
     useEffect(() => {
         if (activeProjectName) {
-            console.log(activeProjectName)
-            getTree()
+            handleGetTree()
         }
     }, [activeProjectName])
 
-    const getTree = () => {
-        azure.get(`/tree?username=${adminUsername}&projectName=${activeProjectName}`)
+    const handleGetTree = () => {
+        getTree()
             .then(result => {
-                console.log(JSON.stringify(JSON.parse(result.data.code), null, 4))
-                setTreeState(JSON.parse(result.data.code).files)
+                setTreeState(result)
                 setIsLoading(false)
-            })
-            .catch(err => console.error(err))
+            }).catch(err => { console.error(err) })
     }
 
     const handleShareIDNotPresent = () => {
@@ -69,7 +66,7 @@ const Join = () => {
     return (
         <div style={{ backgroundColor: colors.dark, height: '100vh', overflow: 'hidden' }}>
             <div style={{ marginBottom: 10 }}>
-                <Navbar showInvite={false} projectname={activeProjectName}/>
+                <Navbar showInvite={false} projectname={activeProjectName} />
             </div>
             {isLoading && <div style={{ display: 'flex', alignItems: 'center', position: 'fixed', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: 'grey', zIndex: 9999999999, opacity: 0.6, }}>
                 <CircularProgress color='inherit' />

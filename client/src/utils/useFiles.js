@@ -1,7 +1,9 @@
 import useAzure from "./useAzure"
+import useProject from "./useProject"
 
 const useFiles = () => {
     const azure = useAzure()
+    const { adminUsername, activeProjectName } = useProject()
 
     const deleteByPath = (path) => {
         return new Promise((resolve, reject) => {
@@ -15,12 +17,12 @@ const useFiles = () => {
         })
     }
 
-    const deleteFile = (username, projectName, relativePath) => {
+    const deleteFile = (relativePath) => {
         return new Promise((resolve, reject) => {
             azure.post('/files/delete', {
                 path: relativePath,
-                username,
-                projectName
+                username: adminUsername,
+                projectName: activeProjectName
             }).then(result => {
                 return resolve(result)
             }).catch(err => {
@@ -40,11 +42,11 @@ const useFiles = () => {
         })
     }
 
-    const createFolder = (username, projectName, relativePath) => {
+    const createFolder = (relativePath) => {
         return new Promise((resolve, reject) => {
             azure.post('/files/create', {
-                username: username,
-                projectName: projectName,
+                username: adminUsername,
+                projectName: activeProjectName,
                 path: relativePath
             }).then(result => {
                 return resolve(result)
@@ -67,11 +69,11 @@ const useFiles = () => {
         })
     }
 
-    const saveOrCreateFile = (username, projectName, relativePath, data = "") => {
+    const saveOrCreateFile = (relativePath, data = "") => {
         return new Promise((resolve, reject) => {
             azure.put('/files/save', {
-                username: username,
-                projectName: projectName,
+                username: adminUsername,
+                projectName: activeProjectName,
                 path: relativePath,
                 data: data
             }).then(result => {
@@ -94,11 +96,11 @@ const useFiles = () => {
             })
         })
     }
-    const rename = (username, projectName, oldPath, newPath) => {
+    const rename = (oldPath, newPath) => {
         return new Promise((resolve, reject) => {
             azure.patch('/files/rename', {
-                username: username,
-                projectName: projectName,
+                username: adminUsername,
+                projectName: activeProjectName,
                 oldPath,
                 newPath
             }).then(result => {

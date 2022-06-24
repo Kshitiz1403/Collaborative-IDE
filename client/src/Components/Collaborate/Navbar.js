@@ -12,7 +12,7 @@ const Navbar = ({ projectname, showInvite = true }) => {
             <ShareModal open={isInviteModalActive} setOpen={setIsInviteModalActive} />
             <div style={{ backgroundColor: colors.light, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: 20, paddingLeft: 20 }}>
                 <Button variant='contained' size='small' onClick={() => navigate('/')}>Home</Button>
-                <div style={{ color: 'whitesmoke', fontWeight: 'bold' }}>{projectname}</div>
+                <div style={{ color: 'whitesmoke', fontWeight: 'bold', userSelect: 'none' }}>{projectname}</div>
                 <div>
                     {showInvite && <Button variant='contained' size='small' onClick={() => setIsInviteModalActive(true)}>Invite</Button>}
                 </div>

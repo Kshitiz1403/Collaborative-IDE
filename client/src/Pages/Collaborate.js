@@ -62,7 +62,8 @@ const Collaborate = () => {
 
   return (
     <div style={{ backgroundColor: colors.dark, height: '100vh', overflow: 'hidden' }}>
-      <div style={{ marginBottom: 10 }}>
+      {/* TODO-> handle username in URL to be same as that in auth */}
+      <div style={{ marginBottom: 10, borderColor: 'white', borderStyle: 'solid', borderWidth: 0, borderBottomWidth: 1 }}>
         <Navbar projectname={activeProjectName} />
       </div>
       <div style={{ display: 'flex' }}>

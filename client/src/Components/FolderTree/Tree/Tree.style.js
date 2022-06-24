@@ -1,11 +1,15 @@
 import styled from "styled-components/macro";
+import colors from "../../../constants/colors";
 
 export const StyledTree = styled.div`
   line-height: 1.75;
   z-index: 1;
+  min-width: 250px;
 
   .tree__input {
     width: auto;
+    background-color: ${colors.light};
+    color:white;
   }
 `;
 
@@ -24,6 +28,7 @@ export const ActionsWrapper = styled.div`
     opacity: 0;
     pointer-events: none;
     transition: 0.2s;
+    margin-right: 10px;
 
     > svg {
       cursor: pointer;

@@ -6,6 +6,7 @@ import FILE_ICONS from "./FileIcons";
 import { StyledFile } from "./File/TreeFile.style";
 import { FolderName } from "./Folder/TreeFolder";
 import { StyledFolder } from "./Folder/TreeFolder.style";
+import colors from "../../../constants/colors";
 
 const FileEdit = ({ ext, inputRef, updateExt, defaultValue, style }) => {
   const extension = FILE_ICONS[ext] ? FILE_ICONS[ext] : <AiOutlineFile />;
@@ -29,7 +30,7 @@ const FolderEdit = ({ name, inputRef, defaultValue, style }) => {
     <StyledFolder id={v4()} name={name} style={style}>
       <FolderName
         isOpen={true}
-        handleClick={() => {}}
+        handleClick={() => { }}
         name={
           <input
             ref={inputRef}

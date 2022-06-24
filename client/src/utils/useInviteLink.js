@@ -13,7 +13,7 @@ const useInviteLink = () => {
             api.get('/share/get', {
                 params: {
                     username: username,
-                    projectname: activeProjectName
+                    projectName: activeProjectName
                 }
             })
                 .then(res => resolve(res.data))
@@ -25,7 +25,7 @@ const useInviteLink = () => {
         return new Promise((resolve, reject) => {
             api.post('/share/create', {
                 username: username,
-                projectname: activeProjectName
+                projectName: activeProjectName
             })
                 .then(res => resolve(res.data))
                 .catch(err => reject(err))

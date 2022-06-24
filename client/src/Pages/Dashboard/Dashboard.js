@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import useAxios from '../../utils/useAxios'
 import useAuth from '../../utils/useAuth'
+import useProject from '../../utils/useProject'
 import TextField from '@mui/material/TextField'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/system/Box'
@@ -21,8 +22,9 @@ const Dashboard = () => {
     const [isError, setIsError] = useState(false)
     const [successMsg, setSuccessMsg] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
+    const [myProjects, setMyProjects] = useState([])
 
-    const api = useAxios();
+    const projectHook = useProject();
 
     const handleClose = () => {
         setIsOpen(false)
@@ -33,21 +35,25 @@ const Dashboard = () => {
         setIsOpen(true)
     }
 
-    const createProject = () => {
-        api.post('/create', {
-            username: username,
-            projectname: projectName,
-            language: selectedLanguage
-        }).then(res => {
-            setSuccessMsg(res.data);
-            setIsSuccess(true);
+    const handleCreateProject = () => {
+        projectHook.createProject(projectName, selectedLanguage).then(result => {
+            setSuccessMsg(result.data)
+            setIsSuccess(true)
             navigate(`/@${username}/${projectName}`)
         }).catch(err => {
-            console.log(err);
-            setErrorMsg(err.response.data);
+            setErrorMsg(err.response.data.error)
             setIsError(true)
         })
     }
+
+    useEffect(() => {
+        projectHook.getProjects()
+            .then(res => setMyProjects(res.data.code))
+            .catch(err => {
+                setIsError(true)
+                setErrorMsg(err.response.data.error)
+            })
+    }, [])
 
     return (
         <>
@@ -80,7 +86,7 @@ const Dashboard = () => {
                                 onChange={(e) => setProjectName(e.target.value)}
                             />
                         </div>
-                        <Button variant='contained' size='small' onClick={createProject}>Create Project</Button>
+                        <Button variant='contained' size='small' onClick={handleCreateProject}>Create Project</Button>
                     </div>
                 </Box>
             </Modal>
@@ -101,6 +107,10 @@ const Dashboard = () => {
                             { language: 'java', onClick: () => handleOpen('java') }
                         ]}
                     />
+                    <div>
+                        My Projects
+                        {myProjects.map(({ name, language }) => <div key={name}>{name} {language}</div>)}
+                    </div>
                 </div>
             </div>
         </>

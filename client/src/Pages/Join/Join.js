@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import useAzure from '../../utils/useAzure';
-import useIsRoomIDPresent from '../../utils/isRoomIDPresent';
 import useProject from '../../utils/useProject';
 import CircularProgress from '@mui/material/CircularProgress';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -18,7 +17,7 @@ const Join = () => {
     const pathname = location.pathname;
     const roomID = pathname.split('/').slice(-1)[0];
     const navigate = useNavigate()
-    const { activeProjectName, adminUsername } = useProject()
+    const { activeProjectName, adminUsername, isShareIDPresent } = useProject()
     const azure = useAzure()
 
     const [isLoading, setIsLoading] = useState(true)
@@ -29,11 +28,9 @@ const Join = () => {
     // run a query checking whether the room id exists in the DB or not
     // if it does, continue to the page, else fallback to a different page
 
-    const isRoomIDPresent = useIsRoomIDPresent(roomID)
-
     useEffect(() => {
-        isRoomIDPresent
-            .catch(err => handleRoomIDNotPresent())
+        isShareIDPresent
+            .catch(err => handleShareIDNotPresent())
     }, [])
 
     useEffect(() => {
@@ -53,7 +50,7 @@ const Join = () => {
             .catch(err => console.error(err))
     }
 
-    const handleRoomIDNotPresent = () => {
+    const handleShareIDNotPresent = () => {
         // display error message
         setIsPresent(false)
         setIsLoading(false)

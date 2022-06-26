@@ -1,9 +1,12 @@
 import React, { useLayoutEffect, useState } from 'react'
 import Tree from './Tree/Tree'
+import { VscRefresh } from "react-icons/vsc";
+import useTree from '../../utils/useTree';
 
 const Main = ({ initialTreeState }) => {
 
     let [data, setData] = useState([...initialTreeState])
+    const { getTree } = useTree()
 
     const handleClick = (node) => {
     };
@@ -31,9 +34,19 @@ const Main = ({ initialTreeState }) => {
         }
     }, []);
 
+    const handleRefresh = () => {
+        getTree()
+            .then(result => setData(result))
+            .catch(err => console.error(err))
+    }
+
     return (<div>
-        <div style={{ margin: 20, fontSize: 20, fontWeight: 'bold' }}>
+        <div style={{ margin: 20, fontSize: 20, fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             Files
+            <abbr title='Refresh' style={{ cursor: 'pointer' }}>
+                <VscRefresh onClick={handleRefresh} />
+            </abbr>
+
         </div>
         <Tree data={data} onUpdate={handleUpdate} onNodeClick={handleClick} />
     </div>

@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { ProjectContext } from "../contexts/ProjectContext";
 import useAxios from "./useAxios";
 
 const useProject = () => {
     const location = useLocation();
-    const [activeProjectName, setActiveProjectname] = useState('')
-    const [adminUsername, setAdminUsername] = useState('')
+    const { adminUsername, setAdminUsername, activeProjectName, setActiveProjectname } = useContext(ProjectContext)
 
     const api = useAxios()
 

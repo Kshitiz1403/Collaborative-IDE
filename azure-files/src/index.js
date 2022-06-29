@@ -1,3 +1,4 @@
+import "dotenv/config"
 import express from 'express'
 import fileRoutes from './routes/FileRoutes.js'
 import treeRoutes from './routes/TreeRoutes.js'

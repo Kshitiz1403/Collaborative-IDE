@@ -1,7 +1,7 @@
 import fsPromises from 'fs/promises'
 import fse from 'fs-extra'
 
-const rootFolder = "/mnt/projects"
+const rootFolder = process.env.rootFolder
 
 
 export const deleteByPathUtil = (path) => {

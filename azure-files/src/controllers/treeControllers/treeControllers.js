@@ -1,5 +1,5 @@
 import dirTree from 'directory-tree'
-const rootFolder = "/mnt/projects"
+const rootFolder = process.env.rootFolder
 
 export const getTree = (req, res) => {
     try {

@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import useAuth from '../../utils/useAuth'
-import useProject from '../../utils/useProject'
 import TextField from '@mui/material/TextField'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/system/Box'
 import Button from '@mui/material/Button'
 import Snacker from '../../Components/Snacker/Snacker'
 import CreateLanguageBox from '../../Components/LanguageBox/CreateLanguageBox'
+import useAuth from '../../hooks/useAuth'
+import useProject from '../../hooks/useProject'
 
 const Dashboard = () => {
 

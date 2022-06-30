@@ -9,7 +9,7 @@ import { PlaceholderInput } from "../TreePlaceholderInput";
 import { FILE } from "../state/constants";
 import FILE_ICONS from "../FileIcons";
 
-import useFiles from "../../../../utils/useFiles";
+import useFiles from "../../../../hooks/useFiles";
 import { getExactFilePath } from "../../utils";
 
 const File = ({ name, id, node }) => {

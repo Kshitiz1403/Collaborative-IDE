@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import useInviteLink from "../../utils/useInviteLink"
+import useInviteLink from "../../hooks/useInviteLink"
 import Snacker from '../Snacker/Snacker'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'

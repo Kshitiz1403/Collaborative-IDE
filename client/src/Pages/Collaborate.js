@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import useInviteLink from '../utils/useInviteLink'
-import useProject from '../utils/useProject'
 import Navbar from '../Components/Collaborate/Navbar'
 import Monaco from '../Components/Monaco/Monaco'
 import Main from '../Components/FolderTree/Main'
 import CircularProgress from '@mui/material/CircularProgress'
 import colors from '../constants/colors'
-import useTree from '../utils/useTree'
+import useTree from '../hooks/useTree'
+import useInviteLink from '../hooks/useInviteLink'
+import useProject from '../hooks/useProject'
+import AutoSaveSwitch from '../Components/AutoSaveSwitch'
 
 const Collaborate = () => {
 
@@ -64,7 +65,7 @@ const Collaborate = () => {
     <div style={{ backgroundColor: colors.dark, height: '100vh', overflow: 'hidden' }}>
       {/* TODO-> handle username in URL to be same as that in auth */}
       <div style={{ marginBottom: 10, borderColor: 'white', borderStyle: 'solid', borderWidth: 0, borderBottomWidth: 1 }}>
-        <Navbar projectname={activeProjectName} />
+        <Navbar projectname={activeProjectName} toLoadSwitch={!treeLoading && !loading} AutoSaveSwitch={<AutoSaveSwitch onChange={(e) => console.log(e.target.value)} />} />
       </div>
       <div style={{ display: 'flex' }}>
         {!treeLoading && !loading && <div style={{ flex: 0.1, backgroundColor: colors.light, borderRadius: 10, color: 'white', marginRight: 10, marginLeft: 10 }}>

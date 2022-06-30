@@ -20,7 +20,7 @@ import { FILE, FOLDER } from "../state/constants";
 import { useTreeContext } from "../state/TreeContext";
 import { PlaceholderInput } from "../TreePlaceholderInput";
 
-import useFiles from "../../../../utils/useFiles";
+import useFiles from "../../../../hooks/useFiles";
 import { getExactFilePath } from "../../utils";
 
 const FolderName = ({ isOpen, name, handleClick }) => (

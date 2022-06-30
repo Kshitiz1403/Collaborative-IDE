@@ -9,7 +9,7 @@ import axios from 'axios'
 import { API_URL } from '../../App'
 import Snacker from '../../Components/Snacker/Snacker'
 import { useLocation, useNavigate } from 'react-router-dom'
-import useAuth from '../../utils/useAuth'
+import useAuth from '../../hooks/useAuth'
 import './Auth.css'
 
 const Auth = () => {

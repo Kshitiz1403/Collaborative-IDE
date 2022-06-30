@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useState } from 'react'
 import Tree from './Tree/Tree'
 import { VscRefresh } from "react-icons/vsc";
-import useTree from '../../utils/useTree';
+import useTree from '../../hooks/useTree';
+import IconButton from '@mui/material/IconButton';
 
 const Main = ({ initialTreeState }) => {
 
@@ -43,8 +44,10 @@ const Main = ({ initialTreeState }) => {
     return (<div>
         <div style={{ margin: 20, fontSize: 20, fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             Files
-            <abbr title='Refresh' style={{ cursor: 'pointer' }}>
-                <VscRefresh onClick={handleRefresh} />
+            <abbr title='Refresh'>
+                <IconButton onClick={handleRefresh} color='primary'>
+                    <VscRefresh color='whitesmoke' />
+                </IconButton>
             </abbr>
 
         </div>

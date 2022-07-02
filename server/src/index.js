@@ -1,10 +1,8 @@
 import "dotenv/config";
-import express from 'express';
+import express, { Router } from 'express';
 import cors from 'cors'
 import db from './db.js';
-import authRoutes from './routes/authRoutes.js'
-import projectRoutes from './routes/projectRoutes.js'
-import shareRoutes from './routes/shareRoutes.js'
+import { authRoutes, projectRoutes, shareRoutes } from './routes/index.js'
 
 const app = express();
 
@@ -26,7 +24,7 @@ app.use('/auth', authRoutes)
 app.use('/', projectRoutes)
 app.use('/share', shareRoutes)
 
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     res.send("hi")
 })
 app.listen(4000, () => {

@@ -1,5 +1,5 @@
-import { docker } from "./docker.js";
-import client from "./cache.js";
+import { docker } from "../../docker.js";
+import client from "../../cache.js";
 
 const promisifyStream = (stream, result) => new Promise((resolve, reject) => {
     stream.on('data', data => result.str += (data.toString()))
@@ -7,7 +7,7 @@ const promisifyStream = (stream, result) => new Promise((resolve, reject) => {
     stream.on('error', reject)
 });
 
-const createContainer = (adminUsername, projectName) => {
+const createContainerUtil = (adminUsername, projectName) => {
     return new Promise((resolve, reject) => {
         let _container
         docker.container.create({
@@ -56,30 +56,8 @@ const stopAndDeleteContainer = async (adminUsername, projectName) => {
     })
 }
 
-const compileJava = (adminUsername, projectName, javaClassName) => {
-    return new Promise((resolve, reject) => {
-        executeInContainer(adminUsername, projectName, `javac ${javaClassName}.java && java ${javaClassName} && rm ${javaClassName}.class`)
-            .then(data => resolve(data))
-            .catch(err => reject(err))
-    })
-}
 
-const compileCpp = (adminUsername, projectName, cppFileName) => {
-    return new Promise((resolve, reject) => {
-        executeInContainer(adminUsername, projectName, `g++ ${cppFileName}.cpp -o ${cppFileName} && ./${cppFileName}`)
-            .then(data => resolve(data))
-            .catch(err => reject(err))
-    })
-}
-
-const compilePython = (adminUsername, projectName, pythonFileName) => {
-    return new Promise((resolve, reject) => {
-        executeInContainer(adminUsername, projectName, `python ${pythonFileName}.py`)
-            .then(data => resolve(data))
-            .catch(err => reject(err))
-    })
-}
 
 export {
-    createContainer, executeInContainer, stopAndDeleteContainer, compileJava, compileCpp, compilePython
+    createContainerUtil, executeInContainer, stopAndDeleteContainer
 }

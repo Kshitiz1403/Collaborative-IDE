@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { languageDefaultFile } from "../constants/languageDefaultFile";
 import { ProjectContext } from "../contexts/ProjectContext";
 import useAuth from "./useAuth";
@@ -13,18 +13,30 @@ const useProject = () => {
 
     const api = useAxios()
     const azure = useAzure()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (location.pathname.startsWith('/@')) {
             // Set project name only when we are on the collaborate screen
-            setActiveProjectname(getProjectNameIfCollaborate(location.pathname))
-            setAdminUsername(getUserNameIfCollaborate(location.pathname))
+
+            // allow only authenticated user to access their "own" project
+            // else throw error like -> permission not allowed... 
+
+            // console.log(getUserNameIfCollaborate(location.pathname))
+            if (username && getUserNameIfCollaborate(location.pathname)) {
+                if (username === getUserNameIfCollaborate(location.pathname)) {
+                    setActiveProjectname(getProjectNameIfCollaborate(location.pathname))
+                    setAdminUsername(getUserNameIfCollaborate(location.pathname))
+                } else {
+                    navigate('/404', { state: { error: "Unauthorized access. You don't have access to the request project." } })
+                }
+            }
         }
         else if (location.pathname.startsWith('/join')) {
             const shareIdentifier = getProjectNameIfJoin(location.pathname)
             getProjectDetailsFromShare(shareIdentifier)
         }
-    }, [location])
+    }, [location, username])
 
     const getUserNameIfCollaborate = (string) => {
         return string.split('@')[1].split('/')[0]
@@ -64,11 +76,23 @@ const useProject = () => {
     }
     const getProjects = () => {
         return new Promise((resolve, reject) => {
-            api.get('/get').then(result => {
+            api.get('/all').then(result => {
                 return resolve(result);
             }).catch(err => {
                 return reject(err);
             })
+        })
+    }
+
+    const getProjectDetails = (projectName) => {
+        return new Promise((resolve, reject) => {
+            api.get('/project', {
+                params: {
+                    "projectName": projectName
+                }
+            })
+                .then(result => resolve(result))
+                .catch(err => reject(err))
         })
     }
 
@@ -96,7 +120,7 @@ const useProject = () => {
         })
     }
 
-    return { activeProjectName, adminUsername, getProjects, isShareIDPresent, createProject, activeProjectLanguage, setActiveProjectLanguage }
+    return { activeProjectName, adminUsername, getProjects, getProjectDetails, isShareIDPresent, createProject, activeProjectLanguage, setActiveProjectLanguage }
 }
 
 export default useProject;

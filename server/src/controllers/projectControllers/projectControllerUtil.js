@@ -22,3 +22,15 @@ export const getProjectsUtil = (username) => {
         })
     })
 }
+
+export const getProjectDetailsUtil = (username, projectName) => {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT * FROM projects WHERE username = ? and name = ?", [username, projectName], (err, result) => {
+            if (err) {
+                reject(err.code)
+            }
+            if (result.length == 0) reject("Username and projectname combination does not exist")
+            resolve(result[0])
+        })
+    })
+}

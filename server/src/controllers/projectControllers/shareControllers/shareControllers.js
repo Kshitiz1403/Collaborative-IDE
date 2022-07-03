@@ -40,7 +40,7 @@ export const getIsShareIDPresent = (req, res) => {
 export const getProjectDetailsFromShareIdentifier = (req, res) => {
     const { share } = req.query
 
-    db.query(`SELECT username,name FROM projects WHERE share = ?`, [share], (err, result) => {
+    db.query(`SELECT username,name,language FROM projects WHERE share = ?`, [share], (err, result) => {
         if (err) {
             return res.status(400).send({ error: err.code });
         }

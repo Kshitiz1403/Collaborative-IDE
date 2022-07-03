@@ -42,31 +42,27 @@ const Folder = ({ id, name, children, node }) => {
   }, [children]);
 
   const commitFolderCreation = (name) => {
-    let ob = { str: "" }
-    getExactFilePath(node, ob)
-    handleFiles.createFolder(ob.str + name).then(() => {
+    let path = getExactFilePath(node)
+    handleFiles.createFolder(path + name).then(() => {
       dispatch({ type: FOLDER.CREATE, payload: { id, name } });
     })
   };
   const commitFileCreation = (name) => {
-    let ob = { str: "" }
-    getExactFilePath(node, ob)
-    handleFiles.saveOrCreateFile(ob.str + name).then(() => {
+    let path = getExactFilePath(node)
+    console.log(path)
+    handleFiles.saveOrCreateFile(path + name).then(() => {
       dispatch({ type: FILE.CREATE, payload: { id, name } });
     })
   };
 
   const commitDeleteFolder = () => {
-    let ob = { str: "" }
-    getExactFilePath(node, ob)
-    handleFiles.deleteFile(ob.str).then(() => {
+    let path = getExactFilePath(node)
+    handleFiles.deleteFile(path).then(() => {
       dispatch({ type: FOLDER.DELETE, payload: { id } });
     })
   };
   const commitFolderEdit = (name) => {
-    let oldPathObj = { str: "" }
-    getExactFilePath(node, oldPathObj)
-    let oldPath = oldPathObj.str
+    let oldPath = getExactFilePath(node)
     let newPath = oldPath.slice(0, oldPath.length - node.name.length - 1) + name
     handleFiles.rename(oldPath, newPath).then(() => {
       dispatch({ type: FOLDER.EDIT, payload: { id, name } });

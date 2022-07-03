@@ -23,9 +23,7 @@ const File = ({ name, id, node }) => {
 
   const toggleEditing = () => setEditing(!isEditing);
   const commitEditing = (name) => {
-    let oldPathObj = { str: "" }
-    getExactFilePath(node, oldPathObj)
-    let oldPath = oldPathObj.str
+    let oldPath = getExactFilePath(node)
     let prevFile = oldPath.split('/').pop()
     let newPath = oldPath.slice(0, oldPath.length - prevFile.length) + name
 
@@ -34,10 +32,8 @@ const File = ({ name, id, node }) => {
     })
     setEditing(false);
   };
-  const commitDelete = () => {
-    let ob = { str: "" }
-    getExactFilePath(node, ob)
-    let path = ob.str
+  const commitDelete = () => {    
+    let path = getExactFilePath(node)
 
     handleFiles.deleteFile(path).then(() => {
       dispatch({ type: FILE.DELETE, payload: { id } });

@@ -104,7 +104,8 @@ const Dashboard = () => {
                         languages={[
                             { language: 'c++', onClick: () => handleOpen('c++') },
                             { language: 'python', onClick: () => handleOpen('python') },
-                            { language: 'java', onClick: () => handleOpen('java') }
+                            { language: 'java', onClick: () => handleOpen('java') },
+                            { language: 'nodejs', onClick: () => handleOpen('nodejs') }
                         ]}
                     />
                     <div>

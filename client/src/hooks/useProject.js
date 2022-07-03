@@ -64,6 +64,14 @@ const useProject = () => {
                             "path": "main.cpp"
                         }).then(result => resolve(result)).catch(err => reject(err))
                     })
+                case 'nodejs':
+                    return new Promise((resolve, reject) => {
+                        azure.put('/files/save', {
+                            "username": username,
+                            "projectName": projectName,
+                            "path": "main.js"
+                        }).then(result => resolve(result)).catch(err => reject(err))
+                    })
             }
         }
         return new Promise((resolve, reject) => {

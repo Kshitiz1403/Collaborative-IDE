@@ -10,7 +10,7 @@ const compileJavaUtil = (adminUsername, projectName, javaClassName) => {
 
 const compileCppUtil = (adminUsername, projectName, cppFileName) => {
     return new Promise((resolve, reject) => {
-        executeInContainer(adminUsername, projectName, `g++ ${cppFileName}.cpp -o ${cppFileName} && ./${cppFileName}`)
+        executeInContainer(adminUsername, projectName, `g++ ${cppFileName}.cpp -o ${cppFileName} && ./${cppFileName} && rm ${cppFileName}`)
             .then(data => resolve(data))
             .catch(err => reject(err))
     })

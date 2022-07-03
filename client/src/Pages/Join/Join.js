@@ -7,7 +7,6 @@ import Monaco from '../../Components/Monaco/Monaco'
 import Main from '../../Components/FolderTree/Main';
 import colors from '../../constants/colors';
 import Navbar from '../../Components/Collaborate/Navbar';
-import AutoSaveSwitch from '../../Components/AutoSaveSwitch';
 import useProject from '../../hooks/useProject';
 import useTree from '../../hooks/useTree';
 
@@ -66,7 +65,7 @@ const Join = () => {
     return (
         <div style={{ backgroundColor: colors.dark, height: '100vh', overflow: 'hidden' }}>
             <div style={{ marginBottom: 10, borderColor: 'white', borderStyle: 'solid', borderWidth: 0, borderBottomWidth: 1 }}>
-                <Navbar showInvite={false} projectname={activeProjectName} toLoadSwitch={!isLoading && isPresent} AutoSaveSwitch={<AutoSaveSwitch defaultChecked onChange={(e) => console.log(e.target.value)} />} />
+                <Navbar showInvite={false} projectname={activeProjectName}/>
             </div>
             {isLoading && <div style={{ display: 'flex', alignItems: 'center', position: 'fixed', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: 'grey', zIndex: 9999999999, opacity: 0.6, }}>
                 <CircularProgress color='inherit' />

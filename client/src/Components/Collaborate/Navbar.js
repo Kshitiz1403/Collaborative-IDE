@@ -26,8 +26,6 @@ const Navbar = ({ projectname, showInvite = true, AutoSaveSwitch, toLoadSwitch }
                             </IconButton>
                         </abbr>
                     </div>
-
-                    {toLoadSwitch && <div style={{ userSelect: 'none', marginRight: 15 }}>Auto Save{AutoSaveSwitch}</div>}
                     {showInvite && <Button variant='contained' size='small' onClick={() => setIsInviteModalActive(true)}>Invite</Button>}
                 </div>
             </div>

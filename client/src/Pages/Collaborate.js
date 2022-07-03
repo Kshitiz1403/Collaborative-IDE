@@ -7,7 +7,6 @@ import colors from '../constants/colors'
 import useTree from '../hooks/useTree'
 import useInviteLink from '../hooks/useInviteLink'
 import useProject from '../hooks/useProject'
-import AutoSaveSwitch from '../Components/AutoSaveSwitch'
 
 const Collaborate = () => {
 
@@ -65,7 +64,7 @@ const Collaborate = () => {
     <div style={{ backgroundColor: colors.dark, height: '100vh', overflow: 'hidden' }}>
       {/* TODO-> handle username in URL to be same as that in auth */}
       <div style={{ marginBottom: 10, borderColor: 'white', borderStyle: 'solid', borderWidth: 0, borderBottomWidth: 1 }}>
-        <Navbar projectname={activeProjectName} toLoadSwitch={!treeLoading && !loading} AutoSaveSwitch={<AutoSaveSwitch onChange={(e) => console.log(e.target.value)} />} />
+        <Navbar projectname={activeProjectName} />
       </div>
       <div style={{ display: 'flex' }}>
         {!treeLoading && !loading && <div style={{ flex: 0.1, backgroundColor: colors.light, borderRadius: 10, color: 'white', marginRight: 10, marginLeft: 10 }}>

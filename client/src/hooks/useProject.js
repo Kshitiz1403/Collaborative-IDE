@@ -87,7 +87,7 @@ const useProject = () => {
     const getProjects = () => {
         return new Promise((resolve, reject) => {
             api.get('/all').then(result => {
-                return resolve(result.code);
+                return resolve(result.data.code);
             }).catch(err => {
                 return reject(err);
             })

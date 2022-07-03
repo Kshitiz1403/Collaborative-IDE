@@ -48,7 +48,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         projectHook.getProjects()
-            .then(res => setMyProjects(res.data.code))
+            .then(data => setMyProjects(data))
             .catch(err => {
                 setIsError(true)
                 setErrorMsg(err.response.data.error)
@@ -105,7 +105,7 @@ const Dashboard = () => {
                             { language: 'c++', onClick: () => handleOpen('c++') },
                             { language: 'python', onClick: () => handleOpen('python') },
                             { language: 'java', onClick: () => handleOpen('java') },
-                            { language: 'nodejs', onClick: () => handleOpen('nodejs') }
+                            { language: 'nodejs', onClick: () => handleOpen('javascript') }
                         ]}
                     />
                     <div>

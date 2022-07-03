@@ -6,7 +6,7 @@ export const languageDefaultFile = (language) => {
             return "Main.java"
         case 'c++':
             return "main.cpp"
-        case 'nodejs':
+        case 'javascript':
             return "main.js"
     }
 }

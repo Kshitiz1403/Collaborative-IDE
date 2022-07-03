@@ -25,8 +25,7 @@ const useProject = () => {
             // console.log(getUserNameIfCollaborate(location.pathname))
             if (username && getUserNameIfCollaborate(location.pathname)) {
                 if (username === getUserNameIfCollaborate(location.pathname)) {
-                    setActiveProjectname(getProjectNameIfCollaborate(location.pathname))
-                    setAdminUsername(getUserNameIfCollaborate(location.pathname))
+                    checkProjectExist(getProjectNameIfCollaborate(location.pathname))
                 } else {
                     navigate('/404', { state: { error: "Unauthorized access. You don't have access to the request project." } })
                 }
@@ -48,6 +47,17 @@ const useProject = () => {
 
     const getProjectNameIfJoin = (pathname) => {
         return pathname.split('/').slice(-1)[0];
+    }
+
+    const checkProjectExist = (projectName) => {
+        getProjectDetails(projectName).then(result => {
+            setActiveProjectLanguage(result.language)
+            setActiveProjectname(getProjectNameIfCollaborate(location.pathname))
+            setAdminUsername(getUserNameIfCollaborate(location.pathname))
+        }).catch(err => {
+            console.log(err.response.data.error)
+            navigate('/404', { state: { error: `Project name ${projectName} does not exists` } })
+        })
     }
 
     const createDefaultFile = (language, projectName) => {
@@ -77,7 +87,7 @@ const useProject = () => {
     const getProjects = () => {
         return new Promise((resolve, reject) => {
             api.get('/all').then(result => {
-                return resolve(result);
+                return resolve(result.code);
             }).catch(err => {
                 return reject(err);
             })

@@ -1,4 +1,4 @@
-import { saveDataToFileUtil, deleteDirectoryOrFileUtil, createFolderUtil, deleteByPathUtil, createFolderByPathUtil, saveDataToFileByPathUtil, renameByPathUtil, renameUtil } from "./fileControllerUtil.js"
+import { saveDataToFileUtil, deleteDirectoryOrFileUtil, createFolderUtil, deleteByPathUtil, createFolderByPathUtil, saveDataToFileByPathUtil, renameByPathUtil, renameUtil, readFileUtil } from "./fileControllerUtil.js"
 
 export const deleteDirectoryOrFile = (req, res) => {
     const { username = "", projectName = "", path } = req.body
@@ -83,6 +83,17 @@ export const rename = (req, res) => {
         .then(result => {
             return res.send({ code: result })
         }).catch(err => {
+            return res.status(400).send({ error: err })
+        })
+}
+
+export const readFile = (req, res) => {
+    const { username, projectName, path } = req.query
+    return readFileUtil(username, projectName, path)
+        .then(result => {
+            return res.send({ code: result })
+        })
+        .catch(err => {
             return res.status(400).send({ error: err })
         })
 }

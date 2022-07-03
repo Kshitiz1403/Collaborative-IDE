@@ -103,5 +103,11 @@ export const renameUtil = (username, projectName, oldRelativePath, newRelativePa
                 return reject(err)
             })
     })
+}
 
+export const readFileUtil = (username, projectName, relativeFilePath) => {
+    return new Promise((resolve, reject) => {
+        const fPath = `${rootFolder}/${username}/${projectName}/${relativeFilePath}`
+        return resolve(fse.readFileSync(fPath, { encoding: 'utf-8' }))
+    })
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { saveDataToFile, deleteDirectoryOrFile, createFolder, rename } from "../controllers/filesControllers/fileControllers.js";
+import { saveDataToFile, deleteDirectoryOrFile, createFolder, rename, readFile } from "../controllers/filesControllers/fileControllers.js";
 
 const router = Router();
 
@@ -17,6 +17,10 @@ router.put('/save', (req, res) => {
 
 router.patch('/rename', (req, res) => {
     rename(req, res);
+})
+
+router.get('/read', (req, res) => {
+    readFile(req, res);
 })
 
 export default router;

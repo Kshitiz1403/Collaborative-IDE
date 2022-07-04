@@ -51,7 +51,7 @@ const useProject = () => {
 
     const checkProjectExist = (projectName) => {
         getProjectDetails(projectName).then(result => {
-            setActiveProjectLanguage(result.language)
+            setActiveProjectLanguage(result.data.code.language)
             setActiveProjectname(getProjectNameIfCollaborate(location.pathname))
             setAdminUsername(getUserNameIfCollaborate(location.pathname))
         }).catch(err => {

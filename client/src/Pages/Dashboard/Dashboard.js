@@ -5,10 +5,13 @@ import TextField from '@mui/material/TextField'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/system/Box'
 import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
 import Snacker from '../../Components/Snacker/Snacker'
-import CreateLanguageBox from '../../Components/LanguageBox/CreateLanguageBox'
+import CreateLanguageBox from '../../Components/ProjectBox/CreateProjectBox'
 import useAuth from '../../hooks/useAuth'
 import useProject from '../../hooks/useProject'
+import colors from '../../constants/colors'
+import RecentBox from '../../Components/ProjectBox/RecentBox'
 
 const Dashboard = () => {
 
@@ -53,6 +56,7 @@ const Dashboard = () => {
                 setIsError(true)
                 setErrorMsg(err.response.data.error)
             })
+        document.title = "Dashboard"
     }, [])
 
     return (
@@ -64,7 +68,8 @@ const Dashboard = () => {
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: 'fit-content',
-                    bgcolor: 'whitesmoke',
+                    bgcolor: colors.light,
+                    color: 'whitesmoke',
                     borderRadius: 2,
                     boxShadow: 24,
                     p: 2,
@@ -82,7 +87,7 @@ const Dashboard = () => {
                                 size='small'
                                 placeholder='Name your project'
                                 value={projectName}
-                                sx={{ backgroundColor: '#f0f1f2' }}
+                                sx={{ input: { color: 'whitesmoke' } }}
                                 onChange={(e) => setProjectName(e.target.value)}
                             />
                         </div>
@@ -92,27 +97,28 @@ const Dashboard = () => {
             </Modal>
 
 
-            <div style={{ display: 'flex', height: '100vh', backgroundColor: "#ebeced" }}>
-
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div>
-                        Create Project
+            <div style={{ display: 'flex', height: '100vh', backgroundColor: colors.dark, color: 'whitesmoke' }}>
+                <Container maxWidth='md' style={{ marginTop: 50 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', }}>
+                        <div>
+                            Create Project
+                        </div>
+                        <Snacker open={isSuccess} autoHideDuration={3000} onClose={() => setIsSuccess(false)} severity='success' message={successMsg} />
+                        <Snacker open={isError} message={errorMsg} autoHideDuration={3000} onClose={() => setIsError(false)} />
+                        <CreateLanguageBox
+                            languages={[
+                                { language: 'c++', onClick: () => handleOpen('c++') },
+                                { language: 'python', onClick: () => handleOpen('python') },
+                                { language: 'java', onClick: () => handleOpen('java') },
+                                { language: 'nodejs', onClick: () => handleOpen('javascript') }
+                            ]}
+                        />
+                        <div>
+                            My Projects
+                            <RecentBox data={myProjects}/>
+                        </div>
                     </div>
-                    <Snacker open={isSuccess} autoHideDuration={3000} onClose={() => setIsSuccess(false)} severity='success' message={successMsg} />
-                    <Snacker open={isError} message={errorMsg} autoHideDuration={3000} onClose={() => setIsError(false)} />
-                    <CreateLanguageBox
-                        languages={[
-                            { language: 'c++', onClick: () => handleOpen('c++') },
-                            { language: 'python', onClick: () => handleOpen('python') },
-                            { language: 'java', onClick: () => handleOpen('java') },
-                            { language: 'nodejs', onClick: () => handleOpen('javascript') }
-                        ]}
-                    />
-                    <div>
-                        My Projects
-                        {myProjects.map(({ name, language }) => <div key={name}>{name} {language}</div>)}
-                    </div>
-                </div>
+                </Container>
             </div>
         </>
 

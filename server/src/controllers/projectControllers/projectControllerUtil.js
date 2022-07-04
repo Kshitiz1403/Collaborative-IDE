@@ -2,6 +2,7 @@ import db from "../../db.js";
 
 export const createProjectInDBUtil = (username, projectName, language) => {
     return new Promise((resolve, reject) => {
+        if (!projectName) return reject("Project name cannot be empty")
 
         db.query("INSERT INTO projects(name, username, language) VALUES(?,?,?)", [projectName, username, language], (err, result) => {
             if (err) {
@@ -14,7 +15,7 @@ export const createProjectInDBUtil = (username, projectName, language) => {
 
 export const getProjectsUtil = (username) => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT name, language FROM projects WHERE username = ?", [username], (err, result) => {
+        db.query("SELECT * FROM projects WHERE username = ?", [username], (err, result) => {
             if (err) {
                 return reject(err.code)
             }

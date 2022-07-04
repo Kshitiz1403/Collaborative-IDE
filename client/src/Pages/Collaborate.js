@@ -60,6 +60,11 @@ const Collaborate = () => {
     }
   }, [loading])
 
+  useEffect(() => {
+    if (!loading) {
+      document.title = activeProjectName
+    }
+  }, [loading, activeProjectName])
 
 
   return (

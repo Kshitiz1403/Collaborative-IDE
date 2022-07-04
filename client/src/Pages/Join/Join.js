@@ -38,6 +38,10 @@ const Join = () => {
         }
     }, [activeProjectName, adminUsername])
 
+    useEffect(() => {
+        if (activeProjectName) document.title = activeProjectName
+    }, [activeProjectName])
+
     const handleGetTree = () => {
         getTree()
             .then(result => {
@@ -65,7 +69,7 @@ const Join = () => {
     return (
         <div style={{ backgroundColor: colors.dark, height: '100vh', overflow: 'hidden' }}>
             <div style={{ marginBottom: 10, borderColor: 'white', borderStyle: 'solid', borderWidth: 0, borderBottomWidth: 1 }}>
-                <Navbar showInvite={false} projectname={activeProjectName}/>
+                <Navbar showInvite={false} projectname={activeProjectName} />
             </div>
             {isLoading && <div style={{ display: 'flex', alignItems: 'center', position: 'fixed', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: 'grey', zIndex: 9999999999, opacity: 0.6, }}>
                 <CircularProgress color='inherit' />

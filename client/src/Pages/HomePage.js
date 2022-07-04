@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from '@mui/material/Button'
 import CodeIcon from '@mui/icons-material/Code';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     let navigate = useNavigate()
+
+    useEffect(() => {
+        document.title = "Collaborative IDE"
+    }, [])
 
     const handleOnIDE = () => {
         navigate('/rooms')

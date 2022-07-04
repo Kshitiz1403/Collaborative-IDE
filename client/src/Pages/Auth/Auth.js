@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import validator from 'validator'
 import axios from 'axios'
 import { API_URL } from '../../App'
@@ -14,7 +14,7 @@ import './Auth.css'
 
 const Auth = () => {
 
-    const { setIsAuthenticated,  setAccessToken, setUsername } = useAuth();
+    const { setIsAuthenticated, setAccessToken, setUsername } = useAuth();
 
     let navigate = useNavigate()
     const { state } = useLocation()
@@ -24,6 +24,11 @@ const Auth = () => {
     const [email, setEmail] = useState("");
     const [errorMsg, setErrorMsg] = useState("")
     const [isErrorShown, setIsErrorShown] = useState(false);
+
+    useEffect(() => {
+        if (isLoggingIn) document.title = "Login"
+        else document.title = "Signup"
+    }, [isLoggingIn])
 
     const performChecks = () => {
         if (!validator.isEmail(email)) return false;

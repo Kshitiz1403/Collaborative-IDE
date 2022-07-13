@@ -21,18 +21,18 @@ export const getShareIdentifierUtil = (username, projectname) => {
         db.query("SELECT * FROM projects WHERE username = ? and name = ?;", [username, projectname], (erro, resu) => {
             if (erro) {
                 console.log(erro)
-                reject(erro.code)
+                return reject(erro.code)
             }
 
             console.log(resu)
-            if (resu.length === 0) reject("Username & projectname combination does not exist");
+            if (resu.length === 0) return reject("Username & projectname combination does not exist");
 
             db.query("SELECT share from projects WHERE username = ? and name = ?;", [username, projectname], (error, result) => {
                 if (error) {
                     console.log(error);
-                    reject(erro.code);
+                    return reject(erro.code);
                 }
-                resolve(result[0]);
+                return resolve(result[0]);
             })
         })
     })

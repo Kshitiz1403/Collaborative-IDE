@@ -6,9 +6,9 @@ export const createProjectInDBUtil = (username, projectName, language) => {
 
         db.query("INSERT INTO projects(name, username, language) VALUES(?,?,?)", [projectName, username, language], (err, result) => {
             if (err) {
-                reject(err.code);
+                return reject(err.code);
             }
-            resolve("Project created");
+            return resolve("Project created");
         })
     })
 }

@@ -85,6 +85,10 @@ const Auth = () => {
 
     return (
         <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: '#0E1525', flexDirection: 'column' }}>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                isLoggingIn?login():signUp()
+            }}>
             <Box
                 sx={{
                     minWidth: 300,
@@ -150,14 +154,12 @@ const Auth = () => {
                         style: { color: "#9e9c89" },
                     }}
                 />
-                {isLoggingIn && <Button type="button" variant='contained' onClick={login} style={{ marginTop: 20, marginBottom: 20 }}>
-                    Log In
-                </Button>}
-                {!isLoggingIn && <Button type="button" variant='contained' onClick={signUp} style={{ marginTop: 20, marginBottom: 20 }}>
-                    Sign up
-                </Button>}
-                <Link onClick={() => setIsLoggingIn(!isLoggingIn)} style={{ cursor: 'pointer' }}>{isLoggingIn ? "Dont have an account? Sign up" : "Already have an account? Log in"}</Link>
+                <Button type="submit" variant='contained' style={{ marginTop: 20, marginBottom: 20 }}>
+                    {isLoggingIn? "Log In":"Sign up"}
+                </Button>
+                <Link onClick={() => setIsLoggingIn(!isLoggingIn)} style={{ cursor: 'pointer' }}>{isLoggingIn ? "Don't have an account? Sign up" : "Already have an account? Log in"}</Link>
             </Box>
+            </form>
             <Snacker message={errorMsg} open={isErrorShown} onClose={showErrorModal} />
         </div>
     )

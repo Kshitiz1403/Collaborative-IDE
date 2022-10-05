@@ -6,10 +6,12 @@ import colors from '../../constants/colors';
 import ShareModal from './ShareModal'
 import { useNavigate } from 'react-router-dom';
 import ClockLoader from 'react-spinners/ClockLoader'
+import useSaveFile from '../../hooks/useSaveFile';
 
 const Navbar = ({ projectname, showInvite = true, AutoSaveSwitch, toLoadSwitch }) => {
     const [isInviteModalActive, setIsInviteModalActive] = useState(false);
     const navigate = useNavigate()
+    const {saveFile} = useSaveFile()
     return (
         <>
             <ShareModal open={isInviteModalActive} setOpen={setIsInviteModalActive} />
@@ -21,7 +23,7 @@ const Navbar = ({ projectname, showInvite = true, AutoSaveSwitch, toLoadSwitch }
                     <ClockLoader loading={true} color='#8f8f8f' size={20}/>
                     <div style={{ marginRight: 20 }}>
                         <abbr title='Synchronize now'>
-                            <IconButton color='primary' >
+                            <IconButton color='primary' onClick={saveFile}>
                                 <MdSync size={20} color='whitesmoke' />
                             </IconButton>
                         </abbr>

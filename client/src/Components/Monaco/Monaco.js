@@ -5,10 +5,24 @@ import Editor from '@monaco-editor/react'
 import { WebrtcProvider } from 'y-webrtc'
 import { CircularProgress } from '@mui/material'
 import colors from '../../constants/colors'
+import useProject from '../../hooks/useProject'
+import useEditor from '../../hooks/useEditor'
 
 const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress /> }) => {
 
+    const { activeProjectLanguage } = useProject()
+
+
+    const { editorData, setEditorData } = useEditor()
+
     const [EditorRef, setEditorRef] = useState(null)
+
+    useEffect(() => {
+        // change room id 
+
+        // generate random key for monaco editor to force-rerender
+    }, [editorData])
+
 
     const handleWillMount = (monaco) => {
         monaco.editor.defineTheme('customTheme', {
@@ -24,6 +38,10 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress 
     const handleEditorMount = (editor) => {
         setEditorRef(editor);
     }
+
+    const handleUpdateValue = (value) => {
+        setEditorData({...editorData, value})
+    }    
 
     useEffect(() => {
         if (EditorRef) {
@@ -63,10 +81,11 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress 
             height={height}
             onMount={handleEditorMount}
             defaultValue="//some comment"
-            defaultLanguage='javascript'
+            language={activeProjectLanguage}
             theme='customTheme'
             loading={loadingComponent}
             beforeMount={handleWillMount}
+            onChange={handleUpdateValue}
         />
     )
 }

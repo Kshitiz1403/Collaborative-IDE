@@ -40,7 +40,7 @@ const Collaborate = () => {
       setInviteLink(data.share)
     }
   }
-
+  
   useEffect(() => {
     const onPageLoad = () => {
       setLoading(false)
@@ -58,7 +58,7 @@ const Collaborate = () => {
     if (!loading) {
       getInviteLink()
     }
-  }, [loading])
+  }, [loading, activeProjectName])
 
   useEffect(() => {
     if (!loading) {

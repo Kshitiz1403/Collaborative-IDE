@@ -17,9 +17,13 @@
     "jsonwebtoken": "^8.5.1",
     "lib0": "^0.2.51",
     "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "random-word-slugs": "^0.1.6",
     "validator": "^13.7.0",
     "ws": "^8.7.0"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }

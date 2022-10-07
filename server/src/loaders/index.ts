@@ -1,12 +1,10 @@
 import expressLoader from './express';
 import dependencyInjectorLoader from './dependencyInjector';
-import mysqlLoader from './mysql';
+import mongooseLoader from './mongoose';
 import Logger from './logger';
-//We have to import at least all the events once so they can be triggered
-import './events';
 
 export default async ({ expressApp }) => {
-  await mysqlLoader();
+  const mongoConnection = await mongooseLoader();
   Logger.info('✌️ DB loaded and connected!');
 
   /**
@@ -25,6 +23,7 @@ export default async ({ expressApp }) => {
 
   // It returns the agenda instance because it's needed in the subsequent loaders
   await dependencyInjectorLoader({
+    mongoConnection,
     models: [
       userModel,
       // salaryModel,

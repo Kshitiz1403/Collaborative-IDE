@@ -6,8 +6,6 @@ import express from 'express';
 
 import Logger from './loaders/logger';
 
-import DIContainer from './container';
-
 async function startServer() {
   const app = express();
 

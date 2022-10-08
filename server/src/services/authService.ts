@@ -95,7 +95,7 @@ export default class AuthService {
      * more information here: https://softwareontheroad.com/you-dont-need-passport
      */
     this.logger.silly(`Sign JWT for username: ${user.username}`);
-    return jwt.sign(
+    const token = jwt.sign(
       {
         role: user.role,
         username: user.username,
@@ -104,5 +104,6 @@ export default class AuthService {
       },
       config.jwtSecret
     );
+    return `Bearer ${token}`;
   }
 }

@@ -8,9 +8,9 @@ import { UserRepository } from '@/repositories/userRepository';
 import { INextFunction, IRequest, IResponse } from '../types/express';
 
 type token = {
-  id:number; 
   role:string; 
-  username:string
+  username:string;
+  email:string;
 }
 
 const getTokenFromHeader = (req): token => {
@@ -45,8 +45,9 @@ const isAuth = async (req: IRequest, res: IResponse, next: INextFunction) => {
   const token = checkToken(req);
   const userRepository = DIContainer.resolve(UserRepository);
 
+  Logger.debug(token);
   try{
-    const userRecord = await userRepository.findUserById(token.id);
+    const userRecord = await userRepository.findUserByUsername(token.username);
   
     if (!userRecord){
       Logger.error('🔥 User record not found: %o', token);

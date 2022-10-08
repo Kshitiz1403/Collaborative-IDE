@@ -94,12 +94,12 @@ export default class AuthService {
      * because it doesn't have _the secret_ to sign it
      * more information here: https://softwareontheroad.com/you-dont-need-passport
      */
-    this.logger.silly(`Sign JWT for userId: ${user.id}`);
+    this.logger.silly(`Sign JWT for username: ${user.username}`);
     return jwt.sign(
       {
-        id: user.id, // We are gonna use this in the middleware 'isAuth'
         role: user.role,
         username: user.username,
+        email: user.email,
         exp: exp.getTime() / 1000,
       },
       config.jwtSecret

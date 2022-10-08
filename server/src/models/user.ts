@@ -1,6 +1,7 @@
 import { IUser } from '@/interfaces/IUser';
 import sequelize from '../loaders/mysql';
 import { DataTypes, Model } from 'sequelize';
+import Project from './project';
 
 const User = sequelize.define<Model & IUser>(
   'user',
@@ -11,14 +12,13 @@ const User = sequelize.define<Model & IUser>(
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      primaryKey: true,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
-        isEmail:true
+      validate: {
+        isEmail: true,
       },
       unique: true,
     },
@@ -33,8 +33,8 @@ const User = sequelize.define<Model & IUser>(
     role: {
       type: DataTypes.ENUM,
       allowNull: false,
-      values:['user', 'admin'],
-      defaultValue: 'user'
+      values: ['user', 'admin'],
+      defaultValue: 'user',
     },
   },
   {
@@ -42,7 +42,8 @@ const User = sequelize.define<Model & IUser>(
   },
 );
 
-export default User;
+User.hasMany(Project, { foreignKey: 'username', foreignKeyConstraint: true });
 
+export default User;
 
 // export default mongoose.model<IUser & mongoose.Document>('User', User);

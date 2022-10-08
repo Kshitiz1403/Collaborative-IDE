@@ -7,23 +7,29 @@ export class UserRepository {
   constructor() {}
 
   public findUserByEmail = async (email: string): Promise<IUser> => {
-    return (await UserModel.findOne({ where: { email } })).toJSON();
+    return UserModel.findOne({ where: { email } }).then(user=>{
+      if (user){
+        return user.toJSON();
+      }
+    })
   };
 
   public findUserByUsername = async (username: string): Promise<IUser> => {
-    return (await UserModel.findOne({ where: { username } })).toJSON();
+    return UserModel.findOne({ where: { username } }).then(user => {
+      if (user) {
+        return user.toJSON();
+      }
+    });
   };
 
   public createUser = async (userInputDTO: IUserInputDTO, salt: string, password: string) => {
-    return (
-      await UserModel.create(
+    return  UserModel.create(
         {
           ...userInputDTO,
           salt: salt,
           password: password,
         },
         { raw: true },
-      )
-    ).toJSON();
+      ).then(result => result.toJSON())
   };
 }

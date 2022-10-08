@@ -49,6 +49,7 @@
     "moment": "^2.29.0",
     "moment-timezone": "^0.5.31",
     "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
     "random-word-slugs": "^0.1.6",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.24.0",

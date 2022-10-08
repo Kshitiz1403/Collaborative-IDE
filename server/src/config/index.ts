@@ -64,12 +64,11 @@ export default {
   api: {
     prefix: '/api',
   },
-  /**
-   * Mailgun email credentials
-   */
+
   emails: {
-    apiKey: process.env.MAILGUN_API_KEY,
-    apiUsername: process.env.MAILGUN_USERNAME,
-    domain: process.env.MAILGUN_DOMAIN
+    username: process.env.ORACLE_EMAIL_USERNAME,
+    password: process.env.ORACLE_EMAIL_PASSWORD,
+    port: process.env.ORACLE_EMAIL_PORT,
+    host: process.env.ORACLE_EMAIL_HOST
   }
 };

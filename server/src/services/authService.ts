@@ -6,16 +6,20 @@ import { randomBytes } from 'crypto';
 import { IUser, IUserInputDTO } from '@/interfaces/IUser';
 import { UserRepository } from '@/repositories/userRepository';
 import { inject, injectable } from 'inversify';
+import MailerService from './mailService';
 
 @injectable()
 export default class AuthService {
 
+  protected mailServiceInstance: MailerService;
   protected userRepositoryInstance: UserRepository;
   constructor(
     @Inject('logger') private logger,
-    @inject(UserRepository) userRepository: UserRepository
+    @inject(UserRepository) userRepository: UserRepository,
+    @inject(MailerService) mailerService: MailerService
   ) {
     this.userRepositoryInstance = userRepository;
+    this.mailServiceInstance = mailerService;
   }
 
   public async signUp(userInputDTO: IUserInputDTO): Promise<{ user: IUser; token: string }> {
@@ -34,8 +38,8 @@ export default class AuthService {
       if (!userRecord) {
         throw new Error('User cannot be created');
       }
-      // this.logger.silly('Sending welcome email');
-      // await this.mailer.SendWelcomeEmail(userRecord);
+      this.logger.silly('Sending welcome email');
+      this.mailServiceInstance.sendWelcomeEmail(userRecord.email, userRecord.name);
 
       /**
        * @TODO This is not the best way to deal with this

@@ -30,7 +30,7 @@ export class UserRepository {
     });
   };
 
-  public createUser = async (userInputDTO: IUserInputDTO, salt: string, password: string) => {
+  public createUser = async (userInputDTO: IUserInputDTO, salt: string, password: string): Promise<IUser> => {
     return  UserModel.create(
         {
           ...userInputDTO,

@@ -1,31 +1,44 @@
 import { IUser } from '@/interfaces/IUser';
-import mongoose from 'mongoose';
- 
-const User = new mongoose.Schema(
+import sequelize from '../loaders/mysql';
+import { DataTypes, Model } from 'sequelize';
+
+const User = sequelize.define<Model & IUser>(
+  'User',
   {
     name: {
-      type: String,
-      required: [true, 'Please enter a full name'],
-      index: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     email: {
-      type: String,
-      lowercase: true,
+      type: DataTypes.STRING,
+      allowNull: false,
       unique: true,
-      index: true,
     },
-
-    password: String,
-
-    salt: String,
-
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    salt: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     role: {
-      type: String,
-      default: 'user',
+      type: DataTypes.ENUM,
+      allowNull: false,
+      values:['user', 'admin'],
+      defaultValue: 'user'
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
 
-export default mongoose.model<IUser & mongoose.Document>('User', User);
+export default User;
+
+
+// export default mongoose.model<IUser & mongoose.Document>('User', User);

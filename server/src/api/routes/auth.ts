@@ -77,6 +77,8 @@ export default (app: Router) => {
     '/reset',
     middlewares.isResetToken,
     async (req: Request & { token: IPasswordResetToken }, res: Response, next: NextFunction) => {
+      const logger: Logger = Container.get('logger');
+      logger.debug('Calling Reset Password endpoint with body: %o', req.body);
       try {
         const authServiceInstance = Container.get(AuthService);
         const user = await authServiceInstance.resetPassword(req.token, req.body.password, req.token.username);

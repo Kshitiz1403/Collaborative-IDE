@@ -6,11 +6,11 @@ import { NextFunction, Request, Response } from 'express';
 const verifyToken = async (token: string) => {
   const passwordResetRepository = DIContainer.resolve(PasswordResetTokenRepository);
   const reset_token_record = await passwordResetRepository.getResetPasswordToken(token);
-  if (!reset_token_record) throw 'Invalid reset link';
-  if (reset_token_record.used) throw 'Invalid reset link';
+  if (!reset_token_record) throw new Error('Invalid reset link');
+  if (reset_token_record.used) throw new Error('Invalid reset link');
   const now = new Date();
 
-  if (reset_token_record.token_expiry < now) throw 'Invalid reset link';
+  if (reset_token_record.token_expiry < now) throw new Error('Invalid reset link');
   return reset_token_record;
 };
 

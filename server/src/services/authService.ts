@@ -58,7 +58,7 @@ export default class AuthService {
       return { user, token };
     } catch (e) {
       this.logger.error(e);
-      throw e;
+      throw new Error(e);
     }
   }
 
@@ -142,7 +142,7 @@ export default class AuthService {
       Reflect.deleteProperty(user, 'salt');
       return { user };
     } catch (e) {
-      throw e;
+      throw new Error(e);
     }
   };
 

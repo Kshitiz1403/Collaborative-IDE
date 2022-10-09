@@ -1,4 +1,4 @@
-import LoggerInstance from "@/loaders/logger";
+import LoggerInstance from '@/loaders/logger';
 
 export class Result<T> {
   private isSuccess: boolean;
@@ -32,9 +32,8 @@ export class Result<T> {
     return new Result<U>(true, null, value);
   }
 
-  public static error<U>(errorLog: any, error:string): Result<U> {
-    LoggerInstance.error('🔥 error: %o', errorLog);
-    return new Result<U>(false, error);
+  public static error<U>(errorLog: any, error?: string): Result<U> {
+    return new Result<U>(false, error || errorLog);
   }
 
   public static combine(results: Result<any>[]): Result<any> {

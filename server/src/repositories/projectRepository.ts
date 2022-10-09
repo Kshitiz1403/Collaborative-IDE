@@ -50,7 +50,7 @@ export class ProjectRepository {
           return await ProjectModel.findOne({ where: { id: affectedId } }).then(result => result.toJSON());
       })
       .catch(e => {
-        throw e;
+        throw new Error(e);
       });
   };
 
@@ -63,7 +63,7 @@ export class ProjectRepository {
         throw new Error('Slug not added to project.');
       })
       .catch(e => {
-        throw e;
+        throw new Error(e);
       });
   };
 }

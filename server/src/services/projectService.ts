@@ -27,8 +27,7 @@ export default class ProjectService {
 
       return project;
     } catch (e) {
-      this.logger.error(e);
-      throw e;
+      throw new Error(e);
     }
   };
 
@@ -48,8 +47,7 @@ export default class ProjectService {
 
       return projects;
     } catch (e) {
-      this.logger.error(e);
-      throw e;
+      throw new Error(e);
     }
   };
 
@@ -67,8 +65,7 @@ export default class ProjectService {
 
       return updatedResult;
     } catch (e) {
-      this.logger.error(e);
-      throw e;
+      throw new Error(e);
     }
   };
 
@@ -83,8 +80,7 @@ export default class ProjectService {
 
       return project;
     } catch (e) {
-      this.logger.error(e);
-      throw e;
+      throw new Error(e);
     }
   };
 

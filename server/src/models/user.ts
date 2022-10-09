@@ -6,13 +6,13 @@ import Project from './project';
 const User = sequelize.define<Model & IUser>(
   'user',
   {
+     username: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    username: {
-      type: DataTypes.STRING,
-      primaryKey: true,
     },
     email: {
       type: DataTypes.STRING,

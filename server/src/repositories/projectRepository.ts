@@ -60,6 +60,7 @@ export class ProjectRepository {
         const affectedId = updatedResult[1];
         if (affectedId)
           return await ProjectModel.findOne({ where: { id: affectedId } }).then(result => result.toJSON());
+        throw new Error('Slug not added to project.')
       })
       .catch(e => {
         throw e;

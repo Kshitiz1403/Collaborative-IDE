@@ -6,6 +6,7 @@ import Container from 'typedi';
 import { Logger } from 'winston';
 import middlewares from '../middlewares';
 import { IRequest, IResponse } from '../types/express';
+import { Result } from '../util/result';
 const route = Router();
 
 export default (app: Router) => {
@@ -27,10 +28,10 @@ export default (app: Router) => {
         const projectServiceInstance = Container.get(ProjectService);
         const project = await projectServiceInstance.createProject({ ...(req.body as IProjectInputDTO), username });
 
-        return res.status(200).json(project);
+        return res.status(200).json(Result.success<Object>(project));
       } catch (e) {
         logger.error('🔥 error: %o', e);
-        return res.status(500).json(e.message);
+        return res.status(500).json(Result.error<Object>(e));
       }
     },
   );
@@ -42,10 +43,10 @@ export default (app: Router) => {
       const projectServiceInstance = Container.get(ProjectService);
       const result = await projectServiceInstance.addSlug(req.body.id, username, req.body.name);
 
-      return res.status(200).json(result);
+      return res.status(200).json(Result.success<Object>(result));
     } catch (e) {
       logger.error('🔥 error: %o', e);
-      return res.status(500).json(e.message);
+      return res.status(500).json(Result.error<Object>(e.message));
     }
   });
 
@@ -55,10 +56,11 @@ export default (app: Router) => {
       const projectServiceInstance = Container.get(ProjectService);
       const project = await projectServiceInstance.getProjectBySlug(req.query.slug as string);
 
-      return res.status(200).json(project);
+      return res.status(200).json(Result.success<Object>(project));
+
     } catch (e) {
       logger.error('🔥 error: %o', e);
-      return res.status(500).json(e.message);
+      return res.status(500).json(Result.error<Object>(e));
     }
   });
 
@@ -68,11 +70,11 @@ export default (app: Router) => {
       const username = req.currentUser.username;
       const projectServiceInstance = Container.get(ProjectService);
       const projects = await projectServiceInstance.getAllProjectsForUser(username);
+      return res.status(200).json(Result.success<Object>(projects));
 
-      return res.status(200).json(projects);
     } catch (e) {
       logger.error('🔥 error: %o', e);
-      return res.status(500).json(e.message);
+      return res.status(500).json(Result.error<Object>(e));
     }
   });
 };

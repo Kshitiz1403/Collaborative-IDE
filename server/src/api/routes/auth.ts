@@ -5,6 +5,7 @@ import { IUserInputDTO } from '@/interfaces/IUser';
 import middlewares from '../middlewares';
 import { celebrate, Joi } from 'celebrate';
 import { Logger } from 'winston';
+import { Result } from '../util/result';
 
 const route = Router();
 
@@ -27,7 +28,8 @@ export default (app: Router) => {
       try {
         const authServiceInstance = Container.get(AuthService);
         const { user, token } = await authServiceInstance.signUp(req.body as IUserInputDTO);
-        return res.status(201).json({ user, token });
+        return res.status(201).json(Result.success<Object>({user, token}));
+
       } catch (e) {
         logger.error('🔥 error: %o', e);
         return next(e);
@@ -50,7 +52,8 @@ export default (app: Router) => {
         const { username, password } = req.body;
         const authServiceInstance = Container.get(AuthService);
         const { user, token } = await authServiceInstance.signIn(username, password);
-        return res.json({ user, token }).status(200);
+        return res.json(Result.success<Object>({user, token})).status(200);
+
       } catch (e) {
         logger.error('🔥 error: %o',  e );
         return next(e);

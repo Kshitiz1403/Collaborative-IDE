@@ -14,6 +14,9 @@ export default {
   /**
    * Your favorite port
    */
+
+  host: process.env.HOST,
+  
   port: parseInt(process.env.PORT, 10),
 
   databaseHost: process.env.DB_HOST,

@@ -3,6 +3,8 @@ import cors from 'cors';
 import { OpticMiddleware } from '@useoptic/express-middleware';
 import routes from '@/api';
 import config from '@/config';
+import LoggerInstance from './logger';
+import { Result } from '@/api/util/result';
 export default ({ app }: { app: express.Application }) => {
   /**
    * Health Check endpoints
@@ -51,6 +53,7 @@ export default ({ app }: { app: express.Application }) => {
     /**
      * Handle 401 thrown by express-jwt library
      */
+    LoggerInstance.error('🔥 error: %o', err);
     if (err.name === 'UnauthorizedError') {
       return res
         .status(err.status)
@@ -61,10 +64,6 @@ export default ({ app }: { app: express.Application }) => {
   });
   app.use((err, req, res, next) => {
     res.status(err.status || 500);
-    res.json({
-      errors: {
-        message: err.message,
-      },
-    });
+    res.json(Result.error(err));
   });
 };

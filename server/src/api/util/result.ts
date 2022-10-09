@@ -1,3 +1,5 @@
+import LoggerInstance from "@/loaders/logger";
+
 export class Result<T> {
   private isSuccess: boolean;
   private data: T;
@@ -30,7 +32,8 @@ export class Result<T> {
     return new Result<U>(true, null, value);
   }
 
-  public static error<U>(error: string): Result<U> {
+  public static error<U>(errorLog: any, error:string): Result<U> {
+    LoggerInstance.error('🔥 error: %o', errorLog);
     return new Result<U>(false, error);
   }
 

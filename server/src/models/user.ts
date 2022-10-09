@@ -2,6 +2,7 @@ import { IUser } from '@/interfaces/IUser';
 import sequelize from '../loaders/mysql';
 import { DataTypes, Model } from 'sequelize';
 import Project from './project';
+import PasswordResetToken from './password-reset-token';
 
 const User = sequelize.define<Model & IUser>(
   'user',
@@ -43,6 +44,7 @@ const User = sequelize.define<Model & IUser>(
 );
 
 User.hasMany(Project, { foreignKey: 'username', foreignKeyConstraint: true });
+User.hasMany(PasswordResetToken, {foreignKey: 'username', foreignKeyConstraint: true})
 
 export default User;
 

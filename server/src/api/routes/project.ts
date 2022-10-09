@@ -30,8 +30,7 @@ export default (app: Router) => {
 
         return res.status(200).json(Result.success<Object>(project));
       } catch (e) {
-        logger.error('🔥 error: %o', e);
-        return res.status(500).json(Result.error<Object>(e));
+        return res.status(500).json(Result.error<Object>(e, e.message));
       }
     },
   );
@@ -46,7 +45,7 @@ export default (app: Router) => {
       return res.status(200).json(Result.success<Object>(result));
     } catch (e) {
       logger.error('🔥 error: %o', e);
-      return res.status(500).json(Result.error<Object>(e.message));
+      return res.status(500).json(Result.error<Object>(e, e.message));
     }
   });
 
@@ -57,10 +56,8 @@ export default (app: Router) => {
       const project = await projectServiceInstance.getProjectBySlug(req.query.slug as string);
 
       return res.status(200).json(Result.success<Object>(project));
-
     } catch (e) {
-      logger.error('🔥 error: %o', e);
-      return res.status(500).json(Result.error<Object>(e));
+      return res.status(500).json(Result.error<Object>(e, e.message));
     }
   });
 
@@ -71,10 +68,8 @@ export default (app: Router) => {
       const projectServiceInstance = Container.get(ProjectService);
       const projects = await projectServiceInstance.getAllProjectsForUser(username);
       return res.status(200).json(Result.success<Object>(projects));
-
     } catch (e) {
-      logger.error('🔥 error: %o', e);
-      return res.status(500).json(Result.error<Object>(e));
+      return res.status(500).json(Result.error<Object>(e, e.message));
     }
   });
 };

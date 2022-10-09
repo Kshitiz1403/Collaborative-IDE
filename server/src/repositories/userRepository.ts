@@ -6,20 +6,12 @@ import { injectable } from 'inversify';
 export class UserRepository {
   constructor() {}
 
-  public findUserById = async (id: number): Promise<IUser> =>{
-    return UserModel.findOne({where:{id}}).then(user=>{
-      if (user){
-        return user.toJSON();
-      }
-    })
-  }
-
   public findUserByEmail = async (email: string): Promise<IUser> => {
-    return UserModel.findOne({ where: { email } }).then(user=>{
-      if (user){
+    return UserModel.findOne({ where: { email } }).then(user => {
+      if (user) {
         return user.toJSON();
       }
-    })
+    });
   };
 
   public findUserByUsername = async (username: string): Promise<IUser> => {
@@ -30,14 +22,21 @@ export class UserRepository {
     });
   };
 
+  public updatePasswordByUsername = async (username: string, salt: string, password: string) => {
+    return UserModel.update({ salt, password }, { where: { username }, returning: true }).then(async updatedResult => {
+      const affectedRow = updatedResult[1];
+      if (affectedRow) return await UserModel.findOne({ where: { username } }).then(result => result.toJSON());
+    });
+  };
+
   public createUser = async (userInputDTO: IUserInputDTO, salt: string, password: string): Promise<IUser> => {
-    return  UserModel.create(
-        {
-          ...userInputDTO,
-          salt: salt,
-          password: password,
-        },
-        { raw: true },
-      ).then(result => result.toJSON())
+    return UserModel.create(
+      {
+        ...userInputDTO,
+        salt: salt,
+        password: password,
+      },
+      { raw: true },
+    ).then(result => result.toJSON());
   };
 }

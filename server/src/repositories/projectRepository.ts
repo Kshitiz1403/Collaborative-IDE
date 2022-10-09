@@ -57,10 +57,10 @@ export class ProjectRepository {
   public addSlugByProjectName = async (projectName: string, username: string, slug: string): Promise<IProject> => {
     return ProjectModel.update({ slug }, { where: { username, name: projectName }, returning: true })
       .then(async updatedResult => {
-        const affectedId = updatedResult[1];
-        if (affectedId)
-          return await ProjectModel.findOne({ where: { id: affectedId } }).then(result => result.toJSON());
-        throw new Error('Slug not added to project.')
+        const affectedRows = updatedResult[1];
+        if (affectedRows)
+          return await ProjectModel.findOne({ where: { username, name: projectName } }).then(result => result.toJSON());
+        throw new Error('Slug not added to project.');
       })
       .catch(e => {
         throw e;

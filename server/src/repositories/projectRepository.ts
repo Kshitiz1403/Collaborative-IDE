@@ -42,24 +42,23 @@ export class ProjectRepository {
     return ProjectModel.create({ ...projectInputDTO }, { raw: true }).then(project => project.toJSON());
   };
 
-  public addSlugByProjectId = async (projectId: number, slug: string): Promise<IProject> => {
+  public addSlugByProjectId = async (projectId: number, slug: string): Promise<string> => {
     return ProjectModel.update({ slug }, { where: { id: projectId }, returning: true })
-      .then(async updatedResult => {
+      .then(updatedResult => {
         const affectedId = updatedResult[1];
-        if (affectedId)
-          return await ProjectModel.findOne({ where: { id: affectedId } }).then(result => result.toJSON());
+        if (affectedId) return slug;
       })
       .catch(e => {
         throw new Error(e);
       });
   };
 
-  public addSlugByProjectName = async (projectName: string, username: string, slug: string): Promise<IProject> => {
+  public addSlugByProjectName = async (projectName: string, username: string, slug: string): Promise<string> => {
     return ProjectModel.update({ slug }, { where: { username, name: projectName }, returning: true })
-      .then(async updatedResult => {
+      .then(updatedResult => {
         const affectedRows = updatedResult[1];
-        if (affectedRows)
-          return await ProjectModel.findOne({ where: { username, name: projectName } }).then(result => result.toJSON());
+        if (affectedRows) return slug;
+
         throw new Error('Slug not added to project.');
       })
       .catch(e => {

@@ -30,7 +30,7 @@ export default (app: Router) => {
 
         return res.status(200).json(Result.success<Object>(project));
       } catch (e) {
-        return res.status(500).json(Result.error<Object>(e, e.message));
+        return res.status(500).json(Result.error<Object>(e));
       }
     },
   );
@@ -45,7 +45,7 @@ export default (app: Router) => {
       return res.status(200).json(Result.success<Object>(result));
     } catch (e) {
       logger.error('🔥 error: %o', e);
-      return res.status(500).json(Result.error<Object>(e, e.message));
+      return res.status(500).json(Result.error<Object>(e));
     }
   });
 
@@ -57,7 +57,7 @@ export default (app: Router) => {
 
       return res.status(200).json(Result.success<Object>(project));
     } catch (e) {
-      return res.status(500).json(Result.error<Object>(e, e.message));
+      return res.status(500).json(Result.error<Object>(e));
     }
   });
 
@@ -69,7 +69,7 @@ export default (app: Router) => {
       const projects = await projectServiceInstance.getAllProjectsForUser(username);
       return res.status(200).json(Result.success<Object>(projects));
     } catch (e) {
-      return res.status(500).json(Result.error<Object>(e, e.message));
+      return res.status(500).json(Result.error<Object>(e));
     }
   });
 };

@@ -113,7 +113,7 @@ export default class AuthService {
       token_expiry: token_expiry,
     });
 
-    const reset_link = this.getResetPasswordLink(token);
+    const reset_link = `https://${config.host}/reset/${token}`;
 
     this.mailServiceInstance.sendResetPasswordEmail(
       user.name,
@@ -187,9 +187,5 @@ export default class AuthService {
     const exp = new Date(now);
     exp.setTime(exp.getTime() + 1000 * 60 * 30); // 30 minutes from now
     return exp;
-  };
-
-  private getResetPasswordLink = (token: string) => {
-    return `http://${config.host}/reset/${token}`;
   };
 }

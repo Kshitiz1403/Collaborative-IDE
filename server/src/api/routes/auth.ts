@@ -69,7 +69,7 @@ export default (app: Router) => {
       const status = await authServiceInstance.forgotPassword(username, email);
       return res.status(200).json(Result.success<Object>(status));
     } catch (e) {
-      return res.status(500).json(Result.error(e, e.message));
+      return res.status(500).json(Result.error(e));
     }
   });
 
@@ -84,7 +84,7 @@ export default (app: Router) => {
         const user = await authServiceInstance.resetPassword(req.token, req.body.password, req.token.username);
         return res.status(200).json(Result.success(user));
       } catch (e) {
-        return res.status(500).json(Result.error(e, e.message));
+        return res.status(500).json(Result.error(e));
       }
     },
   );

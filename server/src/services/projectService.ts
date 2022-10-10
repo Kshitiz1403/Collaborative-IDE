@@ -51,12 +51,12 @@ export default class ProjectService {
     }
   };
 
-  public addSlug = async (id: number | undefined, username: string, projectName: string): Promise<IProject> => {
+  public addSlug = async (id: number | undefined, username: string, projectName: string): Promise<string> => {
     try {
       this.logger.silly('Adding slug to project');
       const slug = this.getSlug();
 
-      let updatedResult: IProject;
+      let updatedResult: string;
       if (id) {
         updatedResult = await this.projectRepositoryInstance.addSlugByProjectId(id, slug);
       } else {

@@ -14,7 +14,7 @@ export default class MailerService {
     @inject(MailUtilService) private mailUtilService: MailUtilService,
   ) {}
 
-  private SUCCESS = messageId => {
+  private SUCCESS = (messageId: string) => {
     return { delivered: 1, messageId, status: 'OK' };
   };
 

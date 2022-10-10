@@ -6,7 +6,7 @@ import { injectable } from 'inversify';
 export class UserRepository {
   constructor() {}
 
-  public findUserByEmail = async (email: string): Promise<IUser> => {
+  public findUserByEmail = async (email: IUserInputDTO['email']): Promise<IUser> => {
     return UserModel.findOne({ where: { email } }).then(user => {
       if (user) {
         return user.toJSON();
@@ -14,7 +14,7 @@ export class UserRepository {
     });
   };
 
-  public findUserByUsername = async (username: string): Promise<IUser> => {
+  public findUserByUsername = async (username: IUserInputDTO['username']): Promise<IUser> => {
     return UserModel.findOne({ where: { username } }).then(user => {
       if (user) {
         return user.toJSON();
@@ -22,14 +22,14 @@ export class UserRepository {
     });
   };
 
-  public updatePasswordByUsername = async (username: string, salt: string, password: string) => {
+  public updatePasswordByUsername = async (username: IUser['username'], salt: IUser['salt'], password: IUser['password']): Promise<IUser> => {
     return UserModel.update({ salt, password }, { where: { username }, returning: true }).then(async updatedResult => {
       const affectedRow = updatedResult[1];
       if (affectedRow) return await UserModel.findOne({ where: { username } }).then(result => result.toJSON());
     });
   };
 
-  public createUser = async (userInputDTO: IUserInputDTO, salt: string, password: string): Promise<IUser> => {
+  public createUser = async (userInputDTO: IUserInputDTO, salt: IUser['salt'], password: IUser['salt']): Promise<IUser> => {
     return UserModel.create(
       {
         ...userInputDTO,

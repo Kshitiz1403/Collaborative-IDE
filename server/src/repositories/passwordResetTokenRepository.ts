@@ -19,16 +19,20 @@ export class PasswordResetTokenRepository {
     });
   };
 
-  public markTokenUsed = async (username: string, token: string) => {
+  public markTokenUsed = async (
+    username: IPasswordResetTokenInputDTO['username'],
+    token: IPasswordResetTokenInputDTO['token'],
+  ): Promise<{ status: string }> => {
     return PasswordResetTokenModel.update({ used: true }, { where: { username, token }, returning: true }).then(
       result => {
         const affectedRow = result[1];
         if (affectedRow) return { status: 'OK' };
+        throw { status: 'error' };
       },
     );
   };
 
-  public getResetPasswordToken = async (resetPasswordToken: string): Promise<IPasswordResetToken> => {
+  public getResetPasswordToken = async (resetPasswordToken: IPasswordResetTokenInputDTO['token']): Promise<IPasswordResetToken> => {
     return PasswordResetTokenModel.findOne({ where: { token: resetPasswordToken } }).then(record => {
       if (record) return record.toJSON();
     });

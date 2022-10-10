@@ -62,7 +62,10 @@ export default class AuthService {
     }
   }
 
-  public async signIn(username: string, password: string): Promise<{ user: IUser; token: string }> {
+  public async signIn(
+    username: IUserInputDTO['username'],
+    password: IUserInputDTO['password'],
+  ): Promise<{ user: IUser; token: string }> {
     const userRecord = await this.userRepositoryInstance.findUserByUsername(username);
     if (!userRecord) {
       throw new Error('User not registered');
@@ -89,7 +92,7 @@ export default class AuthService {
     }
   }
 
-  public forgotPassword = async (username: string | undefined, email: string) => {
+  public forgotPassword = async (username: IUserInputDTO['username'] | undefined, email: IUserInputDTO['email']) => {
     const handleSuccess = (username, email) => {
       if (email) return 'Password reset email sent to ' + email;
 

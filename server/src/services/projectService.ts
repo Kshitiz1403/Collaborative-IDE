@@ -31,7 +31,7 @@ export default class ProjectService {
     }
   };
 
-  public getAllProjectsForUser = async (username: string): Promise<IProject[]> => {
+  public getAllProjectsForUser = async (username: IProjectInputDTO['username']): Promise<IProject[]> => {
     try {
       this.logger.silly('Getting project for user');
       const projectsRecord = await this.projectRepositoryInstance.findAllProjectsForUser(username);
@@ -51,7 +51,11 @@ export default class ProjectService {
     }
   };
 
-  public addSlug = async (id: number | undefined, username: string, projectName: string): Promise<string> => {
+  public addSlug = async (
+    id: IProject['id'] | undefined,
+    username: IProjectInputDTO['username'],
+    projectName: IProjectInputDTO['name'],
+  ): Promise<IProject['slug']> => {
     try {
       this.logger.silly('Adding slug to project');
       const slug = await this.getSlug();
@@ -75,7 +79,7 @@ export default class ProjectService {
     }
   };
 
-  public getProjectBySlug = async (slug: string): Promise<IProject> => {
+  public getProjectBySlug = async (slug: IProject['slug']): Promise<IProject> => {
     try {
       this.logger.silly('Getting project by slug');
       const projectRecord = await this.projectRepositoryInstance.findProjectBySlug(slug);

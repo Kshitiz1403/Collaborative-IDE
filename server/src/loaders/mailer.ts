@@ -5,12 +5,11 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 const NodeMailerInstance = nodemailer.createTransport({
   host: config.emails.host,
-  port: config.emails.port,
-  secure: false,
-  auth: {
+  secure:false,
+  auth:{
     user: config.emails.username,
     pass: config.emails.password,
-  },
+  }
 });
 
 const sendMail = async (data: IMail): Promise<SMTPTransport.SentMessageInfo> => {

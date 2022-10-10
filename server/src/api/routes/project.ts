@@ -23,6 +23,7 @@ export default (app: Router) => {
     middlewares.isAuth,
     async (req: IRequest, res: IResponse) => {
       const logger: Logger = Container.get('logger');
+      logger.debug('Calling Create Project endpoint with body: %o', req.body);
       try {
         const username = req.currentUser.username;
         const projectServiceInstance = Container.get(ProjectService);
@@ -37,6 +38,7 @@ export default (app: Router) => {
 
   route.patch('/slug', middlewares.isAuth, async (req: IRequest, res: IResponse) => {
     const logger: Logger = Container.get('logger');
+    logger.debug('Calling Add Slug endpoint with body: %o', req.body);
     try {
       const username = req.currentUser.username;
       const projectServiceInstance = Container.get(ProjectService);
@@ -51,6 +53,7 @@ export default (app: Router) => {
 
   route.get('/slug', async (req: Request, res: IResponse) => {
     const logger: Logger = Container.get('logger');
+    logger.debug('Calling Get Project by Slug endpoint with body: %o', req.body);
     try {
       const projectServiceInstance = Container.get(ProjectService);
       const project = await projectServiceInstance.getProjectBySlug(req.query.slug as string);
@@ -63,6 +66,7 @@ export default (app: Router) => {
 
   route.get('/', middlewares.isAuth, async (req: IRequest, res: IResponse) => {
     const logger: Logger = Container.get('logger');
+    logger.debug('Calling Get all projects endpoint with body: %o', req.body);
     try {
       const username = req.currentUser.username;
       const projectServiceInstance = Container.get(ProjectService);

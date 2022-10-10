@@ -27,7 +27,7 @@ export default class ProjectService {
 
       return project;
     } catch (e) {
-      throw new Error(e);
+      throw e;
     }
   };
 
@@ -47,7 +47,7 @@ export default class ProjectService {
 
       return projects;
     } catch (e) {
-      throw new Error(e);
+      throw e;
     }
   };
 
@@ -55,17 +55,23 @@ export default class ProjectService {
     try {
       this.logger.silly('Adding slug to project');
       const slug = await this.getSlug();
+      const slug_expiry = new Date();
+      slug_expiry.setTime(slug_expiry.getTime() + 1000 * 60 * 60 * 24 * 7); // 7 days
 
       let updatedResult: string;
       if (id) {
-        updatedResult = await this.projectRepositoryInstance.addSlugByProjectId(id, slug);
+        updatedResult = await this.projectRepositoryInstance.addSlugByProjectId(id, slug, slug_expiry);
       } else {
-        updatedResult = await this.projectRepositoryInstance.addSlugByProjectName(projectName, username, slug);
+        updatedResult = await this.projectRepositoryInstance.addSlugByProjectName(
+          projectName,
+          username,
+          slug,
+          slug_expiry,
+        );
       }
-
       return updatedResult;
     } catch (e) {
-      throw new Error(e);
+      throw e;
     }
   };
 
@@ -73,14 +79,20 @@ export default class ProjectService {
     try {
       this.logger.silly('Getting project by slug');
       const projectRecord = await this.projectRepositoryInstance.findProjectBySlug(slug);
+      if (!projectRecord) throw 'Invalid link';
+
+      const { slug_expiry } = projectRecord;
+      const now = new Date();
+      if (slug_expiry < now) throw 'The project link has expired, kindly request the project owner for a new link';
 
       const project = projectRecord;
       Reflect.deleteProperty(project, 'createdAt');
       Reflect.deleteProperty(project, 'updatedAt');
+      Reflect.deleteProperty(project, 'slug_expiry');
 
       return project;
     } catch (e) {
-      throw new Error(e);
+      throw e;
     }
   };
 

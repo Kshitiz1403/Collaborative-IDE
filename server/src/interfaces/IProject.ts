@@ -6,6 +6,7 @@ export interface IProject{
     createdAt: Date;
     updatedAt: Date;
     slug: string;
+    slug_expiry:Date;
 }
 
 export interface IProjectInputDTO{

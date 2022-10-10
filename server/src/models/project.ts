@@ -26,6 +26,9 @@ const Project = sequelize.define<Model & IProject>(
       type: DataTypes.STRING,
       unique: true,
     },
+    slug_expiry:{
+      type:DataTypes.DATE,    
+    }
   },
   {
     timestamps: true,

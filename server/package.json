@@ -1,7 +1,7 @@
 {
-  "name": "bulletproof-nodejs",
+  "name": "collaborative-ide-server",
   "version": "1.0.0",
-  "description": "Bulletproof node.js",
+  "description": "collaborative-ide-server",
   "main": "src/app.ts",
   "scripts": {
     "build": "tsc",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/santiq/bulletproof-nodejs.git"
+    "url": "git+https://github.com/Kshitiz1403/Collaborative-IDE.git"
   },
   "keywords": [
     "boilerplay",
@@ -28,7 +28,7 @@
     "node",
     "express"
   ],
-  "author": "Santiago Quinteros",
+  "author": "Kshitiz Agrawal",
   "license": "ISC",
   "dependencies": {
     "@azure/storage-file-share": "^12.10.0",

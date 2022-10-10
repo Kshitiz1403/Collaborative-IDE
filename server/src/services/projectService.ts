@@ -54,7 +54,7 @@ export default class ProjectService {
   public addSlug = async (id: number | undefined, username: string, projectName: string): Promise<string> => {
     try {
       this.logger.silly('Adding slug to project');
-      const slug = this.getSlug();
+      const slug = await this.getSlug();
 
       let updatedResult: string;
       if (id) {
@@ -84,7 +84,23 @@ export default class ProjectService {
     }
   };
 
-  private getSlug = () => {
-    return generateSlug(5);
+  private getSlug = async () => {
+    const checkSlugUnique = async () => {
+      const slug = generateSlug(5);
+      try {
+        const existingSlug = await this.projectRepositoryInstance.findProjectBySlug(slug);
+        if (existingSlug) return { status: 'error', slug: null, message: 'slug exists' };
+        return { status: 'ok', slug: slug, message: 'slug generated' };
+      } catch (e) {
+        return { status: 'ok', slug: slug, message: 'slug generated' };
+      }
+    };
+
+    let slugStatus = await checkSlugUnique();
+    while (slugStatus.status == 'error') {
+      slugStatus = await checkSlugUnique();
+    }
+
+    return slugStatus.slug;
   };
 }

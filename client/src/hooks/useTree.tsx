@@ -4,7 +4,7 @@ import useProject from "./useProject";
 const useTree = () => {
     const azure = useAzure()
     const { adminUsername, activeProjectName } = useProject()
-    const getTree = () => {
+    const getTree = ():Promise<any> => {
         return new Promise((resolve, reject) => {
             azure.get(`/tree?username=${adminUsername}&projectName=${activeProjectName}`)
                 .then(result => {

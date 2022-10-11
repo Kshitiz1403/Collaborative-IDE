@@ -40,7 +40,7 @@ const Dashboard = () => {
 
     const handleCreateProject = () => {
         projectHook.createProject(projectName, selectedLanguage).then(result => {
-            setSuccessMsg(result.data)
+            setSuccessMsg(result['data'])
             setIsSuccess(true)
             navigate(`/@${username}/${projectName}`)
         }).catch(err => {

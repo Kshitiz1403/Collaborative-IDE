@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
 
-const ShareModal = ({ open, setOpen, link }) => {
+const ShareModal = ({ open, setOpen }) => {
     const [inviteLink, setInviteLink] = useState('')
     const [invitationAlert, setInvitationAlert] = useState(false)
 
@@ -22,7 +22,7 @@ const ShareModal = ({ open, setOpen, link }) => {
         if (open) {
             inviteHook.generateIfNotPresent()
                 .then(res => {
-                    setInviteLink(`${domain}/join/${res.share}`)
+                    setInviteLink(`${domain}/join/${res['share']}`)
                 })
         }
     }, [open])

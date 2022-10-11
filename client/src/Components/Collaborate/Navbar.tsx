@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import ClockLoader from 'react-spinners/ClockLoader'
 import useSaveFile from '../../hooks/useSaveFile';
 
-const Navbar = ({ projectname, showInvite = true, AutoSaveSwitch, toLoadSwitch }) => {
+const Navbar = ({ projectname, showInvite = true }) => {
     const [isInviteModalActive, setIsInviteModalActive] = useState(false);
     const navigate = useNavigate()
     const {saveFile} = useSaveFile()

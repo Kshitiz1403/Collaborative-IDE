@@ -21,6 +21,7 @@ const Auth = () => {
     const [isLoggingIn, setIsLoggingIn] = useState(true)
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [errorMsg, setErrorMsg] = useState("")
     const [isErrorShown, setIsErrorShown] = useState(false);
@@ -37,6 +38,7 @@ const Auth = () => {
 
     const login = () => {
         setIsErrorShown(false)
+        
         axios.post(`${API_URL}/auth/login`, {
             username: username, password: password
         }).then(res => {
@@ -60,15 +62,17 @@ const Auth = () => {
             showErrorModal()
             return
         }
-        axios.post(`${API_URL}/auth/register`, {
-            username, password, email
+        axios.post(`${API_URL}/auth/signup`, {
+            username, password, email, name
         }).then(res => {
-            localStorage.setItem("accessToken", res.data.accessToken)
-            setAccessToken(res.data.accessToken)
+            localStorage.setItem("accessToken", res.data.token)
+            console.log(res.data)
+            setAccessToken(res.data.data.token)
             navigate(state?.path || '/', { replace: true })
             setIsAuthenticated(true)
             setUsername(username)
         }).catch(err => {
+            console.error(err)
             setErrorMsg(err.response.data.message)
             showErrorModal()
             console.error(err.response.data.message)
@@ -124,6 +128,21 @@ const Auth = () => {
                         style: { color: "#9e9c89", },
                     }}
                 />
+                {!isLoggingIn && <TextField
+                    onChange={event => setName(event.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    id="name"
+                    label="Name"
+                    name="name"
+                    size='small'
+                    value={name}
+                    inputProps={{ sx: { color: 'whitesmoke', backgroundColor: '#1c2333' } }}
+                    InputLabelProps={{
+                        style: { color: "#9e9c89" },
+                    }}
+                />}
                 {!isLoggingIn && <TextField
                     onChange={event => setEmail(event.target.value)}
                     variant="outlined"

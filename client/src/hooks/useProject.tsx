@@ -51,7 +51,7 @@ const useProject = () => {
 
     const checkProjectExist = (projectName) => {
         getProjectDetails(projectName).then(result => {
-            setActiveProjectLanguage(result.data.code.language)
+            setActiveProjectLanguage(result['data']['code']['language'])
             setActiveProjectname(getProjectNameIfCollaborate(location.pathname))
             setAdminUsername(getUserNameIfCollaborate(location.pathname))
         }).catch(err => {
@@ -84,7 +84,7 @@ const useProject = () => {
                 .catch(err => reject(err))
         })
     }
-    const getProjects = () => {
+    const getProjects = ():Promise<any[]> => {
         return new Promise((resolve, reject) => {
             api.get('/all').then(result => {
                 return resolve(result.data.code);

@@ -37,7 +37,7 @@ const Collaborate = () => {
   const getInviteLink = async () => {
     if (activeProjectName) {
       const data = await invite.generateIfNotPresent()
-      setInviteLink(data.share)
+      setInviteLink(data['share'])
     }
   }
   

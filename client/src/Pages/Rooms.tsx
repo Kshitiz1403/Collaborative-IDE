@@ -122,7 +122,7 @@ const Rooms = () => {
                         }}
                     />
                 </Box>
-                <Button variant={!name.length == 0 ? 'contained' : 'outlined'} style={{ borderColor: 'whitesmoke', color: 'whitesmoke', margin: 8 }} >
+                <Button variant={!(name.length == 0) ? 'contained' : 'outlined'} style={{ borderColor: 'whitesmoke', color: 'whitesmoke', margin: 8 }} >
                     Join/Create
                 </Button>
             </div>

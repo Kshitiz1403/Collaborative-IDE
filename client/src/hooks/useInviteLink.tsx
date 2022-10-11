@@ -32,7 +32,7 @@ const useInviteLink = () => {
         return new Promise((resolve, reject) => {
             getInviteLink()
                 .then(res => {
-                    if (res.share) {
+                    if (res['share']) {
                         return resolve(res)
                     }
                     generateInviteLink()

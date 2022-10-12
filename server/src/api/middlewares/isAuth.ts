@@ -30,6 +30,7 @@ const getTokenFromHeader = (req): token => {
 const checkToken = (req: Request): token  => {
   const Logger: Logger = Container.get('logger');
   const token = getTokenFromHeader(req);
+  if (!token) throw "Token malformed";
   return verify(token, config.jwtSecret, { algorithms: [config.jwtAlgorithm] }, (err, decoded) => {
     if (err) {
       Logger.error('🔥 Error in verifying token: %o', err);
@@ -42,11 +43,11 @@ const checkToken = (req: Request): token  => {
 const isAuth = async (req: IRequest, res: IResponse, next: INextFunction) => {
   const Logger: Logger = Container.get('logger');
 
-  const token = checkToken(req);
   const userRepository = DIContainer.resolve(UserRepository);
-
-  Logger.debug(token);
+  
   try{
+    const token = checkToken(req);
+    Logger.debug(token);
     const userRecord = await userRepository.findUserByUsername(token.username);
   
     if (!userRecord){

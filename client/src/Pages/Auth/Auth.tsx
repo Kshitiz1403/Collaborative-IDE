@@ -11,6 +11,7 @@ import Snacker from '../../Components/Snacker/Snacker'
 import { useLocation, useNavigate } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 import './Auth.css'
+import { signup as signupService, login as loginService} from '../../api/authService'
 
 const Auth = () => {
 
@@ -36,25 +37,22 @@ const Auth = () => {
         return true;
     }
 
-    const login = () => {
+    const login = async () => {
         setIsErrorShown(false)
-        
-        axios.post(`${API_URL}/auth/login`, {
-            username: username, password: password
-        }).then(res => {
-            localStorage.setItem("accessToken", res.data.accessToken)
-            setAccessToken(res.data.accessToken)
+        try{
+            const login = await loginService({username, password})
+            setAccessToken(login.token)
             setIsAuthenticated(true)
             setUsername(username)
             navigate(state?.path || '/', { replace: true })
-        }).catch(err => {
-            setErrorMsg(err.response.data.message)
+        }
+        catch(err){
+            setErrorMsg(err)
             showErrorModal()
-            console.log(err.response.data.message)
-        })
+        }
     }
 
-    const signUp = () => {
+    const signUp = async() => {
         setIsErrorShown(false)
         if (!performChecks()) {
             // show error modal
@@ -62,21 +60,16 @@ const Auth = () => {
             showErrorModal()
             return
         }
-        axios.post(`${API_URL}/auth/signup`, {
-            username, password, email, name
-        }).then(res => {
-            localStorage.setItem("accessToken", res.data.token)
-            console.log(res.data)
-            setAccessToken(res.data.data.token)
+        try{
+            const token = await signupService({username, password, name, email})
             navigate(state?.path || '/', { replace: true })
             setIsAuthenticated(true)
             setUsername(username)
-        }).catch(err => {
-            console.error(err)
-            setErrorMsg(err.response.data.message)
+        }
+        catch(e){
+            setErrorMsg(e.error)
             showErrorModal()
-            console.error(err.response.data.message)
-        })
+        }
     }
 
     const showErrorModal = () => {

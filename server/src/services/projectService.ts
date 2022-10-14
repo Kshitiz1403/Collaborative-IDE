@@ -39,6 +39,7 @@ export default class ProjectService {
       const projects = [];
       projectsRecord.map(project => {
         const obj = {};
+        obj['id'] = project.id;
         obj['name'] = project.name;
         obj['language'] = project.language;
         obj['updatedAt'] = project.updatedAt;
@@ -52,9 +53,9 @@ export default class ProjectService {
   };
 
   public addSlug = async (
-    id: IProject['id'] | undefined,
     username: IProjectInputDTO['username'],
     projectName: IProjectInputDTO['name'],
+    id?: IProject['id']
   ): Promise<IProject['slug']> => {
     try {
       this.logger.silly('Adding slug to project');

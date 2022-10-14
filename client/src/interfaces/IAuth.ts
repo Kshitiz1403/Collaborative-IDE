@@ -1,5 +1,4 @@
-import { IAPI } from "../interfaces/IAPI";
-export interface IAuth extends Omit<IAPI, "data"> {
+export interface IAuth {
   user: {
     role: string;
     name: string;

@@ -32,16 +32,12 @@ const Auth = () => {
         else document.title = "Signup"
     }, [isLoggingIn])
 
-    const performChecks = () => {
-        if (!validator.isEmail(email)) return false;
-        return true;
-    }
-
     const login = async () => {
         setIsErrorShown(false)
         try{
             const login = await loginService({username, password})
-            setAccessToken(login.token)
+            console.log(login)
+            setAccessToken(login['token'])
             setIsAuthenticated(true)
             setUsername(username)
             navigate(state?.path || '/', { replace: true })
@@ -54,8 +50,7 @@ const Auth = () => {
 
     const signUp = async() => {
         setIsErrorShown(false)
-        if (!performChecks()) {
-            // show error modal
+        if (!validator.isEmail(email)) {
             setErrorMsg("Please enter valid email")
             showErrorModal()
             return
@@ -65,9 +60,10 @@ const Auth = () => {
             navigate(state?.path || '/', { replace: true })
             setIsAuthenticated(true)
             setUsername(username)
+            setAccessToken(token);
         }
         catch(e){
-            setErrorMsg(e.error)
+            setErrorMsg(e)
             showErrorModal()
         }
     }

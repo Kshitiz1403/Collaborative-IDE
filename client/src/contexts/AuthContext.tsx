@@ -11,6 +11,8 @@ const AuthProvider = (props:any) => {
     useEffect(() => {
         console.log("Auth Context reloaded")
         const token = localStorage.getItem("accessToken") || accessToken;
+        if (token == "undefined" || token === undefined) return;
+        if (token.length===0) return; 
         (async() => {
             const user = await getUserFromToken(token);
             setUsername(user.username);

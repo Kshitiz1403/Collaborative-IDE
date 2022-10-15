@@ -3,6 +3,7 @@ import sequelize from '../loaders/mysql';
 import { DataTypes, Model } from 'sequelize';
 import Project from './project';
 import PasswordResetToken from './password-reset-token';
+import RefreshToken from './refresh-tokens';
 
 const User = sequelize.define<Model & IUser>(
   'user',
@@ -45,6 +46,7 @@ const User = sequelize.define<Model & IUser>(
 
 User.hasMany(Project, { foreignKey: 'username', foreignKeyConstraint: true });
 User.hasMany(PasswordResetToken, {foreignKey: 'username', foreignKeyConstraint: true})
+User.hasOne(RefreshToken, { foreignKey: 'username'})
 
 export default User;
 

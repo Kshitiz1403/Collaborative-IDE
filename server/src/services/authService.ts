@@ -9,21 +9,26 @@ import { inject, injectable } from 'inversify';
 import MailerService from './mailService';
 import { PasswordResetTokenRepository } from '@/repositories/passwordResetTokenRepository';
 import { IPasswordResetToken } from '@/interfaces/IPasswordResetToken';
+import { RefreshTokenRepository } from '@/repositories/refreshTokenRepository';
+import { v4 as uuid } from 'uuid'
 
 @injectable()
 export default class AuthService {
   protected mailServiceInstance: MailerService;
   protected userRepositoryInstance: UserRepository;
   protected passwordResetRepositoryInstance: PasswordResetTokenRepository;
+  protected refreshTokenRepositoryInstance: RefreshTokenRepository;
   constructor(
     @Inject('logger') private logger,
     @inject(UserRepository) userRepository: UserRepository,
     @inject(MailerService) mailerService: MailerService,
     @inject(PasswordResetTokenRepository) passwordResetTokenRepository: PasswordResetTokenRepository,
+    @inject(RefreshTokenRepository) refreshTokenRepository: RefreshTokenRepository,
   ) {
     this.userRepositoryInstance = userRepository;
     this.mailServiceInstance = mailerService;
     this.passwordResetRepositoryInstance = passwordResetTokenRepository;
+    this.refreshTokenRepositoryInstance = refreshTokenRepository;
   }
 
   public async signUp(userInputDTO: IUserInputDTO): Promise<{ user: IUser; token: string }> {
@@ -43,6 +48,9 @@ export default class AuthService {
       if (!userRecord) {
         throw new Error('User cannot be created');
       }
+
+      const refreshTokenRecord = await this.generateRefreshToken(userRecord);
+
       this.logger.silly('Sending welcome email');
       this.mailServiceInstance.sendWelcomeEmail(userRecord.email, userRecord.name);
 
@@ -161,7 +169,7 @@ export default class AuthService {
   private generateToken(user: IUser) {
     const today = new Date();
     const exp = new Date(today);
-    exp.setDate(today.getDate() + 60);
+    exp.setTime(today.getTime() + 1000 * 60 * 60 * 8); //8 hours
 
     /**
      * A JWT means JSON Web Token, so basically it's a json that is _hashed_ into a string
@@ -191,4 +199,13 @@ export default class AuthService {
     exp.setTime(exp.getTime() + 1000 * 60 * 30); // 30 minutes from now
     return exp;
   };
+
+  private generateRefreshToken = async(user:IUser) =>{
+    const today = new Date();
+    const exp = new Date(today);
+    exp.setTime(today.getTime() + 1000 * 60 * 60 * 24 * 30); //30 days
+
+    const token = uuid()
+    return await this.refreshTokenRepositoryInstance.createRefreshTokenForUser(user.username, token, exp);
+  }
 }

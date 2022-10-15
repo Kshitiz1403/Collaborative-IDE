@@ -55,6 +55,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.24.0",
     "typedi": "^0.8.0",
+    "uuid": "^9.0.0",
     "validator": "^13.7.0",
     "winston": "^3.3.3",
     "ws": "^8.7.0"

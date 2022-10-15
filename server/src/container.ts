@@ -4,6 +4,7 @@ import LoggerInstance from "./loaders/logger"
 import { UserRepository } from "./repositories/userRepository";
 import { ProjectRepository } from "./repositories/projectRepository";
 import { PasswordResetTokenRepository } from "./repositories/passwordResetTokenRepository";
+import { RefreshTokenRepository } from "./repositories/refreshTokenRepository";
 
 import AuthService from "./services/authService";
 import ProjectService from "./services/projectService";
@@ -15,6 +16,7 @@ var DIContainer = new Container();
 DIContainer.bind<UserRepository>(UserRepository).toSelf();
 DIContainer.bind<ProjectRepository>(ProjectRepository).toSelf();
 DIContainer.bind<PasswordResetTokenRepository>(PasswordResetTokenRepository).toSelf();
+DIContainer.bind<RefreshTokenRepository>(RefreshTokenRepository).toSelf();
 
 DIContainer.bind<AuthService>(AuthService).toSelf().inSingletonScope();
 DIContainer.bind<ProjectService>(ProjectService).toSelf().inSingletonScope();

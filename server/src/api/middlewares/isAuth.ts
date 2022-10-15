@@ -1,19 +1,13 @@
-import { verify } from 'jsonwebtoken';
+import { Jwt, JwtPayload, verify } from 'jsonwebtoken';
 import config from '@/config';
 import { Request } from 'express';
 import { Logger } from 'winston';
 import Container from 'typedi';
-import DIContainer from '@/container';
-import { UserRepository } from '@/repositories/userRepository';
 import { INextFunction, IRequest, IResponse } from '../types/express';
+import { IToken } from '@/interfaces/IToken';
 
-type token = {
-  role:string; 
-  username:string;
-  email:string;
-}
 
-const getTokenFromHeader = (req): token => {
+const getTokenFromHeader = (req): string => {
   /**
    * @TODO Edge and Internet Explorer do some weird things with the headers
    * So I believe that this should handle more 'edge' cases ;)
@@ -27,41 +21,32 @@ const getTokenFromHeader = (req): token => {
   return null;
 };
 
-const checkToken = (req: Request): token  => {
+const checkToken = (req: Request): IToken => {
   const Logger: Logger = Container.get('logger');
   const token = getTokenFromHeader(req);
   if (!token) throw "Token malformed";
-  return verify(token, config.jwtSecret, { algorithms: [config.jwtAlgorithm] }, (err, decoded) => {
-    if (err) {
-      Logger.error('🔥 Error in verifying token: %o', err);
-      throw err;
-    }
+  try{
+    const decoded = verify(token, config.jwtSecret, {algorithms:[config.jwtAlgorithm]});
     return decoded;
-  });
+
+  }catch(err){
+    if (err.name === "TokenExpiredError"){
+      // here, we reissue the token using the refresh token from the database
+    }
+    
+    Logger.error('🔥 Error in verifying token: %o', err);
+    throw err;
+  };
 };
 
 const isAuth = async (req: IRequest, res: IResponse, next: INextFunction) => {
   const Logger: Logger = Container.get('logger');
-
-  const userRepository = DIContainer.resolve(UserRepository);
   
   try{
     const token = checkToken(req);
-    Logger.debug(token);
-    const userRecord = await userRepository.findUserByUsername(token.username);
-  
-    if (!userRecord){
-      Logger.error('🔥 User record not found: %o', token);
-      return res.sendStatus(401);
-    }
-  
-    const currentUser = userRecord;
-  
-    Reflect.deleteProperty(currentUser, 'salt');
-    Reflect.deleteProperty(currentUser, 'password');
-  
-    req.currentUser = currentUser;
-    Logger.info('User authenticated %o', currentUser);
+    Logger.debug('User authenticated %o',token);
+
+    req.currentUser = token;
     return next();
   }
   catch(e){

@@ -1,15 +1,12 @@
-import { IProjectInputDTO } from '@/interfaces/IProject';
-import ProjectService from '@/services/projectService';
 import { celebrate, Joi } from 'celebrate';
-import { NextFunction, Request, Router } from 'express';
+import { Router } from 'express';
 import Container from 'typedi';
-import { Logger } from 'winston';
+import { ProjectController } from '../controllers/projectController';
 import middlewares from '../middlewares';
-import { IRequest, IResponse } from '../types/express';
-import { Result } from '../util/result';
 const route = Router();
 
 export default (app: Router) => {
+  const ctrl: ProjectController = Container.get(ProjectController);
   app.use('/projects', route);
 
   route.post(
@@ -21,59 +18,12 @@ export default (app: Router) => {
       }),
     }),
     middlewares.isAuth,
-    async (req: IRequest, res: IResponse, next: NextFunction) => {
-      const logger: Logger = Container.get('logger');
-      logger.debug('Calling Create Project endpoint with body: %o', req.body);
-      try {
-        const username = req.currentUser.username;
-        const projectServiceInstance = Container.get(ProjectService);
-        const project = await projectServiceInstance.createProject({ ...(req.body as IProjectInputDTO), username });
-
-        return res.status(200).json(Result.success<Object>(project));
-      } catch (e) {
-        return next(e);
-      }
-    },
+    ctrl.create,
   );
 
-  route.patch('/slug', middlewares.isAuth, async (req: IRequest, res: IResponse, next: NextFunction) => {
-    const logger: Logger = Container.get('logger');
-    logger.debug('Calling Add Slug endpoint with body: %o', req.body);
-    try {
-      const username = req.currentUser.username;
-      const projectServiceInstance = Container.get(ProjectService);
-      const result = await projectServiceInstance.addSlug(username, req.body.name, req.body.id);
+  route.patch('/slug', middlewares.isAuth, ctrl.addSlug);
 
-      return res.status(200).json(Result.success<Object>(result));
-    } catch (e) {
-      logger.error('🔥 error: %o', e);
-      return next(e);
-    }
-  });
+  route.get('/slug', ctrl.getBySlug);
 
-  route.get('/slug', async (req: Request, res: IResponse, next: NextFunction) => {
-    const logger: Logger = Container.get('logger');
-    logger.debug('Calling Get Project by Slug endpoint with body: %o', req.body);
-    try {
-      const projectServiceInstance = Container.get(ProjectService);
-      const project = await projectServiceInstance.getProjectBySlug(req.query.slug as string);
-
-      return res.status(200).json(Result.success<Object>(project));
-    } catch (e) {
-      return next(e);
-    }
-  });
-
-  route.get('/', middlewares.isAuth, async (req: IRequest, res: IResponse, next: NextFunction) => {
-    const logger: Logger = Container.get('logger');
-    logger.debug('Calling Get all projects endpoint with body: %o', req.body);
-    try {
-      const username = req.currentUser.username;
-      const projectServiceInstance = Container.get(ProjectService);
-      const projects = await projectServiceInstance.getAllProjectsForUser(username);
-      return res.status(200).json(Result.success<Object>(projects));
-    } catch (e) {
-      return next(e);
-    }
-  });
+  route.get('/', middlewares.isAuth, ctrl.getAllProjects);
 };

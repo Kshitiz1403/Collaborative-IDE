@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import auth from './routes/auth';
+import file from './routes/file';
 import project from './routes/project';
 import user from './routes/user';
 
@@ -9,6 +10,7 @@ export default () => {
 	auth(app);
 	user(app);
 	project(app);
+	file(app);
 
 	return app
 }

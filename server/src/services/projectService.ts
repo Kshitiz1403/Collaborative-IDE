@@ -52,10 +52,32 @@ export default class ProjectService {
     }
   };
 
+  public getProjectForUserByName = async (
+    username: IProjectInputDTO['username'],
+    name: IProjectInputDTO['name'],
+  ): Promise<IProject> => {
+    try {
+      this.logger.silly('Getting project by name for user');
+      const projectRecord = await this.projectRepositoryInstance.findProjectByNameForUser(username, name);
+
+      if (!projectRecord) throw "Project does not exist."
+
+      const project = projectRecord;
+
+      Reflect.deleteProperty(project, 'slug_expiry');
+      Reflect.deleteProperty(project, 'createdAt');
+      Reflect.deleteProperty(project, 'updatedAt');
+
+      return project;
+    } catch (err) {
+      throw err;
+    }
+  };
+
   public addSlug = async (
     username: IProjectInputDTO['username'],
     projectName: IProjectInputDTO['name'],
-    id?: IProject['id']
+    id?: IProject['id'],
   ): Promise<IProject['slug']> => {
     try {
       this.logger.silly('Adding slug to project');

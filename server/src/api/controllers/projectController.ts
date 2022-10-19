@@ -26,6 +26,19 @@ export class ProjectController {
     }
   };
 
+  public getByName = async (req: IRequest, res: IResponse, next: NextFunction) => {
+    this.logger.debug('Calling Get Project By Name endpoint with params: %o', req.params);
+    try {
+      const username = req.currentUser.username;
+      const name = req.params.name as string;
+      const project = await this.projectServiceInstance.getProjectForUserByName(username, name);
+
+      return res.status(200).json(Result.success(project));
+    } catch (e) {
+      return next(e);
+    }
+  };
+
   public addSlug = async (req: IRequest, res: IResponse, next: NextFunction) => {
     this.logger.debug('Calling Add Slug endpoint with body: %o', req.body);
     try {
@@ -40,7 +53,7 @@ export class ProjectController {
   };
 
   public getBySlug = async (req: Request, res: IResponse, next: NextFunction) => {
-    this.logger.debug('Calling Get Project by Slug endpoint with body: %o', req.body);
+    this.logger.debug('Calling Get Project by Slug endpoint with query: %o', req.query);
     try {
       const project = await this.projectServiceInstance.getProjectBySlug(req.query.slug as string);
 

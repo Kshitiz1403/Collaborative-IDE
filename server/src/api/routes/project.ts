@@ -21,6 +21,17 @@ export default (app: Router) => {
     ctrl.create,
   );
 
+  route.get(
+    '/name/:name',
+    celebrate({
+      params:{
+        name: Joi.string().required(),
+      }
+    }),
+    middlewares.isAuth,
+    ctrl.getByName,
+  );
+
   route.patch('/slug', middlewares.isAuth, ctrl.addSlug);
 
   route.get('/slug', ctrl.getBySlug);

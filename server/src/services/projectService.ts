@@ -60,7 +60,7 @@ export default class ProjectService {
       this.logger.silly('Getting project by name for user');
       const projectRecord = await this.projectRepositoryInstance.findProjectByNameForUser(username, name);
 
-      if (!projectRecord) throw "Project does not exist."
+      if (!projectRecord) throw 'Project does not exist.';
 
       const project = projectRecord;
 
@@ -99,6 +99,23 @@ export default class ProjectService {
       return updatedResult;
     } catch (e) {
       throw e;
+    }
+  };
+
+  public getOrAddSlug = async(username: IProjectInputDTO['username'], projectName: IProjectInputDTO['name']) => {
+    try {
+      const project = await this.getProjectForUserByName(username, projectName);
+      if (project.slug) {
+        const now = new Date();
+        if (project.slug_expiry > now) {
+          const slug = await this.addSlug(username, projectName);
+          return slug;
+        } else {
+          return project.slug;
+        }
+      }
+    } catch (err) {
+      throw err;
     }
   };
 

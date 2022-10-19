@@ -1,9 +1,9 @@
 import useAzure from "./useAzure"
-import useProject from "./useProject"
+import useProjectService from "../api/projectService"
 
 const useFiles = () => {
     const azure = useAzure()
-    const { adminUsername, activeProjectName } = useProject()
+    const {adminUsername, activeProjectName} = useProjectService()
 
     const deleteByPath = (path) => {
         return new Promise((resolve, reject) => {

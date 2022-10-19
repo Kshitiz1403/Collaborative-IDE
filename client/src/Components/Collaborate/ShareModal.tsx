@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import useInviteLink from "../../hooks/useInviteLink"
+import useProjectService from '../../api/projectService'
 import Snacker from '../Snacker/Snacker'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -10,7 +10,7 @@ const ShareModal = ({ open, setOpen }) => {
     const [inviteLink, setInviteLink] = useState('')
     const [invitationAlert, setInvitationAlert] = useState(false)
 
-    const inviteHook = useInviteLink()
+    const {addOrGetSlug} = useProjectService()
 
     const copyInviteLink = () => {
         navigator.clipboard.writeText(inviteLink).then(() => setInvitationAlert(true))
@@ -20,10 +20,10 @@ const ShareModal = ({ open, setOpen }) => {
         let domain = new URL(window.location.href).host
 
         if (open) {
-            inviteHook.generateIfNotPresent()
-                .then(res => {
-                    setInviteLink(`${domain}/join/${res['share']}`)
-                })
+            (async()=>{
+                const slug = await addOrGetSlug()
+                setInviteLink(`${domain}/join/${slug}`)
+            })()
         }
     }, [open])
 

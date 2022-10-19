@@ -52,6 +52,18 @@ export class ProjectController {
     }
   };
 
+  public getOrAddSlug = async (req: IRequest, res: IResponse, next: NextFunction) => {
+    this.logger.debug('Calling Get Or Add Slug endpoint with query: %o', req.query);
+    try {
+      const username = req.currentUser.username;
+      const name = req.body.name;
+      const slug = await this.projectServiceInstance.getOrAddSlug(username, name);
+      return res.status(200).json(Result.success(slug));
+    } catch (err) {
+      return next(err);
+    }
+  };
+
   public getBySlug = async (req: Request, res: IResponse, next: NextFunction) => {
     this.logger.debug('Calling Get Project by Slug endpoint with query: %o', req.query);
     try {

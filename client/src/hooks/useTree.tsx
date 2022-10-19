@@ -1,9 +1,9 @@
 import useAzure from "./useAzure";
-import useProject from "./useProject";
+import useProjectService from "../api/projectService";
 
 const useTree = () => {
     const azure = useAzure()
-    const { adminUsername, activeProjectName } = useProject()
+    const { adminUsername, activeProjectName } = useProjectService()
     const getTree = ():Promise<any> => {
         return new Promise((resolve, reject) => {
             azure.get(`/tree?username=${adminUsername}&projectName=${activeProjectName}`)

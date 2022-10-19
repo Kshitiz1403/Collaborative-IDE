@@ -5,18 +5,25 @@ import Main from '../Components/FolderTree/Main'
 import CircularProgress from '@mui/material/CircularProgress'
 import colors from '../constants/colors'
 import useTree from '../hooks/useTree'
-import useInviteLink from '../hooks/useInviteLink'
-import useProject from '../hooks/useProject'
+import useProjectService from '../api/projectService'
+import useAuth from '../hooks/useAuth'
 
 const Collaborate = () => {
 
-  const invite = useInviteLink()
-  const { adminUsername, activeProjectName } = useProject()
+  const { adminUsername, activeProjectName, handleUserCollaborateTasks, addOrGetSlug } = useProjectService()
+  const { username } = useAuth()
+
   const [loading, setLoading] = useState(true)
   const [inviteLink, setInviteLink] = useState("")
   const [treeLoading, setTreeLoading] = useState(true)
   const [treeState, setTreeState] = useState([])
   const { getTree } = useTree()
+
+  useEffect(() =>{
+    (async()=>{
+      await handleUserCollaborateTasks()
+    })()
+  },[username])
 
   useEffect(() => {
     if (adminUsername && activeProjectName) {
@@ -36,8 +43,8 @@ const Collaborate = () => {
 
   const getInviteLink = async () => {
     if (activeProjectName) {
-      const data = await invite.generateIfNotPresent()
-      setInviteLink(data['share'])
+      const slug = await addOrGetSlug()
+      setInviteLink(slug)
     }
   }
   

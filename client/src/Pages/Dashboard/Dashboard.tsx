@@ -11,7 +11,7 @@ import CreateLanguageBox from '../../Components/ProjectBox/CreateProjectBox';
 import useAuth from '../../hooks/useAuth';
 import colors from '../../constants/colors';
 import RecentBox from '../../Components/ProjectBox/RecentBox';
-import { useProjectService } from '../../api/projectService';
+import useProjectService from '../../api/projectService';
 
 const Dashboard = () => {
     const navigate = useNavigate();

@@ -32,7 +32,7 @@ export default (app: Router) => {
     ctrl.getByName,
   );
 
-  route.patch('/slug', middlewares.isAuth, ctrl.addSlug);
+  route.patch('/slug', middlewares.isAuth, ctrl.getOrAddSlug);
 
   route.get('/slug', ctrl.getBySlug);
 

@@ -16,7 +16,7 @@ export default (app: Router) => {
       query: Joi.object({
         parent: Joi.string().allow(''),
         name: Joi.string().required(),
-        slug: Joi.string(),
+        slug: Joi.string().allow(''),
         project: Joi.string(),
       }),
     }),
@@ -65,7 +65,7 @@ export default (app: Router) => {
       query: Joi.object({
         parent: Joi.string().allow(''),
         name: Joi.string().required(),
-        slug: Joi.string(),
+        slug: Joi.string().allow(''),
         project: Joi.string(),
       }),
     }),
@@ -78,7 +78,7 @@ export default (app: Router) => {
     celebrate({
       query: Joi.object({
         parent: Joi.string().allow(''),
-        slug: Joi.string(),
+        slug: Joi.string().allow(''),
         project: Joi.string(),
       }),
     }),

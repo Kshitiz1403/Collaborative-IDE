@@ -7,18 +7,18 @@ import Monaco from '../../Components/Monaco/Monaco';
 import Main from '../../Components/FolderTree/Main';
 import colors from '../../constants/colors';
 import Navbar from '../../Components/Collaborate/Navbar';
-import useTree from '../../hooks/useTree';
 import useProjectService from '../../api/projectService';
 import { joinUtil } from '../../utils/projectUtils';
+import useFileService from '../../api/fileService';
 
 const Join = () => {
     const location = useLocation();
     const pathname = location.pathname;
-    const roomID = joinUtil.geSlug(pathname);
+    const slug = joinUtil.getSlug(pathname);
 
     const navigate = useNavigate();
-    const { handleUserJoinTasks, isSlugPresent, activeProjectName, adminUsername } = useProjectService();
-    const { getTree } = useTree();
+    const { handleUserJoinTasks, isSlugPresent, activeProjectName } = useProjectService();
+    const { getTree } = useFileService();
 
     const [isLoading, setIsLoading] = useState(true);
     const [isPresent, setIsPresent] = useState(true);
@@ -31,8 +31,8 @@ const Join = () => {
     useEffect(() => {
         (async () => {
             try {
-                await isSlugPresent(roomID);
-                await handleUserJoinTasks(roomID)
+                await isSlugPresent(slug);
+                await handleUserJoinTasks(slug)
             } catch (err) {
                 handleSlugNotPresent();
             }
@@ -40,24 +40,19 @@ const Join = () => {
     }, []);
 
     useEffect(() => {
-        if (activeProjectName && adminUsername) {
+        if (activeProjectName) {
             handleGetTree();
         }
-    }, [activeProjectName, adminUsername]);
+    }, [activeProjectName]);
 
     useEffect(() => {
         if (activeProjectName) document.title = activeProjectName;
     }, [activeProjectName]);
 
-    const handleGetTree = () => {
-        getTree()
-            .then(result => {
-                setTreeState(result);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.error(err);
-            });
+    const handleGetTree = async() => {
+        const tree = await getTree()
+        setTreeState([tree]);
+        setIsLoading(false)
     };
 
     const handleSlugNotPresent = () => {
@@ -134,7 +129,7 @@ const Join = () => {
                     >
                         <Main initialTreeState={treeState} />
                     </div>
-                    <Monaco roomId={roomID} />
+                    <Monaco roomId={slug} />
                 </div>
             )}
         </div>

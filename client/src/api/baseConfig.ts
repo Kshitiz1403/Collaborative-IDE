@@ -3,13 +3,17 @@ import axios, { AxiosRequestHeaders } from 'axios';
 interface config {
     baseURL?: string;
     headers?: AxiosRequestHeaders;
+    params?: {
+        slug?: string;
+        project?: string;
+    };
 }
 
 const config = {
     baseURL: 'http://localhost:4000/api',
     headers: {
         'Content-Type': 'application/json',
-    }
+    },
 };
 
 const getUnauthenticatedConfig = (url: string = ''): config => {
@@ -26,6 +30,13 @@ const getUnauthenticatedConfig = (url: string = ''): config => {
 const getAuthenticatedConfig = (token: string, url: string = ''): config => {
     const configuration = getUnauthenticatedConfig(url);
     configuration['headers']['Authorization'] = token;
+    return configuration;
+};
+
+const getFileConfig = (token: string, project_name: string, url: string = ''): config => {
+    const configuration = getAuthenticatedConfig(token, url);
+    configuration['params'] = {};
+    configuration['params']['project'] = project_name;
     return configuration;
 };
 
@@ -63,4 +74,24 @@ export const getUnauthenticatedAxios = (url: string = '') => {
     );
 
     return unauthenticatedAxios;
+};
+
+export const getFileAxios = (token: string, project_name: string, url: string = '') => {
+    const config = getFileConfig(token, project_name, url);
+
+    const fileAxiosInstance = axios.create(config);
+
+    fileAxiosInstance.interceptors.response.use(
+        response => {
+            let res = response.data;
+            return res.data;
+        },
+        error => {
+            let err = error.response.data;
+            console.error(err);
+            throw err.error;
+        },
+    );
+
+    return fileAxiosInstance;
 };

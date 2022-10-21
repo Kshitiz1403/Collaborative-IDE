@@ -19,7 +19,7 @@ const isCollaboratePath = pathname => {
 
 export const joinUtil = {
     isJoinPath,
-    geSlug: getSlugIfJoin,
+    getSlug: getSlugIfJoin,
 };
 
 export const collaborateUtil = {

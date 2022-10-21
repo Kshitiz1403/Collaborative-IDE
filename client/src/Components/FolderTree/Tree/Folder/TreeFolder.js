@@ -20,8 +20,8 @@ import { FILE, FOLDER } from "../state/constants";
 import { useTreeContext } from "../state/TreeContext";
 import { PlaceholderInput } from "../TreePlaceholderInput";
 
-import useFiles from "../../../../hooks/useFiles";
 import { getExactFilePath } from "../../utils";
+import useFileService from "../../../../api/fileService";
 
 const FolderName = ({ isOpen, name, handleClick }) => (
   <StyledName onClick={handleClick}>
@@ -35,38 +35,35 @@ const Folder = ({ id, name, children, node }) => {
   const [isEditing, setEditing] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [childs, setChilds] = useState([]);
-  const handleFiles = useFiles()
+  const handleFiles = useFileService()
 
   useEffect(() => {
     setChilds([children]);
   }, [children]);
 
-  const commitFolderCreation = (name) => {
-    let path = getExactFilePath(node)
-    handleFiles.createFolder(path + name).then(() => {
-      dispatch({ type: FOLDER.CREATE, payload: { id, name } });
-    })
+  const commitFolderCreation = async (name) => {
+    let relativePath = getExactFilePath(node)
+    await handleFiles.createFolder({ relativePath, folder_name: name })
+    dispatch({ type: FOLDER.CREATE, payload: { id, name } });
   };
-  const commitFileCreation = (name) => {
+  const commitFileCreation = async (name) => {
     let path = getExactFilePath(node)
-    console.log(path)
-    handleFiles.saveOrCreateFile(path + name).then(() => {
-      dispatch({ type: FILE.CREATE, payload: { id, name } });
-    })
+
+    await handleFiles.saveFile({ relativePath: path, name: name })
+    dispatch({ type: FILE.CREATE, payload: { id, name } });
   };
 
-  const commitDeleteFolder = () => {
+  const commitDeleteFolder = async () => {
     let path = getExactFilePath(node)
-    handleFiles.deleteFile(path).then(() => {
-      dispatch({ type: FOLDER.DELETE, payload: { id } });
-    })
+    await handleFiles.deleteRes({ relativePath: path, name: '' })
+    dispatch({ type: FOLDER.DELETE, payload: { id } });
   };
-  const commitFolderEdit = (name) => {
+  const commitFolderEdit = async (name) => {
     let oldPath = getExactFilePath(node)
     let newPath = oldPath.slice(0, oldPath.length - node.name.length - 1) + name
-    handleFiles.rename(oldPath, newPath).then(() => {
-      dispatch({ type: FOLDER.EDIT, payload: { id, name } });
-    })
+    await handleFiles.rename({ old_name: oldPath, new_name: newPath })
+    dispatch({ type: FOLDER.EDIT, payload: { id, name } });
+
     setEditing(false);
   };
 
@@ -116,6 +113,16 @@ const Folder = ({ id, name, children, node }) => {
     setEditing(true);
   };
 
+  const isNonRootFolder = (node) => {
+    const parentNode = node.parentNode;
+    if (typeof (parentNode) === 'object' &&
+      !Array.isArray((parentNode)) &&
+      (parentNode) !== null) {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <StyledFolder id={id} onClick={handleNodeClick} className="tree__folder">
       <VerticalLine>
@@ -138,10 +145,10 @@ const Folder = ({ id, name, children, node }) => {
 
           {isImparative && (
             <div className="actions">
-              <AiOutlineEdit onClick={handleFolderRename} />
+              {isNonRootFolder(node) && <AiOutlineEdit onClick={handleFolderRename} />}
               <AiOutlineFileAdd onClick={handleFileCreation} />
               <AiOutlineFolderAdd onClick={handleFolderCreation} />
-              <AiOutlineDelete onClick={commitDeleteFolder} />
+              {isNonRootFolder(node) && <AiOutlineDelete onClick={commitDeleteFolder} />}
             </div>
           )}
         </ActionsWrapper>

@@ -29,7 +29,7 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         name: Joi.string().required(),
-        data: Joi.string(),
+        data: Joi.string().allow(''),
       }),
     }),
     middlewares.isFileAuth,
@@ -64,7 +64,7 @@ export default (app: Router) => {
     celebrate({
       query: Joi.object({
         parent: Joi.string().allow(''),
-        name: Joi.string().required(),
+        name: Joi.string().allow(''),
         slug: Joi.string().allow(''),
         project: Joi.string(),
       }),

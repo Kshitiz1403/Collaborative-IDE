@@ -1,17 +1,15 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Tree from './Tree/Tree'
 import { VscRefresh } from "react-icons/vsc";
-import useTree from '../../hooks/useTree';
 import IconButton from '@mui/material/IconButton';
 import { getExactFilePath } from './utils';
-import useSaveFile from '../../hooks/useSaveFile';
+import useFileService from '../../api/fileService';
 
 const Main = ({ initialTreeState }) => {
 
     let [data, setData] = useState([...initialTreeState])
     // const { editorData } = useEditor()
-    const { getTree } = useTree()
-    const { saveFile } = useSaveFile()
+    const { getTree } = useFileService()
 
     const handleClick = (node) => {
         // let path;
@@ -20,7 +18,7 @@ const Main = ({ initialTreeState }) => {
         // }
         // console.log(node)
         // change open file
-        saveFile()
+        // saveFile()
         // if (editorData.filePath!=path)
         // handleChangeOpenFile()
         // setEditorValue({filePath:path, })
@@ -29,7 +27,7 @@ const Main = ({ initialTreeState }) => {
     const handleChangeOpenFile = () => {
         // handle force save
         // newFileRelativePath
-        saveFile()
+        // saveFile()
         // .then(res=>{
         //     console.log(res)
         //     // setEditorData({...editorData, filePath:newFileRelativePath, value:""})
@@ -59,10 +57,10 @@ const Main = ({ initialTreeState }) => {
         }
     }, []);
 
-    const handleRefresh = () => {
-        getTree()
-            .then(result => setData(result))
-            .catch(err => console.error(err))
+    const handleRefresh = async () => {
+        const tree = await getTree();
+        console.log(tree)
+        setData([tree])
     }
 
     return (<div>

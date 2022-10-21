@@ -78,7 +78,8 @@ export const useDidMountEffect = (func, deps) => {
 export const getExactFilePath = (node) => {
     const ob = { str: "" }
     const exactPathUtil = (node, ob) => {
-        if (!(typeof node === "object" && !Array.isArray(node) && node != null)) {
+        const parentNode = node.parentNode
+        if (!(typeof parentNode === "object" && !Array.isArray(parentNode) && parentNode != null)) {
             return;
         }
         exactPathUtil(node.parentNode, ob);

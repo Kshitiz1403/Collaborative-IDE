@@ -4,9 +4,9 @@ import Monaco from '../Components/Monaco/Monaco'
 import Main from '../Components/FolderTree/Main'
 import CircularProgress from '@mui/material/CircularProgress'
 import colors from '../constants/colors'
-import useTree from '../hooks/useTree'
 import useProjectService from '../api/projectService'
 import useAuth from '../hooks/useAuth'
+import useFileService from '../api/fileService'
 
 const Collaborate = () => {
 
@@ -17,7 +17,7 @@ const Collaborate = () => {
   const [inviteLink, setInviteLink] = useState("")
   const [treeLoading, setTreeLoading] = useState(true)
   const [treeState, setTreeState] = useState([])
-  const { getTree } = useTree()
+  const { getTree } = useFileService()
 
   useEffect(() =>{
     (async()=>{
@@ -31,14 +31,10 @@ const Collaborate = () => {
     }
   }, [adminUsername, activeProjectName])
 
-  const handleGetTree = () => {
-    getTree()
-      .then(result => {
-        setTreeState(result)
-        setTreeLoading(false)
-      }).catch(err => {
-        console.error(err)
-      })
+  const handleGetTree = async() => {
+    const tree = await getTree()
+    setTreeState([tree]);
+    setTreeLoading(false)
   }
 
   const getInviteLink = async () => {
@@ -81,7 +77,7 @@ const Collaborate = () => {
         <Navbar projectname={activeProjectName} />
       </div>
       <div style={{ display: 'flex' }}>
-        {!treeLoading && !loading && <div style={{ flex: 0.1, backgroundColor: colors.light, borderRadius: 10, color: 'white', marginRight: 10, marginLeft: 10 }}>
+        {!treeLoading && !loading && <div style={{ flex: 0.2, backgroundColor: colors.light, borderRadius: 10, color: 'white', marginRight: 10, marginLeft: 10 }}>
           <Main initialTreeState={treeState} />
         </div>}
         {loading && treeLoading && <CircularProgress />}

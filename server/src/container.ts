@@ -9,6 +9,7 @@ import { RefreshTokenRepository } from "./repositories/refreshTokenRepository";
 import AuthService from "./services/authService";
 import ProjectService from "./services/projectService";
 import MailerService from "./services/mailService";
+import FileService from "./services/fileService";
 
 var DIContainer = new Container();
 
@@ -21,6 +22,7 @@ DIContainer.bind<RefreshTokenRepository>(RefreshTokenRepository).toSelf();
 DIContainer.bind<AuthService>(AuthService).toSelf().inSingletonScope();
 DIContainer.bind<ProjectService>(ProjectService).toSelf().inSingletonScope();
 DIContainer.bind<MailerService>(MailerService).toSelf().inSingletonScope();
+DIContainer.bind<FileService>(FileService).toSelf().inSingletonScope();
 
 LoggerInstance.info("✌️Injections accomplished.")
 

@@ -16,6 +16,8 @@ export default (app: Router) => {
       query: Joi.object({
         parent: Joi.string().allow(''),
         name: Joi.string().required(),
+        slug: Joi.string(),
+        project: Joi.string(),
       }),
     }),
     middlewares.isFileAuth,
@@ -26,7 +28,6 @@ export default (app: Router) => {
     '/save',
     celebrate({
       body: Joi.object({
-        parent: Joi.string().allow(''),
         name: Joi.string().required(),
         data: Joi.string(),
       }),
@@ -36,22 +37,20 @@ export default (app: Router) => {
   );
 
   route.post(
-    '/create',
+    '/folder',
     celebrate({
       body: Joi.object({
-        parent: Joi.string().allow(''),
         name: Joi.string().required(),
       }),
     }),
     middlewares.isFileAuth,
-    ctrl.create,
+    ctrl.createFolder,
   );
 
   route.patch(
     '/rename',
     celebrate({
       body: Joi.object({
-        parent: Joi.string().allow(''),
         old_name: Joi.string().required(),
         new_name: Joi.string().required(),
       }),
@@ -66,9 +65,24 @@ export default (app: Router) => {
       query: Joi.object({
         parent: Joi.string().allow(''),
         name: Joi.string().required(),
+        slug: Joi.string(),
+        project: Joi.string(),
       }),
     }),
     middlewares.isFileAuth,
     ctrl.delete,
+  );
+
+  route.get(
+    '/tree',
+    celebrate({
+      query: Joi.object({
+        parent: Joi.string().allow(''),
+        slug: Joi.string(),
+        project: Joi.string(),
+      }),
+    }),
+    middlewares.isFileAuth,
+    ctrl.getTree,
   );
 };

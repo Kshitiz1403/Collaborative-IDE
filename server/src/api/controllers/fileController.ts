@@ -1,7 +1,8 @@
 import FileService from '@/services/fileService';
-import { Request } from 'express';
-import Container, { Inject } from 'typedi';
+import { NextFunction,  Response } from 'express';
+import Container from 'typedi';
 import { Logger } from 'winston';
+import { IFileRequest } from '../types/express';
 import { Result } from '../util/result';
 
 export class FileController {
@@ -12,13 +13,21 @@ export class FileController {
     this.logger = Container.get('logger');
   }
 
-  public get = async (req: Request & { username: string }, res, next) => {
+  public get = async (req: IFileRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Get File endpoint with query: %o', req.query);
+
     try {
-      const fileServiceInstance = Container.get(FileService);
+      const project_name_authenticatedWithSlug = req.project_name;
+      const project_name_from_request = req.query.project as string;
       const parent: string = req.query.parent as string;
-      const name: string = req.query.name as string;
-      const result = await fileServiceInstance.getFile(parent, req['username'], name);
+      const file_name: string = req.query.name as string;
+      const result = await this.fileServiceInstance.getFile({
+        file_name,
+        project_name_authenticatedWithSlug,
+        project_name_from_request,
+        relativePath: parent,
+        username: req['username'],
+      });
 
       return res.status(200).json(Result.success(result));
     } catch (err) {
@@ -26,56 +35,111 @@ export class FileController {
     }
   };
 
-  public save = async (req: Request & { username: string }, res, next) => {
+  public save = async (req: IFileRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Save File endpoint with body: %o', req.body);
     try {
-      const fileServiceInstance = Container.get(FileService);
-      const result = await fileServiceInstance.createFile(
-        req.body['parent'],
-        req['username'],
-        req.body['name'],
-        req.body['data'],
-      );
+      const project_name_authenticatedWithSlug = req.project_name;
+      const project_name_from_request = req.query.project as string;
+      const parent: string = req.query.parent as string;
+      const file_name = req.body['name'];
+      const data = req.body['data'];
+
+      const result = await this.fileServiceInstance.createFile({
+        file_name,
+        project_name_from_request,
+        project_name_authenticatedWithSlug,
+        data,
+        relativePath: parent,
+        username: req['username'],
+      });
+
       return res.status(200).json(Result.success(result));
     } catch (err) {
       return next(err);
     }
   };
 
-  public create = async (req: Request & { username: string }, res, next) => {
+  public createFolder = async (req: IFileRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Create File/Folder endpoint with body: %o', req.body);
     try {
-      const fileServiceInstance = Container.get(FileService);
-      const result = await fileServiceInstance.createFolder(req.body['parent'], req['username'], req.body['name']);
+      const project_name_authenticatedWithSlug = req.project_name;
+      const project_name_from_request = req.query.project as string;
+      const parent: string = req.query.parent as string;
+      const folder_name = req.body['name'];
+
+      const result = await this.fileServiceInstance.createFolder({
+        project_name_authenticatedWithSlug,
+        project_name_from_request,
+        folder_name,
+        username: req['username'],
+        relativePath: parent,
+      });
       return res.status(200).json(Result.success<Object>(result));
     } catch (err) {
       return next(err);
     }
   };
 
-  public rename = async (req, res, next) => {
+  public rename = async (req: IFileRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Rename File/Folder endpoint with body: %o', req.body);
     try {
-      const result = await this.fileServiceInstance.rename(
-        req.body['parent'],
-        req['username'],
-        req.body['old_name'],
-        req.body['new_name'],
-      );
+      const project_name_authenticatedWithSlug = req.project_name;
+      const project_name_from_request = req.query.project as string;
+      const parent: string = req.query.parent as string;
+      const newName = req.body['new_name'];
+      const oldName = req.body['old_name'];
+
+      const result = await this.fileServiceInstance.rename({
+        project_name_authenticatedWithSlug,
+        project_name_from_request,
+        relativePath: parent,
+        newName,
+        oldName,
+        username: req['username'],
+      });
       return res.status(200).json(Result.success(result));
     } catch (err) {
       return next(err);
     }
   };
 
-  public delete = async (req: Request & { username: string }, res, next) => {
+  public delete = async (req: IFileRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Delete File endpoint with query: %o', req.query);
     try {
+      const project_name_authenticatedWithSlug = req.project_name;
+      const project_name_from_request = req.query.project as string;
       const parent: string = req.query.parent as string;
-      const name: string = req.query.name as string;
-      const result = await this.fileServiceInstance.delete(parent, req['username'], name);
+      const file_name: string = req.query.name as string;
+
+      const result = await this.fileServiceInstance.delete({
+        project_name_authenticatedWithSlug,
+        project_name_from_request,
+        username: req['username'],
+        relativePath: parent,
+        file_name,
+      });
 
       return res.status(200).json(Result.success<Object>(result));
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  public getTree = async (req: IFileRequest, res: Response, next: NextFunction) => {
+    this.logger.debug('Calling Get File Tree endpoint with query: %o', req.query);
+    try {
+      const project_name_authenticatedWithSlug = req.project_name;
+      const project_name_from_request = req.query.project as string;
+      const parent: string = req.query.parent as string;
+
+      const result = await this.fileServiceInstance.getTree({
+        project_name_authenticatedWithSlug,
+        project_name_from_request,
+        relativePath: parent,
+        username: req['username'],
+      });
+
+      return res.status(200).json(Result.success(result));
     } catch (err) {
       return next(err);
     }

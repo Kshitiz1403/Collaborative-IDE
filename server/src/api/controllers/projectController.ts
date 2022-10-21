@@ -52,7 +52,7 @@ export class ProjectController {
     }
   };
 
-  public getOrAddSlug = async (req: IRequest, res: IResponse, next: NextFunction) => {
+  public addOrGetSlug = async (req: IRequest, res: IResponse, next: NextFunction) => {
     this.logger.debug('Calling Get Or Add Slug endpoint with query: %o', req.query);
     try {
       const username = req.currentUser.username;

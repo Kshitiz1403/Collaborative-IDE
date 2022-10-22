@@ -12,6 +12,7 @@ import {
   ActionsWrapper,
   Collapse,
   StyledName,
+  StyledNameText,
   VerticalLine,
 } from "../Tree.style";
 import { StyledFolder } from "./TreeFolder.style";
@@ -20,13 +21,17 @@ import { FILE, FOLDER } from "../state/constants";
 import { useTreeContext } from "../state/TreeContext";
 import { PlaceholderInput } from "../TreePlaceholderInput";
 
-import { getExactFilePath } from "../../utils";
+import { getExactFilePath, shortenText } from "../../utils";
 import useFileService from "../../../../api/fileService";
 
 const FolderName = ({ isOpen, name, handleClick }) => (
   <StyledName onClick={handleClick}>
-    {isOpen ? <AiOutlineFolderOpen color="#ffffff" /> : <AiOutlineFolder color="#ffffff" />}
-    &nbsp;&nbsp;{name}
+    <div>
+      {isOpen ? <AiOutlineFolderOpen color="#ffffff" /> : <AiOutlineFolder color="#ffffff" />}
+    </div>
+    <StyledNameText>
+      {shortenText(name)}
+    </StyledNameText>
   </StyledName>
 );
 

@@ -3,14 +3,14 @@ import { AiOutlineFile, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
 import { StyledFile } from "./TreeFile.style";
 import { useTreeContext } from "../state/TreeContext";
-import { ActionsWrapper, StyledName } from "../Tree.style.js";
+import { ActionsWrapper, StyledName, StyledNameText } from "../Tree.style.js";
 import { PlaceholderInput } from "../TreePlaceholderInput";
 
 import { FILE } from "../state/constants";
 import FILE_ICONS from "../FileIcons";
 
 import useFileService from "../../../../api/fileService";
-import { getExactFilePath } from "../../utils";
+import { getExactFilePath, shortenText } from "../../utils";
 
 const File = ({ name, id, node }) => {
   const { dispatch, isImparative, onNodeClick } = useTreeContext();
@@ -62,12 +62,16 @@ const File = ({ name, id, node }) => {
       ) : (
         <ActionsWrapper>
           <StyledName>
-            {FILE_ICONS[ext.current] ? (
-              FILE_ICONS[ext.current]
-            ) : (
-              <AiOutlineFile />
-            )}
-            &nbsp;&nbsp;{name}
+            <div>
+              {FILE_ICONS[ext.current] ? (
+                FILE_ICONS[ext.current]
+              ) : (
+                <AiOutlineFile />
+              )}
+            </div>
+            <StyledNameText>
+              {shortenText(name)}
+            </StyledNameText>
           </StyledName>
           {isImparative && (
             <div className="actions">

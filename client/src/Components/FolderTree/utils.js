@@ -94,5 +94,9 @@ export const getExactFilePath = (node) => {
     return ob.str;
 };
 
+export const shortenText = txt => {
+    return txt.length > 20 ? `${txt.substring(0, 8)}...${txt.substring(txt.length - 9, txt.length)}` : txt
+}
+
 export const createFile = ({ name }) => ({ name, type: "file" });
 export const createFolder = ({ name }) => ({ name, type: "folder", files: [] });

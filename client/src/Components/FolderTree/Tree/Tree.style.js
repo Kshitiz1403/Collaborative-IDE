@@ -56,6 +56,10 @@ export const StyledName = styled.div`
   color: whitesmoke;
 `;
 
+export const StyledNameText = styled.div`
+  margin-left: 10px;
+`;
+
 export const Collapse = styled.div`
   height: max-content;
   max-height: ${p => (p.isOpen ? "800px" : "0px")};

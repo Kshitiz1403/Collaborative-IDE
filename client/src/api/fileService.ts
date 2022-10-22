@@ -19,12 +19,11 @@ const useFileService = () => {
     const { accessToken } = useAuth();
     const fileAxios = getFileAxios(accessToken, activeProjectName, '/files');
     const pathname = useLocation().pathname;
-
-    let slug = '';
+    const [slug, setSlug] = useState('');
 
     useEffect(() => {
         if (joinUtil.isJoinPath(pathname)) {
-            slug = joinUtil.getSlug(pathname);
+            setSlug(joinUtil.getSlug(pathname));
             console.log(joinUtil.getSlug(pathname));
         }
     }, [pathname]);
@@ -105,7 +104,6 @@ const useFileService = () => {
     const getTree = async () => {
         try {
             const tree: ITree = await fileAxios.get('/tree', { params: { slug } });
-            console.log(tree);
             return tree;
         } catch (err) {
             throw err;

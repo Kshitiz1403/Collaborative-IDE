@@ -32,27 +32,27 @@ const Join = () => {
         (async () => {
             try {
                 await isSlugPresent(slug);
-                await handleUserJoinTasks(slug)
+                await handleUserJoinTasks(slug);
             } catch (err) {
                 handleSlugNotPresent();
             }
         })();
-    }, []);
+    }, [slug]);
 
     useEffect(() => {
-        if (activeProjectName) {
+        if (activeProjectName && pathname) {
             handleGetTree();
         }
-    }, [activeProjectName]);
+    }, [activeProjectName, location]);
 
     useEffect(() => {
         if (activeProjectName) document.title = activeProjectName;
     }, [activeProjectName]);
 
-    const handleGetTree = async() => {
-        const tree = await getTree()
+    const handleGetTree = async () => {
+        const tree = await getTree();
         setTreeState([tree]);
-        setIsLoading(false)
+        setIsLoading(false);
     };
 
     const handleSlugNotPresent = () => {

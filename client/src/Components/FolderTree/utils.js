@@ -78,7 +78,8 @@ export const useDidMountEffect = (func, deps) => {
 export const getExactFilePath = (node) => {
     const ob = { str: "" }
     const exactPathUtil = (node, ob) => {
-        if (!(typeof node === "object" && !Array.isArray(node) && node != null)) {
+        const parentNode = node.parentNode
+        if (!(typeof parentNode === "object" && !Array.isArray(parentNode) && parentNode != null)) {
             return;
         }
         exactPathUtil(node.parentNode, ob);
@@ -92,6 +93,13 @@ export const getExactFilePath = (node) => {
     exactPathUtil(node, ob);
     return ob.str;
 };
+export const getLanguageFromPath = (path) =>{
+    return (path.split('.'))[1]
+}
+
+export const shortenText = txt => {
+    return txt.length > 20 ? `${txt.substring(0, 8)}...${txt.substring(txt.length - 9, txt.length)}` : txt
+}
 
 export const createFile = ({ name }) => ({ name, type: "file" });
 export const createFolder = ({ name }) => ({ name, type: "folder", files: [] });

@@ -1,0 +1,33 @@
+.wrapper {
+    height: '100vh';
+    overflow: 'hidden';
+}
+
+.navbarWrapper {
+    margin-bottom: 10px;
+    border-color: white;
+    border-style: solid;
+    border-width: 0px;
+    border-bottom-width: 1px;
+}
+
+.treeWrapper {
+    border-radius: 10px;
+    color: white;
+    margin-right: 10px;
+    margin-left: 10px;
+    flex: 0.25;
+}
+
+.selectedFile {
+    max-width: fit-content;
+    min-height: 20;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    user-select: none;
+}

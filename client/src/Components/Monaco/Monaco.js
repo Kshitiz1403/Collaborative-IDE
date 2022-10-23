@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import * as Y from 'yjs'
 import { MonacoBinding } from 'y-monaco'
 import Editor from '@monaco-editor/react'
 import { WebrtcProvider } from 'y-webrtc'
 import { CircularProgress } from '@mui/material'
 import colors from '../../constants/colors'
-import useProject from '../../hooks/useProject'
+import useProjectService from '../../api/projectService'
+import languageMap from '../../utils/languageMappings'
 import useEditor from '../../hooks/useEditor'
 
 const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress /> }) => {
 
-    const { activeProjectLanguage } = useProject()
-
+    const { activeProjectLanguage } = useProjectService()
 
     const { editorData, setEditorData } = useEditor()
 
     const [EditorRef, setEditorRef] = useState(null)
-
-    useEffect(() => {
-        // change room id 
-
-        // generate random key for monaco editor to force-rerender
-    }, [editorData])
-
 
     const handleWillMount = (monaco) => {
         monaco.editor.defineTheme('customTheme', {
@@ -40,8 +33,18 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress 
     }
 
     const handleUpdateValue = (value) => {
-        setEditorData({...editorData, value})
-    }    
+        setEditorData(prevState => {
+            return {
+                ...prevState,
+                value: value,
+                saved:false
+            }
+        })
+    }
+
+    const getMonacoSubscriberId = () => {
+        return `${roomId}-${editorData.filePath}`
+    }
 
     useEffect(() => {
         if (EditorRef) {
@@ -49,11 +52,11 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress 
 
             let provider = null;
             try {
-                provider = new WebrtcProvider(roomId, yDoc, {
+                provider = new WebrtcProvider(getMonacoSubscriberId(), yDoc, {
                     signaling: [
-                        "wss://signaling.yjs.dev",
-                        'wss://y-webrtc-signaling-eu.herokuapp.com',
-                        'wss://y-webrtc-signaling-us.herokuapp.com'
+                        // "wss://signaling.yjs.dev",
+                        // 'wss://y-webrtc-signaling-eu.herokuapp.com',
+                        // 'wss://y-webrtc-signaling-us.herokuapp.com'
                     ],
                 })
                 const yText = yDoc.getText("monaco")
@@ -61,6 +64,7 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress 
                 const yAwarness = provider.awareness
 
                 const getBinding = new MonacoBinding(yText, EditorRef.getModel(), new Set([EditorRef]), yAwarness)
+                EditorRef.getModel().setValue(editorData.value)
             }
             catch (err) {
                 alert("error in collaborating try refreshing or come back later!")
@@ -80,12 +84,14 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress 
         <Editor
             height={height}
             onMount={handleEditorMount}
-            defaultValue="//some comment"
-            language={activeProjectLanguage}
+            defaultLanguage={languageMap[editorData.language]}
             theme='customTheme'
             loading={loadingComponent}
             beforeMount={handleWillMount}
             onChange={handleUpdateValue}
+            options={{
+                fontSize:16
+            }}
         />
     )
 }

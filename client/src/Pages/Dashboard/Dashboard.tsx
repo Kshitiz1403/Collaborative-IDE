@@ -39,7 +39,10 @@ const Dashboard = () => {
 
     const handleCreateProject = async () => {
         try {
-            const createdProject = await projectService.createProject({ name: projectName, language: selectedLanguage });
+            const createdProject = await projectService.createProject({
+                name: projectName,
+                language: selectedLanguage,
+            });
             setSuccessMsg('Project created successfully');
             setIsSuccess(true);
             setTimeout(() => {
@@ -81,28 +84,35 @@ const Dashboard = () => {
                         borderRadius: 2,
                         boxShadow: 24,
                         p: 2,
-                        height: 200,
+                        // height: 200,
                         display: 'flex',
                     }}
                 >
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                        <h2 style={{ margin: 0 }}>Create a {selectedLanguage} project</h2>
-                        <div>
-                            <h3 style={{ marginBottom: 2, fontWeight: 'normal' }}>Title</h3>
-                            <TextField
-                                autoFocus
-                                variant="outlined"
-                                fullWidth
-                                size="small"
-                                placeholder="Name your project"
-                                value={projectName}
-                                sx={{ input: { color: 'whitesmoke' } }}
-                                onChange={e => setProjectName(e.target.value)}
-                            />
-                        </div>
-                        <Button variant="contained" size="small" onClick={handleCreateProject}>
-                            Create Project
-                        </Button>
+                        <h2 style={{ margin: 0, marginBottom: 25 }}>Create a {selectedLanguage} project</h2>
+                        <form
+                            onSubmit={e => {
+                                e.preventDefault();
+                                handleCreateProject();
+                            }}
+                        >
+                            <div style={{ marginBottom: 25 }}>
+                                <h3 style={{ marginBottom: 5, fontWeight: 'normal' }}>Title</h3>
+                                <TextField
+                                    autoFocus
+                                    variant="outlined"
+                                    fullWidth
+                                    size="small"
+                                    placeholder="Name your project"
+                                    value={projectName}
+                                    sx={{ input: { color: 'whitesmoke' } }}
+                                    onChange={e => setProjectName(e.target.value)}
+                                />
+                            </div>
+                            <Button type="submit" variant="contained" size="small" style={{ width: '100%' }}>
+                                Create Project
+                            </Button>
+                        </form>
                     </div>
                 </Box>
             </Modal>

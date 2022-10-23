@@ -24,7 +24,6 @@ const useFileService = () => {
     useEffect(() => {
         if (joinUtil.isJoinPath(pathname)) {
             setSlug(joinUtil.getSlug(pathname));
-            console.log(joinUtil.getSlug(pathname));
         }
     }, [pathname]);
 

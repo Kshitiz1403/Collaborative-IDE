@@ -36,7 +36,6 @@ const Auth = () => {
         setIsErrorShown(false)
         try{
             const login = await loginService({username, password})
-            console.log(login)
             setAccessToken(login['token'])
             setIsAuthenticated(true)
             setUsername(username)

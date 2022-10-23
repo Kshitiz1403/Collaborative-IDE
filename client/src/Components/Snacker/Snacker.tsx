@@ -1,16 +1,10 @@
 import { Alert, AlertProps } from '@mui/material'
 import Snackbar from '@mui/material/Snackbar'
 import React from 'react'
+import { ISnacker } from '../../interfaces/ISnacker'
 
-interface IProps {
-    open: boolean;
-    onClose?: ()=>void;
-    message: string;
-    autoHideDuration?: number ;
-    severity?: AlertProps['severity'];
 
-}
-const Snacker = ({ open, onClose, message, autoHideDuration = 6000, severity = "error" }: IProps) => {
+const Snacker = ({ open, onClose, message, autoHideDuration = 6000, severity = "error" }: ISnacker) => {
     return (
         <Snackbar
             autoHideDuration={autoHideDuration}

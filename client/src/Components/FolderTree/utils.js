@@ -93,6 +93,9 @@ export const getExactFilePath = (node) => {
     exactPathUtil(node, ob);
     return ob.str;
 };
+export const getLanguageFromPath = (path) =>{
+    return (path.split('.'))[1]
+}
 
 export const shortenText = txt => {
     return txt.length > 20 ? `${txt.substring(0, 8)}...${txt.substring(txt.length - 9, txt.length)}` : txt

@@ -2,23 +2,33 @@ import { IProject, IProjectInputDTO } from '@/interfaces/IProject';
 import { ProjectRepository } from '@/repositories/projectRepository';
 import { inject, injectable } from 'inversify';
 import { generateSlug } from 'random-word-slugs';
-import { Inject } from 'typedi';
+import { Inject, Container } from 'typedi';
 import { Logger } from 'winston';
+import FileService from './fileService';
 
 @injectable()
 export default class ProjectService {
   protected projectRepositoryInstance: ProjectRepository;
+  protected fileServiceInstance: FileService;
   constructor(
     @Inject('logger') private logger: Logger,
     @inject(ProjectRepository) projectRepository: ProjectRepository,
   ) {
     this.projectRepositoryInstance = projectRepository;
+    this.fileServiceInstance = Container.get(FileService);
   }
 
   public createProject = async (projectInputDTO: IProjectInputDTO): Promise<IProject> => {
     try {
       this.logger.silly('Creating project db record');
       const projectRecord = await this.projectRepositoryInstance.createProject(projectInputDTO);
+      await this.fileServiceInstance.createFolder({
+        username: projectInputDTO.username,
+        project_name_from_request: projectInputDTO.name,
+        relativePath: '',
+        project_name_authenticatedWithSlug: '',
+        folder_name: '',
+      });
 
       const project = projectRecord;
       Reflect.deleteProperty(project, 'createdAt');
@@ -102,7 +112,7 @@ export default class ProjectService {
     }
   };
 
-  public getOrAddSlug = async(username: IProjectInputDTO['username'], projectName: IProjectInputDTO['name']) => {
+  public getOrAddSlug = async (username: IProjectInputDTO['username'], projectName: IProjectInputDTO['name']) => {
     try {
       const project = await this.getProjectForUserByName(username, projectName);
       if (project.slug) {

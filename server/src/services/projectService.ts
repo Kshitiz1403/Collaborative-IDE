@@ -124,6 +124,8 @@ export default class ProjectService {
           return project.slug;
         }
       }
+      const slug = await this.addSlug(username, projectName);
+      return slug;
     } catch (err) {
       throw err;
     }

@@ -2,20 +2,25 @@ import { IProject, IProjectInputDTO } from '@/interfaces/IProject';
 import { ProjectRepository } from '@/repositories/projectRepository';
 import { inject, injectable } from 'inversify';
 import { generateSlug } from 'random-word-slugs';
-import { Inject, Container } from 'typedi';
+import { Inject, Container, Service } from 'typedi';
 import { Logger } from 'winston';
 import FileService from './fileService';
+import ProjectUtilService from './projectUtilService';
 
 @injectable()
+@Service()
 export default class ProjectService {
   protected projectRepositoryInstance: ProjectRepository;
   protected fileServiceInstance: FileService;
+  protected projectUtilInstance: ProjectUtilService;
   constructor(
     @Inject('logger') private logger: Logger,
     @inject(ProjectRepository) projectRepository: ProjectRepository,
+    projectUtilService: ProjectUtilService,
   ) {
     this.projectRepositoryInstance = projectRepository;
     this.fileServiceInstance = Container.get(FileService);
+    this.projectUtilInstance = projectUtilService;
   }
 
   public createProject = async (projectInputDTO: IProjectInputDTO): Promise<IProject> => {
@@ -29,6 +34,8 @@ export default class ProjectService {
         project_name_authenticatedWithSlug: '',
         folder_name: '',
       });
+
+      await this.createDefaultFile(projectInputDTO);
 
       const project = projectRecord;
       Reflect.deleteProperty(project, 'createdAt');
@@ -170,5 +177,18 @@ export default class ProjectService {
     }
 
     return slugStatus.slug;
+  };
+
+  private createDefaultFile = async (projectInputDTO: IProjectInputDTO) => {
+    const getDefaultFileName = this.projectUtilInstance.fileLanguageMapping(projectInputDTO.language);
+    if (!getDefaultFileName) return;
+    return await this.fileServiceInstance.createFile({
+      username: projectInputDTO.username,
+      relativePath: '',
+      file_name: getDefaultFileName,
+      data: '',
+      project_name_authenticatedWithSlug: projectInputDTO.name,
+      project_name_from_request: projectInputDTO.name,
+    });
   };
 }

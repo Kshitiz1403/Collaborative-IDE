@@ -17,6 +17,11 @@ const Main = ({ initialTreeState }) => {
 
     const { FileSaveAlert, handleFileSave } = useSaveFile();
 
+    useEffect(() => {
+      setData(initialTreeState)
+    }, [initialTreeState])
+    
+
     // const handleDirtyFile = () => {
     //     console.log('dirty🐛', editorData);
     //     if (editorData.saved == false)

@@ -1,18 +1,17 @@
-import { Inject } from 'typedi';
+import { Inject, Service } from 'typedi';
 import jwt from 'jsonwebtoken';
 import config from '@/config';
 import argon2 from 'argon2';
 import { randomBytes } from 'crypto';
 import { IUser, IUserInputDTO } from '@/interfaces/IUser';
 import { UserRepository } from '@/repositories/userRepository';
-import { inject, injectable } from 'inversify';
 import MailerService from './mailService';
 import { PasswordResetTokenRepository } from '@/repositories/passwordResetTokenRepository';
 import { IPasswordResetToken } from '@/interfaces/IPasswordResetToken';
 import { RefreshTokenRepository } from '@/repositories/refreshTokenRepository';
-import { v4 as uuid } from 'uuid'
+import { v4 as uuid } from 'uuid';
 
-@injectable()
+@Service()
 export default class AuthService {
   protected mailServiceInstance: MailerService;
   protected userRepositoryInstance: UserRepository;
@@ -20,10 +19,10 @@ export default class AuthService {
   protected refreshTokenRepositoryInstance: RefreshTokenRepository;
   constructor(
     @Inject('logger') private logger,
-    @inject(UserRepository) userRepository: UserRepository,
-    @inject(MailerService) mailerService: MailerService,
-    @inject(PasswordResetTokenRepository) passwordResetTokenRepository: PasswordResetTokenRepository,
-    @inject(RefreshTokenRepository) refreshTokenRepository: RefreshTokenRepository,
+    userRepository: UserRepository,
+    mailerService: MailerService,
+    passwordResetTokenRepository: PasswordResetTokenRepository,
+    refreshTokenRepository: RefreshTokenRepository,
   ) {
     this.userRepositoryInstance = userRepository;
     this.mailServiceInstance = mailerService;
@@ -200,12 +199,12 @@ export default class AuthService {
     return exp;
   };
 
-  private generateRefreshToken = async(user:IUser) =>{
+  private generateRefreshToken = async (user: IUser) => {
     const today = new Date();
     const exp = new Date(today);
     exp.setTime(today.getTime() + 1000 * 60 * 60 * 24 * 30); //30 days
 
-    const token = uuid()
+    const token = uuid();
     return await this.refreshTokenRepositoryInstance.createRefreshTokenForUser(user.username, token, exp);
-  }
+  };
 }

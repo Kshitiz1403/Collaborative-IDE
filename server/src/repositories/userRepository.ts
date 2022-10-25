@@ -1,8 +1,8 @@
 import UserModel from '@/models/user';
 import { IUser, IUserInputDTO } from '@/interfaces/IUser';
-import { injectable } from 'inversify';
+import { Service } from 'typedi';
 
-@injectable()
+@Service()
 export class UserRepository {
   constructor() {}
 

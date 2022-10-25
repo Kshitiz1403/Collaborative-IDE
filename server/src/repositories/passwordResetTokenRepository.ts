@@ -1,9 +1,9 @@
 import { IPasswordResetToken, IPasswordResetTokenInputDTO } from '@/interfaces/IPasswordResetToken';
-import { injectable } from 'inversify';
 import PasswordResetTokenModel from '@/models/password-reset-token';
 import UserModel from '@/models/user';
+import { Service } from 'typedi';
 
-@injectable()
+@Service()
 export class PasswordResetTokenRepository {
   constructor() {}
 

@@ -1,19 +1,18 @@
 import { ProjectRepository } from '@/repositories/projectRepository';
-import { injectable } from 'inversify';
 import fs from 'fs-extra';
 import path from 'path';
 import { IFileInputDTO } from '@/interfaces/IFile';
-import Container, { Inject } from 'typedi';
+import { Inject, Service } from 'typedi';
 import { Logger } from 'winston';
 import dirTree from 'directory-tree';
 
-@injectable()
+@Service()
 export default class FileService {
   protected projectRepositoryInstance: ProjectRepository;
   protected loggerInstance: Logger;
-  constructor(@Inject('logger') private logger) {
+  constructor(@Inject('logger') private logger, projectRepository: ProjectRepository) {
     this.loggerInstance = logger;
-    this.projectRepositoryInstance = Container.get(ProjectRepository);
+    this.projectRepositoryInstance = projectRepository;
   }
 
   private getAbsolutePath = (...args) => {
@@ -145,6 +144,8 @@ export default class FileService {
 
     return tree;
   };
+
+  public createDefaultFile = (username, project_name) => {};
 
   private treeWalker = (treeObject: any) => {
     if (treeObject.type == 'directory') {

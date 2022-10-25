@@ -1,16 +1,17 @@
 import FileService from '@/services/fileService';
-import { NextFunction,  Response } from 'express';
-import Container from 'typedi';
+import { NextFunction, Response } from 'express';
+import { Inject, Service } from 'typedi';
 import { Logger } from 'winston';
 import { IFileRequest } from '../types/express';
 import { Result } from '../util/result';
 
+@Service()
 export class FileController {
   protected fileServiceInstance: FileService;
   protected logger: Logger;
-  constructor() {
-    this.fileServiceInstance = Container.get(FileService);
-    this.logger = Container.get('logger');
+  constructor(@Inject('logger') logger: Logger, fileService: FileService) {
+    this.fileServiceInstance = fileService;
+    this.logger = logger;
   }
 
   public get = async (req: IFileRequest, res: Response, next: NextFunction) => {

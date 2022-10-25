@@ -2,16 +2,17 @@ import { IPasswordResetToken } from '@/interfaces/IPasswordResetToken';
 import { IUserInputDTO } from '@/interfaces/IUser';
 import AuthService from '@/services/authService';
 import { NextFunction, Request, Response } from 'express';
-import Container from 'typedi';
+import { Inject, Service } from 'typedi';
 import { Logger } from 'winston';
 import { Result } from '../util/result';
 
+@Service()
 export class AuthController {
   protected logger: Logger;
   protected authServiceInstance: AuthService;
-  constructor() {
-    this.logger = Container.get('logger');
-    this.authServiceInstance = Container.get(AuthService);
+  constructor(@Inject('logger') logger: Logger, authService: AuthService) {
+    this.logger = logger;
+    this.authServiceInstance = authService;
   }
   public signup = async (req: Request, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Sign-Up endpoint with body: %o', req.body);

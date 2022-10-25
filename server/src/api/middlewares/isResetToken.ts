@@ -1,10 +1,10 @@
-import DIContainer from '@/container';
 import { IPasswordResetToken } from '@/interfaces/IPasswordResetToken';
 import { PasswordResetTokenRepository } from '@/repositories/passwordResetTokenRepository';
 import { NextFunction, Request, Response } from 'express';
+import Container from 'typedi';
 
 const verifyToken = async (token: string) => {
-  const passwordResetRepository = DIContainer.resolve(PasswordResetTokenRepository);
+  const passwordResetRepository = Container.get(PasswordResetTokenRepository);
   const reset_token_record = await passwordResetRepository.getResetPasswordToken(token);
   if (!reset_token_record) throw new Error('Invalid reset link');
   if (reset_token_record.used) throw new Error('Invalid reset link');

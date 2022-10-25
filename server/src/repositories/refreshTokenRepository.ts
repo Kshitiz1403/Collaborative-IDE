@@ -1,8 +1,8 @@
 import { IRefreshToken } from '@/interfaces/IRefreshToken';
 import RefreshTokenModel from '@/models/refresh-tokens';
-import { injectable } from 'inversify';
+import { Service } from 'typedi';
 
-@injectable()
+@Service()
 export class RefreshTokenRepository {
   constructor() {}
 

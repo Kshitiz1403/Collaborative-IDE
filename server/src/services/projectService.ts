@@ -1,13 +1,11 @@
 import { IProject, IProjectInputDTO } from '@/interfaces/IProject';
 import { ProjectRepository } from '@/repositories/projectRepository';
-import { inject, injectable } from 'inversify';
 import { generateSlug } from 'random-word-slugs';
 import { Inject, Container, Service } from 'typedi';
 import { Logger } from 'winston';
 import FileService from './fileService';
 import ProjectUtilService from './projectUtilService';
 
-@injectable()
 @Service()
 export default class ProjectService {
   protected projectRepositoryInstance: ProjectRepository;
@@ -15,11 +13,12 @@ export default class ProjectService {
   protected projectUtilInstance: ProjectUtilService;
   constructor(
     @Inject('logger') private logger: Logger,
-    @inject(ProjectRepository) projectRepository: ProjectRepository,
+    projectRepository: ProjectRepository,
     projectUtilService: ProjectUtilService,
+    fileService: FileService,
   ) {
     this.projectRepositoryInstance = projectRepository;
-    this.fileServiceInstance = Container.get(FileService);
+    this.fileServiceInstance = fileService;
     this.projectUtilInstance = projectUtilService;
   }
 

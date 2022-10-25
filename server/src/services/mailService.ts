@@ -1,17 +1,16 @@
-import { inject, injectable } from 'inversify';
-import { Inject } from 'typedi';
+import { Inject, Service } from 'typedi';
 import Mailer from '@/loaders/mailer';
 import { MailUtilService } from './mailUtilService';
 import moment from 'moment';
 
-@injectable()
+@Service()
 export default class MailerService {
   protected FROM = 'Kshitiz Agrawal <no_reply@ide.kshitizagrawal.in>';
 
   constructor(
     @Inject('emailClient') private emailClient: typeof Mailer,
     @Inject('logger') private logger,
-    @inject(MailUtilService) private mailUtilService: MailUtilService,
+    private mailUtilService: MailUtilService,
   ) {}
 
   private SUCCESS = (messageId: string) => {

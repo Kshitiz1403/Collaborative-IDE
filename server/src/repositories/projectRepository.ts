@@ -1,8 +1,8 @@
-import { injectable } from 'inversify';
 import ProjectModel from '@/models/project';
 import { IProject, IProjectInputDTO } from '@/interfaces/IProject';
+import { Service } from 'typedi';
 
-@injectable()
+@Service()
 export class ProjectRepository {
   constructor() {}
 

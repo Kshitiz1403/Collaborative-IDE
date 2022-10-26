@@ -2,6 +2,7 @@ import { IProject } from '@/interfaces/IProject';
 import { IUser } from '@/interfaces/IUser';
 import docker from '@/loaders/docker';
 import { ContainerRepository } from '@/repositories/containerRepository';
+import { ProjectRepository } from '@/repositories/projectRepository';
 import path from 'path';
 import { Service } from 'typedi';
 import ContainerUtilService from './containerUtilService';
@@ -10,9 +11,15 @@ import ContainerUtilService from './containerUtilService';
 export class ContainerService {
   protected containerRepositoryInstance: ContainerRepository;
   protected containerUtilInstance: ContainerUtilService;
-  constructor(containerRepository: ContainerRepository, containerUtil: ContainerUtilService) {
+  protected projectRepositoryInstance: ProjectRepository;
+  constructor(
+    containerRepository: ContainerRepository,
+    containerUtil: ContainerUtilService,
+    projectRepository: ProjectRepository,
+  ) {
     this.containerRepositoryInstance = containerRepository;
     this.containerUtilInstance = containerUtil;
+    this.projectRepositoryInstance = projectRepository;
   }
 
   public compile = async (
@@ -25,6 +32,7 @@ export class ContainerService {
       await this.createContainer(username, projectName);
       const result = await this.executeInContainer(username, projectName, command);
       this.stopAndDeleteContainer(username, projectName);
+      this.projectRepositoryInstance.updateLastUpdated(username, projectName);
       return result;
     } catch (err) {
       throw err;

@@ -73,4 +73,10 @@ export class ProjectRepository {
       },
     );
   };
+
+  public updateLastUpdated = async (username: IProject['username'], projectName: IProject['name']) => {
+    const project = await ProjectModel.findOne({ where: { name: projectName, username: username } });
+    project.changed('updatedAt', true);
+    await project.save();
+  };
 }

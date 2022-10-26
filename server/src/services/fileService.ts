@@ -31,6 +31,7 @@ export default class FileService {
 
     try {
       await fs.ensureDir(folder_path);
+      this.projectRepositoryInstance.updateLastUpdated(username, project_name)
       return 'Folder has been created';
     } catch (err) {
       throw 'Folder could not be created';
@@ -49,6 +50,7 @@ export default class FileService {
 
     try {
       await fs.outputFile(file_path, data);
+      this.projectRepositoryInstance.updateLastUpdated(username, project_name)
       return 'File has been saved';
     } catch (err) {
       throw 'File could not be saved';
@@ -85,6 +87,7 @@ export default class FileService {
 
     try {
       await fs.rename(old_file_path, new_file_path);
+      this.projectRepositoryInstance.updateLastUpdated(username, project_name)
       return 'File has been renamed';
     } catch (err) {
       throw 'File could not be renamed';
@@ -103,6 +106,7 @@ export default class FileService {
 
     try {
       await fs.remove(file_path);
+      this.projectRepositoryInstance.updateLastUpdated(username, project_name)
       return 'Removed';
     } catch (err) {
       throw 'Could not remove';

@@ -18,11 +18,15 @@ const Playground = ({ slug }) => {
 
     const { getTree } = useFileService();
     const { activeProjectName } = useProjectService();
-    const { editorData } = useEditor();
+    const { editorData, resetEditorData } = useEditor();
     const { handleFileSave, FileSaveAlert } = useSaveFile();
     const location = useLocation();
 
     const pathname = location.pathname;
+
+    useEffect(() => {
+        resetEditorData();
+    }, []);
 
     useEffect(() => {
         if (activeProjectName && pathname) {

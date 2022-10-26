@@ -3,10 +3,10 @@ import { EditorContext } from "../contexts/EditorContext";
 
 const useEditor = () => {
 
-    const { editorData, setEditorData } = useContext(EditorContext)
+    const { editorData, setEditorData, resetEditorData } = useContext(EditorContext)
 
 
-    return { editorData, setEditorData }
+    return { editorData, setEditorData, resetEditorData }
 
 }
 

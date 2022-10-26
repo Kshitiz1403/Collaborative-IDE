@@ -14,8 +14,12 @@ const EditorProvider = (props) => {
     }
     const [editorData, setEditorData] = useState(initialState)
 
+    const resetEditorData = () =>{
+        setEditorData(initialState)
+    }
+
     return (
-        <EditorContext.Provider value={{ editorData, setEditorData }}>
+        <EditorContext.Provider value={{ editorData, setEditorData, resetEditorData }}>
             {props.children}
         </EditorContext.Provider>
     )

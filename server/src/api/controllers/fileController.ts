@@ -2,7 +2,7 @@ import FileService from '@/services/fileService';
 import { NextFunction, Response } from 'express';
 import { Inject, Service } from 'typedi';
 import { Logger } from 'winston';
-import { IFileRequest } from '../types/express';
+import { IProjectRequest } from '../types/express';
 import { Result } from '../util/result';
 
 @Service()
@@ -14,18 +14,16 @@ export class FileController {
     this.logger = logger;
   }
 
-  public get = async (req: IFileRequest, res: Response, next: NextFunction) => {
+  public get = async (req: IProjectRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Get File endpoint with query: %o', req.query);
 
     try {
-      const project_name_authenticatedWithSlug = req.project_name;
-      const project_name_from_request = req.query.project as string;
+      const project_name = req.project.name;
       const parent: string = req.query.parent as string;
       const file_name: string = req.query.name as string;
       const result = await this.fileServiceInstance.getFile({
         file_name,
-        project_name_authenticatedWithSlug,
-        project_name_from_request,
+        project_name,
         relativePath: parent,
         username: req['username'],
       });
@@ -36,19 +34,17 @@ export class FileController {
     }
   };
 
-  public save = async (req: IFileRequest, res: Response, next: NextFunction) => {
+  public save = async (req: IProjectRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Save File endpoint with body: %o', req.body);
     try {
-      const project_name_authenticatedWithSlug = req.project_name;
-      const project_name_from_request = req.query.project as string;
+      const project_name = req.project.name;
       const parent: string = req.query.parent as string;
       const file_name = req.body['name'];
       const data = req.body['data'];
 
       const result = await this.fileServiceInstance.createFile({
         file_name,
-        project_name_from_request,
-        project_name_authenticatedWithSlug,
+        project_name,
         data,
         relativePath: parent,
         username: req['username'],
@@ -60,17 +56,16 @@ export class FileController {
     }
   };
 
-  public createFolder = async (req: IFileRequest, res: Response, next: NextFunction) => {
+  public createFolder = async (req: IProjectRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Create File/Folder endpoint with body: %o', req.body);
     try {
-      const project_name_authenticatedWithSlug = req.project_name;
-      const project_name_from_request = req.query.project as string;
+      const project_name = req.project.name;
+
       const parent: string = req.query.parent as string;
       const folder_name = req.body['name'];
 
       const result = await this.fileServiceInstance.createFolder({
-        project_name_authenticatedWithSlug,
-        project_name_from_request,
+        project_name,
         folder_name,
         username: req['username'],
         relativePath: parent,
@@ -81,18 +76,17 @@ export class FileController {
     }
   };
 
-  public rename = async (req: IFileRequest, res: Response, next: NextFunction) => {
+  public rename = async (req: IProjectRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Rename File/Folder endpoint with body: %o', req.body);
     try {
-      const project_name_authenticatedWithSlug = req.project_name;
-      const project_name_from_request = req.query.project as string;
+      const project_name = req.project.name;
+
       const parent: string = req.query.parent as string;
       const newName = req.body['new_name'];
       const oldName = req.body['old_name'];
 
       const result = await this.fileServiceInstance.rename({
-        project_name_authenticatedWithSlug,
-        project_name_from_request,
+        project_name,
         relativePath: parent,
         newName,
         oldName,
@@ -104,17 +98,15 @@ export class FileController {
     }
   };
 
-  public delete = async (req: IFileRequest, res: Response, next: NextFunction) => {
+  public delete = async (req: IProjectRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Delete File endpoint with query: %o', req.query);
     try {
-      const project_name_authenticatedWithSlug = req.project_name;
-      const project_name_from_request = req.query.project as string;
+      const project_name = req.project.name;
       const parent: string = req.query.parent as string;
       const file_name: string = req.query.name as string;
 
       const result = await this.fileServiceInstance.delete({
-        project_name_authenticatedWithSlug,
-        project_name_from_request,
+        project_name,
         username: req['username'],
         relativePath: parent,
         file_name,
@@ -126,16 +118,14 @@ export class FileController {
     }
   };
 
-  public getTree = async (req: IFileRequest, res: Response, next: NextFunction) => {
+  public getTree = async (req: IProjectRequest, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Get File Tree endpoint with query: %o', req.query);
     try {
-      const project_name_authenticatedWithSlug = req.project_name;
-      const project_name_from_request = req.query.project as string;
+      const project_name = req.project.name;
       const parent: string = req.query.parent as string;
 
       const result = await this.fileServiceInstance.getTree({
-        project_name_authenticatedWithSlug,
-        project_name_from_request,
+        project_name,
         relativePath: parent,
         username: req['username'],
       });

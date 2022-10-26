@@ -1,9 +1,10 @@
-import { IToken } from "@/interfaces/IToken";
-import { Request, Response, NextFunction } from "express";
+import { IProject } from '@/interfaces/IProject';
+import { IToken } from '@/interfaces/IToken';
+import { Request, Response, NextFunction } from 'express';
 
-type IRequest = Request & {currentUser: IToken}; 
+type IRequest = Request & { currentUser: IToken };
 type IResponse = Response;
 type INextFunction = NextFunction;
-type IFileRequest = Request & { username: string; project_name: string }
+type IProjectRequest = Request & { username: string; project: IProject };
 
-export {IRequest, IResponse, INextFunction, IFileRequest}
+export { IRequest, IResponse, INextFunction, IProjectRequest };

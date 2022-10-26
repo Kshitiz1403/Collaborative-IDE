@@ -1,9 +1,9 @@
 import isAuth from './isAuth';
 import isResetToken from './isResetToken';
-import isFileAuth from './isFileAuth';
+import isProjectAuth from './isProjectAuth';
 
 export default {
   isAuth,
   isResetToken,
-  isFileAuth,
+  isProjectAuth,
 };

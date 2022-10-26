@@ -30,6 +30,7 @@ export class ProjectRepository {
       if (project) {
         return project.toJSON();
       }
+      throw 'Project not found';
     });
   };
 

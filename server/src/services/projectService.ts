@@ -28,9 +28,8 @@ export default class ProjectService {
       const projectRecord = await this.projectRepositoryInstance.createProject(projectInputDTO);
       await this.fileServiceInstance.createFolder({
         username: projectInputDTO.username,
-        project_name_from_request: projectInputDTO.name,
+        project_name: projectInputDTO.name,
         relativePath: '',
-        project_name_authenticatedWithSlug: '',
         folder_name: '',
       });
 
@@ -75,8 +74,6 @@ export default class ProjectService {
     try {
       this.logger.silly('Getting project by name for user');
       const projectRecord = await this.projectRepositoryInstance.findProjectByNameForUser(username, name);
-
-      if (!projectRecord) throw 'Project does not exist.';
 
       const project = projectRecord;
 
@@ -186,8 +183,7 @@ export default class ProjectService {
       relativePath: '',
       file_name: getDefaultFileName,
       data: '',
-      project_name_authenticatedWithSlug: projectInputDTO.name,
-      project_name_from_request: projectInputDTO.name,
+      project_name: projectInputDTO.name,
     });
   };
 }

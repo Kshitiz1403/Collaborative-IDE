@@ -20,7 +20,7 @@ export default (app: Router) => {
         project: Joi.string(),
       }),
     }),
-    middlewares.isFileAuth,
+    middlewares.isProjectAuth,
     ctrl.get,
   );
 
@@ -32,7 +32,7 @@ export default (app: Router) => {
         data: Joi.string().allow(''),
       }),
     }),
-    middlewares.isFileAuth,
+    middlewares.isProjectAuth,
     ctrl.save,
   );
 
@@ -43,7 +43,7 @@ export default (app: Router) => {
         name: Joi.string().required(),
       }),
     }),
-    middlewares.isFileAuth,
+    middlewares.isProjectAuth,
     ctrl.createFolder,
   );
 
@@ -55,7 +55,7 @@ export default (app: Router) => {
         new_name: Joi.string().required(),
       }),
     }),
-    middlewares.isFileAuth,
+    middlewares.isProjectAuth,
     ctrl.rename,
   );
 
@@ -69,7 +69,7 @@ export default (app: Router) => {
         project: Joi.string(),
       }),
     }),
-    middlewares.isFileAuth,
+    middlewares.isProjectAuth,
     ctrl.delete,
   );
 
@@ -82,7 +82,7 @@ export default (app: Router) => {
         project: Joi.string(),
       }),
     }),
-    middlewares.isFileAuth,
+    middlewares.isProjectAuth,
     ctrl.getTree,
   );
 };

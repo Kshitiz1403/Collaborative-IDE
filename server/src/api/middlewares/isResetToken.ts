@@ -16,7 +16,7 @@ const verifyToken = async (token: string) => {
 
 const isResetToken = async (req: Request & { token: IPasswordResetToken }, res: Response, next: NextFunction) => {
   try {
-    const token = await verifyToken(req.body.token);
+    const token = await verifyToken(req.body.token || req.query.token);
     req.token = token;
     next();
   } catch (e) {

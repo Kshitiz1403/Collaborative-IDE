@@ -33,7 +33,7 @@ const getAuthenticatedConfig = (token: string, url: string = ''): config => {
     return configuration;
 };
 
-const getFileConfig = (token: string, project_name: string, url: string = ''): config => {
+const getProjectConfig = (token: string, project_name: string, url: string = ''): config => {
     const configuration = getAuthenticatedConfig(token, url);
     configuration['params'] = {};
     configuration['params']['project'] = project_name;
@@ -76,12 +76,12 @@ export const getUnauthenticatedAxios = (url: string = '') => {
     return unauthenticatedAxios;
 };
 
-export const getFileAxios = (token: string, project_name: string, url: string = '') => {
-    const config = getFileConfig(token, project_name, url);
+export const getProjectAxios = (token: string, project_name: string, url: string = '') => {
+    const config = getProjectConfig(token, project_name, url);
 
-    const fileAxiosInstance = axios.create(config);
+    const projectAxiosInstance = axios.create(config);
 
-    fileAxiosInstance.interceptors.response.use(
+    projectAxiosInstance.interceptors.response.use(
         response => {
             let res = response.data;
             return res.data;
@@ -93,5 +93,7 @@ export const getFileAxios = (token: string, project_name: string, url: string = 
         },
     );
 
-    return fileAxiosInstance;
+    return projectAxiosInstance;
 };
+
+// export const get

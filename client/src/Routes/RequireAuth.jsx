@@ -6,9 +6,7 @@ const RequireAuth = ({ children }) => {
     const location = useLocation()
     const { isAuthenticated } = useAuth();
 
-    const accessToken = localStorage.getItem('accessToken')
-
-    return (accessToken || isAuthenticated ? children : <Navigate to="/auth" replace state={{ path: location.pathname }} />)
+    return (isAuthenticated ? children : <Navigate to="/auth" replace state={{ path: location.pathname }} />)
 }
 
 export default RequireAuth

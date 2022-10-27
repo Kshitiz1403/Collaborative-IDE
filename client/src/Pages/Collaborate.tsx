@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 import useProjectService from '../api/projectService';
 import useAuth from '../hooks/useAuth';
 import Playground from './Playground';
@@ -47,9 +48,12 @@ const Collaborate = () => {
         }
     }, [loading, activeProjectName]);
 
-    return <>
-        {!loading && <Playground slug={inviteLink} />}
-    </>;
+    return (
+        <>
+            {loading && <CircularProgress />}
+            {!loading && <Playground slug={inviteLink} />}
+        </>
+    );
 };
 
 export default Collaborate;

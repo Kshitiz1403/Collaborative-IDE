@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { joinUtil } from '../utils/projectUtils';
-import { getFileAxios } from './baseConfig';
+import { getProjectAxios } from './baseConfig';
 import useProjectService from './projectService';
 
 interface IFileInputDTO {
@@ -17,7 +17,7 @@ interface ITree {
 const useFileService = () => {
     const { activeProjectName } = useProjectService();
     const { accessToken } = useAuth();
-    const fileAxios = getFileAxios(accessToken, activeProjectName, '/files');
+    const fileAxios = getProjectAxios(accessToken, activeProjectName, '/files');
     const pathname = useLocation().pathname;
     const [slug, setSlug] = useState('');
 

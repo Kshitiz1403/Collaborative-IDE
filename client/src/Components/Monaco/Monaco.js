@@ -5,13 +5,10 @@ import Editor from '@monaco-editor/react'
 import { WebrtcProvider } from 'y-webrtc'
 import { CircularProgress } from '@mui/material'
 import colors from '../../constants/colors'
-import useProjectService from '../../api/projectService'
 import languageMap from '../../utils/languageMappings'
 import useEditor from '../../hooks/useEditor'
 
-const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress /> }) => {
-
-    const { activeProjectLanguage } = useProjectService()
+const Monaco = ({ roomId, height, loadingComponent = <CircularProgress /> }) => {
 
     const { editorData, setEditorData } = useEditor()
 
@@ -37,7 +34,7 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress 
             return {
                 ...prevState,
                 value: value,
-                saved:false
+                saved: false
             }
         })
     }
@@ -90,7 +87,7 @@ const Monaco = ({ roomId, height = "90vh", loadingComponent = <CircularProgress 
             beforeMount={handleWillMount}
             onChange={handleUpdateValue}
             options={{
-                fontSize:16
+                fontSize: 16
             }}
         />
     )

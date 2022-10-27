@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import React, {  useEffect, useLayoutEffect, useState } from 'react';
 import Tree from './Tree/Tree';
 import { VscRefresh } from 'react-icons/vsc';
 import IconButton from '@mui/material/IconButton';
@@ -7,7 +7,7 @@ import useFileService from '../../api/fileService';
 import useEditor from '../../hooks/useEditor';
 import useSaveFile from '../../hooks/useSaveFile';
 
-const Main = ({ initialTreeState }) => {
+const Main = ({ initialTreeState,  }) => {
     const [data, setData] = useState([...initialTreeState]);
     const { getTree, getFile } = useFileService();
 
@@ -85,7 +85,7 @@ const Main = ({ initialTreeState }) => {
     };
 
     return (
-        <div style={{ height: '100vh', userSelect: 'none' }}>
+        <div style={{ userSelect: 'none' }}>
             <div
                 style={{
                     margin: 20,

@@ -1,9 +1,9 @@
 .App {
-  text-align: center;
-  background-color: #0e1525;
+   text-align: center;
+   background-color: #0e1525;
 }
 * {
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-    overflow: hidden;
+   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   overflow: hidden;
+   scroll-behavior: smooth;
 }

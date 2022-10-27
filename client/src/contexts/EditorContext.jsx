@@ -10,7 +10,8 @@ const EditorProvider = (props) => {
         activeProjectName: "",
         fileName: "",
         language: "",
-        saved: false
+        saved: false,
+        console:""
     }
     const [editorData, setEditorData] = useState(initialState)
 

@@ -92,6 +92,7 @@ const Playground = ({ slug }) => {
                      <div style={{ flex: 1 }}>
                         <div style={{ backgroundColor: colors.light }} className={styles.selectedFile}>
                            <abbr title={editorData.filePath} style={{ textDecoration: 'none' }}>
+                              {!editorData.saved ? '● ' : ''}
                               {editorData.fileName}
                            </abbr>
                         </div>

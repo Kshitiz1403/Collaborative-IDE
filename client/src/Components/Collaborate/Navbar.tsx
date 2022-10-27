@@ -18,7 +18,7 @@ const Navbar = ({ projectName: projectName, showInvite = true }) => {
    const navigate = useNavigate();
    const { handleFileSave, FileSaveAlert, isSaving } = useSaveFile();
    const { editorData, setEditorData } = useEditor();
-   const { compileProject } = useCompileService();
+   const { compileProject, CompileAlert } = useCompileService();
 
    const run = async () => {
       const output = await compileProject();
@@ -103,6 +103,7 @@ const Navbar = ({ projectName: projectName, showInvite = true }) => {
                   </Button>
                )}
                <FileSaveAlert />
+               <CompileAlert />
             </div>
          </div>
       </>

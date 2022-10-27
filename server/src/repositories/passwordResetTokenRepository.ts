@@ -32,9 +32,12 @@ export class PasswordResetTokenRepository {
     );
   };
 
-  public getResetPasswordToken = async (resetPasswordToken: IPasswordResetTokenInputDTO['token']): Promise<IPasswordResetToken> => {
+  public getResetPasswordToken = async (
+    resetPasswordToken: IPasswordResetTokenInputDTO['token'],
+  ): Promise<IPasswordResetToken> => {
     return PasswordResetTokenModel.findOne({ where: { token: resetPasswordToken } }).then(record => {
       if (record) return record.toJSON();
+      throw 'Invalid Link';
     });
   };
 }

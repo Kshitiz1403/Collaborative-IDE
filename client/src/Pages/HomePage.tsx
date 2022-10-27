@@ -36,7 +36,7 @@ const HomePage = () => {
                onClick={handleOnAuth}
                style={{ paddingTop: 10, paddingBottom: 10, marginBottom: 10 }}
             >
-               Login/Signup
+               Login / Signup
             </Button>
             <Button variant="outlined" style={{ paddingTop: 10, paddingBottom: 10 }} onClick={handleOnForgot}>
                Forgot Password

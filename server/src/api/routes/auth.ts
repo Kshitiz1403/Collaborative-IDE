@@ -36,6 +36,8 @@ export default (app: Router) => {
 
   route.post('/forgot', ctrl.forgot);
 
+  route.get('/reset', middlewares.isResetToken, ctrl.checkResetToken);
+
   route.post('/reset', middlewares.isResetToken, ctrl.reset);
 
   /**

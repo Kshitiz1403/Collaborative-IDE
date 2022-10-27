@@ -10,6 +10,7 @@ import { PasswordResetTokenRepository } from '@/repositories/passwordResetTokenR
 import { IPasswordResetToken } from '@/interfaces/IPasswordResetToken';
 import { RefreshTokenRepository } from '@/repositories/refreshTokenRepository';
 import { v4 as uuid } from 'uuid';
+import { Logger } from 'winston';
 
 @Service()
 export default class AuthService {
@@ -18,7 +19,7 @@ export default class AuthService {
   protected passwordResetRepositoryInstance: PasswordResetTokenRepository;
   protected refreshTokenRepositoryInstance: RefreshTokenRepository;
   constructor(
-    @Inject('logger') private logger,
+    @Inject('logger') private logger: Logger,
     userRepository: UserRepository,
     mailerService: MailerService,
     passwordResetTokenRepository: PasswordResetTokenRepository,
@@ -101,7 +102,7 @@ export default class AuthService {
 
   public forgotPassword = async (username: IUserInputDTO['username'] | undefined, email: IUserInputDTO['email']) => {
     const handleSuccess = (username, email) => {
-      if (email) return 'Password reset email sent to ' + email;
+      if (email) return 'Check your email for password reset instructions';
 
       if (username) return 'Password reset email sent to email registered with ' + username;
     };
@@ -133,6 +134,12 @@ export default class AuthService {
     );
 
     return handleSuccess(username, email);
+  };
+
+  public checkValidResetToken = (token: IPasswordResetToken) => {
+    this.logger.silly('Checking reset token');
+
+    return 'Valid Reset Link';
   };
 
   public resetPassword = async (token: IPasswordResetToken, newPassword: string, username: string) => {

@@ -2,9 +2,13 @@ import winston from 'winston';
 import config from '@/config';
 
 const transports = [];
-if(process.env.NODE_ENV !== 'development') {
+if(config.node_env!=="development") {
   transports.push(
     new winston.transports.Console()
+  )
+  transports.push(
+    new winston.transports.File({filename:'error.log', level:'error'}),
+    new winston.transports.File({filename:'combined.log'})
   )
 } else {
   transports.push(

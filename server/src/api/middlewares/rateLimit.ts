@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import cache from '@/loaders/cache';
 import { IRateLimit } from '@/interfaces/IRateLimit';
+import { Logger } from 'winston';
+import Container from 'typedi';
 
 const rateLimit = ({ secondsWindow = 60, allowedHits = 10, originalUrl }: IRateLimit) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -19,6 +21,9 @@ const rateLimit = ({ secondsWindow = 60, allowedHits = 10, originalUrl }: IRateL
     }
 
     if (requests > allowedHits) {
+      const logger: Logger = Container.get('logger');
+      logger.warn(`Rate limiting the ip ${ip} for ${originalUrl}`);
+
       return next({ status: 429, message: `You have been rate limited, please try again in ${ttl} seconds.` });
     }
     return next();

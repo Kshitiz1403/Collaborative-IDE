@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import { OpticMiddleware } from '@useoptic/express-middleware';
 import routes from '@/api';
 import config from '@/config';
 import LoggerInstance from './logger';
 import { Result } from '@/api/util/result';
+import path from 'path';
 export default ({ app }: { app: express.Application }) => {
   /**
    * Health Check endpoints
@@ -24,7 +24,6 @@ export default ({ app }: { app: express.Application }) => {
   // The magic package that prevents frontend developers going nuts
   // Alternate description:
   // Enable Cross Origin Resource Sharing to all origins by default
-  app.use(cors());
 
   // Some sauce that always add since 2014
   // "Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it."
@@ -36,10 +35,11 @@ export default ({ app }: { app: express.Application }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
-  // API Documentation
-  app.use(OpticMiddleware({
-      enabled: process.env.NODE_ENV !== 'production',
-  }));
+  // Serve front-end
+  const clientBuildFolder = path.join(__dirname, '..', '..', '..', 'client', 'build');
+  app.use(express.static(clientBuildFolder));
+
+  app.get('*', (req, res) => res.sendFile(path.resolve(clientBuildFolder, 'index.html')));
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {
@@ -55,10 +55,7 @@ export default ({ app }: { app: express.Application }) => {
      */
     LoggerInstance.error('🔥 error: %o', err);
     if (err.name === 'UnauthorizedError') {
-      return res
-        .status(err.status)
-        .send({ message: err.message })
-        .end();
+      return res.status(err.status).send({ message: err.message }).end();
     }
     return next(err);
   });

@@ -7,13 +7,14 @@ const AuthProvider = (props: any) => {
    const [isAuthenticated, setIsAuthenticated] = useState(false);
    const [username, setUsername] = useState('');
    const [accessToken, setAccessToken] = useState('');
-   const [loggingIn, setLoggingIn] = useState(true)
+   const [loggingIn, setLoggingIn] = useState(true);
 
    useEffect(() => {
-      console.log('Auth Context reloaded');
       const token = localStorage.getItem('ACCESS_TOKEN') || accessToken;
-      if (token == 'undefined' || token === undefined) return;
-      if (token.length === 0) return;
+      if (token == 'undefined' || token === undefined || token.length===0) {
+         setLoggingIn(false);
+         return;
+      }
       (async () => {
          try {
             const user = await getUserFromToken(token);
@@ -22,9 +23,8 @@ const AuthProvider = (props: any) => {
             setIsAuthenticated(true);
          } catch (err) {
             setIsAuthenticated(false);
-         }
-         finally{
-            setLoggingIn(false)
+         } finally {
+            setLoggingIn(false);
          }
       })();
    }, []);

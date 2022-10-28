@@ -32,9 +32,11 @@ const useCompileService = () => {
       }
    }, [pathname]);
 
+   console.log(slug);
+
    const compileProject = async () => {
       try {
-         const result: string = await compileAxios.post('', { params: { slug } });
+         const result: string = await compileAxios.post('', {}, { params: { slug } });
          setSnackerData(prev => {
             return {
                ...prev,

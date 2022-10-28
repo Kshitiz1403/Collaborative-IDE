@@ -11,7 +11,7 @@ const AuthProvider = (props: any) => {
 
    useEffect(() => {
       console.log('Auth Context reloaded');
-      const token = localStorage.getItem('accessToken') || accessToken;
+      const token = localStorage.getItem('ACCESS_TOKEN') || accessToken;
       if (token == 'undefined' || token === undefined) return;
       if (token.length === 0) return;
       (async () => {

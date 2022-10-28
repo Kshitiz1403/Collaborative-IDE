@@ -10,7 +10,7 @@ export const signup = async (userSignupInput: IUserSignupInputDTO): Promise<IAut
       })
       .then(data => {
          const token = data['token'];
-         localStorage.setItem('accessToken', token);
+         localStorage.setItem('ACCESS_TOKEN', token);
          return token;
       })
       .catch(err => {
@@ -22,7 +22,7 @@ export const login = async (userLoginInput: IUserLoginInputDTO): Promise<IAuth> 
    try {
       const data: IAuth = await unauthenticatedAxios.post('/signin', { ...userLoginInput });
       const token = data['token'];
-      localStorage.setItem('accessToken', token);
+      localStorage.setItem('ACCESS_TOKEN', token);
       return data;
    } catch (err) {
       throw err;

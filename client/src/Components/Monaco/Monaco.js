@@ -51,9 +51,9 @@ const Monaco = ({ roomId, height, loadingComponent = <CircularProgress /> }) => 
             try {
                 provider = new WebrtcProvider(getMonacoSubscriberId(), yDoc, {
                     signaling: [
-                        // "wss://signaling.yjs.dev",
-                        // 'wss://y-webrtc-signaling-eu.herokuapp.com',
-                        // 'wss://y-webrtc-signaling-us.herokuapp.com'
+                        "wss://signaling.yjs.dev",
+                        'wss://y-webrtc-signaling-eu.herokuapp.com',
+                        'wss://y-webrtc-signaling-us.herokuapp.com'
                     ],
                 })
                 const yText = yDoc.getText("monaco")

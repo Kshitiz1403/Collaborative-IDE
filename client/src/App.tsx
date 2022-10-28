@@ -6,8 +6,6 @@ import ProjectProvider from './contexts/ProjectContext';
 import EditorProvider from './contexts/EditorContext';
 import CustomRoutes from './Routes/CustomRoutes';
 
-export const API_URL = "http://localhost:4000/api"
-
 
 function App() {
   return (

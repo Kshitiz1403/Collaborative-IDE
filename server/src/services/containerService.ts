@@ -28,6 +28,8 @@ export class ContainerService {
     language: IProject['language'],
   ) => {
     try {
+      const prevContainer = await this.containerRepositoryInstance.getContainerRecord(username, projectName);
+      if (prevContainer) throw 'Please wait for ongoing compile request to finish before you can start a new one.';
       const command = this.containerUtilInstance.getLanguageCompile(language);
       await this.createContainer(username, projectName);
       try {
@@ -51,11 +53,12 @@ export class ContainerService {
           Binds: [
             `${path.join(__dirname, '..', '..', '..', 'projects', username, projectName)}:/${username}/${projectName}`,
           ],
+          Memory: 2e8,
+          CpuQuota: 100 * 1000, // 100%
         },
-        Memory: 2e8,
       });
-      _container.start();
       await this.containerRepositoryInstance.createContainerRecord(username, projectName, _container.data['Id']);
+      _container.start();
       return _container.data['Id'];
     } catch (err) {
       throw err;
@@ -68,9 +71,9 @@ export class ContainerService {
   ): Promise<String> => {
     try {
       const container = await this.containerRepositoryInstance.getContainer(username, projectName);
+      await this.containerRepositoryInstance.removeContainerRecord(username, projectName);
       await container.stop();
       await container.delete({ force: true });
-      await this.containerRepositoryInstance.removeContainerRecord(username, projectName);
       return container.data['Id'];
     } catch (err) {
       throw err;

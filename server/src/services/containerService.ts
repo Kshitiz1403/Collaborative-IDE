@@ -30,10 +30,13 @@ export class ContainerService {
     try {
       const command = this.containerUtilInstance.getLanguageCompile(language);
       await this.createContainer(username, projectName);
-      const result = await this.executeInContainer(username, projectName, command);
-      this.stopAndDeleteContainer(username, projectName);
-      this.projectRepositoryInstance.updateLastUpdated(username, projectName);
-      return result;
+      try {
+        const result = await this.executeInContainer(username, projectName, command);
+        return result;
+      } finally {
+        this.stopAndDeleteContainer(username, projectName);
+        this.projectRepositoryInstance.updateLastUpdated(username, projectName);
+      }
     } catch (err) {
       throw err;
     }
@@ -91,9 +94,15 @@ export class ContainerService {
   };
 
   private promisifyStream = async stream => {
+    let MAX_STRING_LENGTH = Math.pow(2, 27);
     let result = '';
     return new Promise((resolve, reject) => {
-      stream.on('data', data => (result += data.toString()));
+      stream.on('data', data => {
+        if (result.length + data.toString().length > MAX_STRING_LENGTH) {
+          return reject('Maximum output length reached');
+        }
+        result += data.toString();
+      });
       stream.on('end', () => {
         return resolve(result);
       });

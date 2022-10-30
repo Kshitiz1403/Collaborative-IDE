@@ -1,40 +1,42 @@
-import React from 'react'
-import { BrowserRouter, Route, Router, Routes, useNavigate } from 'react-router-dom'
+import React, { Suspense } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
-import Auth from '../Pages/Auth/Auth'
-import Collaborate from '../Pages/Collaborate'
-import Dashboard from '../Pages/Dashboard/Dashboard'
+import Loading from '../Components/Loading'
 import ErrorPage from '../Pages/ErrorPage'
-import Forgot from '../Pages/ForgotPassword'
-import HomePage from '../Pages/HomePage'
-import Join from '../Pages/Join/Join'
-import Reset from '../Pages/ResetPassword'
 import RequireAuth from './RequireAuth'
-import CircularProgress from '@mui/material/CircularProgress';
-import colors from '../constants/colors'
-import styles from './routes.module.css'
+
+const HomePage = React.lazy(() => import('../Pages/HomePage'))
+const Join = React.lazy(() => import('../Pages/Join/Join'))
+const Reset = React.lazy(() => import('../Pages/ResetPassword'))
+const Dashboard = React.lazy(() => import('../Pages/Dashboard/Dashboard'))
+const Collaborate = React.lazy(() => import('../Pages/Collaborate'))
+const Auth = React.lazy(() => import('../Pages/Auth/Auth'))
+const Forgot = React.lazy(() => import('../Pages/ForgotPassword'))
+
 
 const CustomRoutes = () => {
   const { loggingIn, isAuthenticated } = useAuth();
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<>
-          {loggingIn && <div style={{ backgroundColor: colors.dark }} className={styles.loading}><CircularProgress /></div>}
-          {!loggingIn && (!isAuthenticated ?
-            <HomePage />
-            : <Dashboard />)
-          }
-        </>
-        } />
-        <Route path='/auth' element={<Auth />} />
-        <Route path='/forgot' element={<Forgot />} />
-        <Route path='/reset/*' element={<Reset />} />
-        <Route path='/@:username/:projectname' element={<RequireAuth><Collaborate /></RequireAuth>} />
-        <Route path='/join/:id' element={<Join />} />
-        <Route path='*' element={<ErrorPage />} />
-      </Routes>
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path='/' element={<>
+            {loggingIn && <Loading />}
+            {!loggingIn && (!isAuthenticated ?
+              <HomePage />
+              : <Dashboard />)
+            }
+          </>
+          } />
+          <Route path='/auth' element={<Auth />} />
+          <Route path='/forgot' element={<Forgot />} />
+          <Route path='/reset/*' element={<Reset />} />
+          <Route path='/@:username/:projectname' element={<RequireAuth><Collaborate /></RequireAuth>} />
+          <Route path='/join/:id' element={<Join />} />
+          <Route path='*' element={<ErrorPage />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }

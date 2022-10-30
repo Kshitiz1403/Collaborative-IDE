@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import colors from '../../constants/colors';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import validator from 'validator';
 import Snacker from '../../Components/Snacker/Snacker';
-import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { ISnacker } from '../../interfaces/ISnacker';
 import { useNavigate, useParams } from 'react-router-dom';
 import { checkResetToken, reset } from '../../api/authService';
+import Loading from '../../Components/Loading';
 
 const Reset = () => {
    const onCloseSnacker = () => {
@@ -71,19 +70,7 @@ const Reset = () => {
 
    if (loading)
       return (
-         <div
-            style={{
-               display: 'flex',
-               flexGrow: 1,
-               height: '100vh',
-               justifyContent: 'center',
-               alignItems: 'center',
-               backgroundColor: colors.dark,
-               color: 'whitesmoke',
-            }}
-         >
-            <CircularProgress />
-         </div>
+         <Loading/>
       );
    return (
       <div

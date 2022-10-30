@@ -1,0 +1,9 @@
+.loading {
+    display: flex;
+    flex-grow: 1;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    color: 'whitesmoke';
+ }
+ 

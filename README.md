@@ -17,22 +17,23 @@ I am using [Yjs](https://yjs.dev/) for providing CRDT & conflict free collaborat
 
 For synchronization among connected clients, I am using Yjs's pre-setup [websocket servers](https://github.com/yjs/y-websocket/).
 
-### <a name="server-files"></a> Server-side Files 
-User project files are stored & managed using [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction). A file share is mounted on a linux machine using the SMB protocol.
-
-REST Api for file handling is managed by a microservice running on Nodejs.
+### Server-side Files 
+User project files are stored & managed using Azure File Storage. A file share is mounted on a linux machine using the SMB protocol.
 
 ### Client-side Directory Tree
-I am using [Anuraghazra's React Folder Tree](https://github.com/anuraghazra/react-folder-tree)  (with own adaptation) for displaying the project files to connected users in a tree.
+I am using [Anuraghazra's React Folder Tree](https://github.com/anuraghazra/react-folder-tree)  (with own adaptation) for displaying the project files to connected users in a tree. P.S. Thanks Anuragahazra for the great package!
  
- Project files are fetched from the mircoservice running on [Server-side Files](#server-files).
- 
- ## Executor
- Users are allowed to submit their code. For security reasons, code cannot be run & built on the server itself. Hence I am using Container technoology like Docker.
+## Executor
+- Users are allowed to submit their code. For security reasons, code cannot be run & built on the server itself. Hence I am using Container technoology like Docker.
 
-### Executor Server
-I am using a docker container running ubuntu with pre-installed packages for Java, Python, Cpp & Nodejs. This server is running as a seperate micro-service in order not to slow down the back end server.
-I am using the Docker engine API to accept connections between the nodejs server & the docker container.
+- I am using a docker container running ubuntu with pre-installed packages for Java, Python, Cpp & Nodejs.
+I am using the Docker engine API with a node driver to accept connections between the nodejs server & the docker container.
+
+- To limit user from creating multiple requests and blowing up the machine, each request is rate limited.
+
+## Limitations
+- Collaborative editing happens through signalling servers. Currently I am using YJS's demo servers but later those can be hosted on the server itself. P.S. I am having troubles doing that. Will figure out a solution soon.
 
 ## Future Work
 - An interactive shell will be added to the front end for users to install their custom packages without worrying about the setup.
+- Language server protocols to be setup for major languages.

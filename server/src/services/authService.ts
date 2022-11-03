@@ -124,7 +124,7 @@ export default class AuthService {
       token_expiry: token_expiry,
     });
 
-    const reset_link = `http://${config.host}/reset/${token}`;
+    const reset_link = `https://${config.host}/reset/${token}`;
 
     this.mailServiceInstance.sendResetPasswordEmail(
       user.name,

@@ -1,14 +1,16 @@
 import React from 'react';
 import Box from '@mui/system/Box';
 import colors from '../../constants/colors';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const RecentProjectBox = ({ onClick, language, projectName, updated }) => {
    const getUpdatedTime = (updatedAt: Date) => {
-      const now = moment(new Date());
-      const updated = moment(updatedAt);
-      const relativeTime = updated.from(now);
-      return relativeTime;
+      dayjs.extend(relativeTime);
+      const now = dayjs(new Date());
+      const updated = dayjs(updatedAt);
+      const relTime = updated.from(now);
+      return relTime;
    };
    return (
       <Box

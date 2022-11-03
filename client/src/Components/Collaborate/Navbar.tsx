@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import { MdSync } from 'react-icons/md';
+import { AiTwotoneSave } from "react-icons/ai";
 import { TbUserPlus } from 'react-icons/tb';
 import { BsFillPlayFill } from 'react-icons/bs';
 import ClockLoader from 'react-spinners/ClockLoader';
@@ -87,7 +87,7 @@ const Navbar = ({ projectName: projectName, showInvite = true }) => {
                <div style={{ marginRight: 20 }}>
                   <abbr title={`Save now (${navigator.platform.match('Mac') ? 'Cmd' : 'Ctrl'}+S)`}>
                      <IconButton color="primary" onClick={handleFileSave}>
-                        <MdSync size={20} color="whitesmoke" />
+                        <AiTwotoneSave size={20} color="whitesmoke" />
                      </IconButton>
                   </abbr>
                </div>

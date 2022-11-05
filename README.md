@@ -33,6 +33,7 @@ I am using the Docker engine API with a node driver to accept connections betwee
 
 ## Limitations
 - Collaborative editing happens through signalling servers. Currently I am using YJS's demo servers but later those can be hosted on the server itself. P.S. I am having troubles doing that. Will figure out a solution soon.
+- Inputs cannot be given to the console. That will be taken care when interactive shell is released.
 
 ## Future Work
 - An interactive shell will be added to the front end for users to install their custom packages without worrying about the setup.

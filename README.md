@@ -1,9 +1,11 @@
+
 # Collaborative IDE
 ## Overview
 Collaborative IDE is a full stack system supporting collaborative code editing, compiling & shared shell.
 
 ## Design
 
+![Playground](https://objectstorage.ap-mumbai-1.oraclecloud.com/n/bmqamdn4fuln/b/collaborative-ide-bucket/o/github-resources%2FPlayground.png)
 
 ### Client-side Editor
 ####  Monaco editor
@@ -17,11 +19,19 @@ I am using [Yjs](https://yjs.dev/) for providing CRDT & conflict free collaborat
 
 For synchronization among connected clients, I am using Yjs's pre-setup [websocket servers](https://github.com/yjs/y-websocket/).
 
+### Inviting collaborators
+Invite users to collaborate with you by sharing a link which expires in 7 days.
+![Invite URL](https://objectstorage.ap-mumbai-1.oraclecloud.com/n/bmqamdn4fuln/b/collaborative-ide-bucket/o/github-resources/Invite.png)
+
+
 ### Server-side Files 
 User project files are stored & managed using Azure File Storage. A file share is mounted on a linux machine using the SMB protocol.
 
 ### Client-side Directory Tree
 I am using [Anuraghazra's React Folder Tree](https://github.com/anuraghazra/react-folder-tree)  (with own adaptation) for displaying the project files to connected users in a tree. P.S. Thanks Anuragahazra for the great package!
+<p align='center'>
+<img src="https://objectstorage.ap-mumbai-1.oraclecloud.com/n/bmqamdn4fuln/b/collaborative-ide-bucket/o/github-resources%2FDirectory%20Tree.png" alt="Directory Tree Demo" width="200"/>
+</p>
  
 ## Executor
 - Users are allowed to submit their code. For security reasons, code cannot be run & built on the server itself. Hence I am using Container technoology like Docker.
@@ -30,6 +40,9 @@ I am using [Anuraghazra's React Folder Tree](https://github.com/anuraghazra/reac
 I am using the Docker engine API with a node driver to accept connections between the nodejs server & the docker container.
 
 - To limit user from creating multiple requests and blowing up the machine, each request is rate limited.
+<p align='center'>
+<img src='https://objectstorage.ap-mumbai-1.oraclecloud.com/n/bmqamdn4fuln/b/collaborative-ide-bucket/o/github-resources%2FConsole.png' alt='Console'/>
+</p>
 
 ## Limitations
 - Collaborative editing happens through signalling servers. Currently I am using YJS's demo servers but later those can be hosted on the server itself. P.S. I am having troubles doing that. Will figure out a solution soon.

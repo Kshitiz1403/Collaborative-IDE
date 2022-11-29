@@ -1,7 +1,7 @@
 import { IProject, IProjectInputDTO } from '@/interfaces/IProject';
 import { ProjectRepository } from '@/repositories/projectRepository';
 import { generateSlug } from 'random-word-slugs';
-import { Inject, Container, Service } from 'typedi';
+import { Inject, Service } from 'typedi';
 import { Logger } from 'winston';
 import FileService from './fileService';
 import ProjectUtilService from './projectUtilService';
@@ -156,20 +156,26 @@ export default class ProjectService {
   };
 
   private getSlug = async () => {
-    const checkSlugUnique = async () => {
+    interface ISlugStatus {
+      status: 'error' | 'success';
+      slug: IProject['slug'];
+      message: 'slug generated' | 'slug exists';
+    }
+
+    const generateUniqueSlug = async (): Promise<ISlugStatus> => {
       const slug = generateSlug(5);
       try {
         const existingSlug = await this.projectRepositoryInstance.findProjectBySlug(slug);
         if (existingSlug) return { status: 'error', slug: null, message: 'slug exists' };
-        return { status: 'ok', slug: slug, message: 'slug generated' };
+        return { status: 'success', slug: slug, message: 'slug generated' };
       } catch (e) {
-        return { status: 'ok', slug: slug, message: 'slug generated' };
+        return { status: 'success', slug: slug, message: 'slug generated' };
       }
     };
 
-    let slugStatus = await checkSlugUnique();
+    let slugStatus = await generateUniqueSlug();
     while (slugStatus.status == 'error') {
-      slugStatus = await checkSlugUnique();
+      slugStatus = await generateUniqueSlug();
     }
 
     return slugStatus.slug;

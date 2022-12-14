@@ -1,5 +1,5 @@
 
-# Collaborative IDE
+# Collaborative IDE ( Integrated Development Environment )
 ## Overview
 Collaborative IDE is a full stack system supporting collaborative code editing, compiling & shared shell.
 

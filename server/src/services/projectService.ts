@@ -183,12 +183,13 @@ export default class ProjectService {
 
   private createDefaultFile = async (projectInputDTO: IProjectInputDTO) => {
     const getDefaultFileName = this.projectUtilInstance.fileLanguageMapping(projectInputDTO.language);
+    const boilerPlate = this.projectUtilInstance.getBoilerplate(projectInputDTO.language);
     if (!getDefaultFileName) return;
     return await this.fileServiceInstance.createFile({
       username: projectInputDTO.username,
       relativePath: '',
       file_name: getDefaultFileName,
-      data: '',
+      data: boilerPlate,
       project_name: projectInputDTO.name,
     });
   };

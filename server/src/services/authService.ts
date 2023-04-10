@@ -175,7 +175,7 @@ export default class AuthService {
   private generateToken(user: IUser) {
     const today = new Date();
     const exp = new Date(today);
-    exp.setTime(today.getTime() + 1000 * 60 * 60 * 8); //8 hours
+    exp.setTime(today.getTime() + 1000 * 60 * 60 * 24 * 10); //10 days
 
     /**
      * A JWT means JSON Web Token, so basically it's a json that is _hashed_ into a string

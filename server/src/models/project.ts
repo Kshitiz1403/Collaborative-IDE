@@ -24,7 +24,7 @@ const Project = sequelize.define<Model & IProject>(
     },
     slug: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: true,      
     },
     slug_expiry:{
       type:DataTypes.DATE,    
@@ -37,6 +37,9 @@ const Project = sequelize.define<Model & IProject>(
         unique: true,
         fields: ['name', 'username'],
       },
+      {
+        fields:['slug']
+      }
     ],
   },
 );

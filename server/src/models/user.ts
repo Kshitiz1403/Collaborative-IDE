@@ -8,7 +8,7 @@ import RefreshToken from './refresh-tokens';
 const User = sequelize.define<Model & IUser>(
   'user',
   {
-     username: {
+    username: {
       type: DataTypes.STRING,
       primaryKey: true,
     },
@@ -38,6 +38,9 @@ const User = sequelize.define<Model & IUser>(
       values: ['user', 'admin'],
       defaultValue: 'user',
     },
+    signedUpIP: {
+      type: DataTypes.STRING,
+    },
   },
   {
     timestamps: true,
@@ -45,8 +48,8 @@ const User = sequelize.define<Model & IUser>(
 );
 
 User.hasMany(Project, { foreignKey: 'username', foreignKeyConstraint: true });
-User.hasMany(PasswordResetToken, {foreignKey: 'username', foreignKeyConstraint: true})
-User.hasOne(RefreshToken, { foreignKey: 'username'})
+User.hasMany(PasswordResetToken, { foreignKey: 'username', foreignKeyConstraint: true });
+User.hasOne(RefreshToken, { foreignKey: 'username' });
 
 export default User;
 

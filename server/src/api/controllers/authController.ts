@@ -17,7 +17,7 @@ export class AuthController {
   public signup = async (req: Request, res: Response, next: NextFunction) => {
     this.logger.debug('Calling Sign-Up endpoint with body: %o', req.body);
     try {
-      const { user, token } = await this.authServiceInstance.signUp(req.body as IUserInputDTO);
+      const { user, token } = await this.authServiceInstance.signUp(req.body as IUserInputDTO, req['attachedIp']);
       return res.status(201).json(Result.success<Object>({ user, token }));
     } catch (e) {
       this.logger.error('🔥 error: %o', e);

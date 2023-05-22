@@ -20,6 +20,7 @@ export default (app: Router) => {
         password: Joi.string().required(),
       }),
     }),
+    middlewares.attachIP,
     ctrl.signup,
   );
 

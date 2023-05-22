@@ -29,12 +29,13 @@ export class UserRepository {
     });
   };
 
-  public createUser = async (userInputDTO: IUserInputDTO, salt: IUser['salt'], password: IUser['salt']): Promise<IUser> => {
+  public createUser = async (userInputDTO: IUserInputDTO, salt: IUser['salt'], password: IUser['salt'], signedUpIP?): Promise<IUser> => {
     return UserModel.create(
       {
         ...userInputDTO,
         salt: salt,
         password: password,
+        signedUpIP
       },
       { raw: true },
     ).then(result => result.toJSON());

@@ -31,7 +31,7 @@ export default class AuthService {
     this.refreshTokenRepositoryInstance = refreshTokenRepository;
   }
 
-  public async signUp(userInputDTO: IUserInputDTO): Promise<{ user: IUser; token: string }> {
+  public async signUp(userInputDTO: IUserInputDTO, signedUpIP?): Promise<{ user: IUser; token: string }> {
     try {
       const { salt, hashedPassword } = await this.hashPassword(userInputDTO.password);
 
@@ -40,6 +40,7 @@ export default class AuthService {
         userInputDTO,
         salt.toString('hex'),
         hashedPassword,
+        signedUpIP
       );
 
       this.logger.silly('Generating JWT');

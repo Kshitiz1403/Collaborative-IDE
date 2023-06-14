@@ -2,10 +2,11 @@ import { Inject, Service } from 'typedi';
 import Mailer from '@/loaders/mailer';
 import { MailUtilService } from './mailUtilService';
 import moment from 'moment';
+import config from '@/config';
 
 @Service()
 export default class MailerService {
-  protected FROM = 'Kshitiz Agrawal <no_reply@ide.kshitizagrawal.in>';
+  protected FROM = config.emails.from;
 
   constructor(
     @Inject('emailClient') private emailClient: typeof Mailer,

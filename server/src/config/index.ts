@@ -9,7 +9,6 @@ if (envFound.error) {
 }
 
 export default {
-  
   node_env: process.env.NODE_ENV || 'development',
 
   host: process.env.HOST,
@@ -60,6 +59,7 @@ export default {
   },
 
   emails: {
+    from: process.env.ORACLE_APPROVED_SENDER,
     username: process.env.ORACLE_EMAIL_USERNAME,
     password: process.env.ORACLE_EMAIL_PASSWORD,
     port: process.env.ORACLE_EMAIL_PORT,

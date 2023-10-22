@@ -6,6 +6,7 @@ import { ProjectRepository } from '@/repositories/projectRepository';
 import path from 'path';
 import { Service } from 'typedi';
 import ContainerUtilService from './containerUtilService';
+import config from '@/config';
 
 @Service()
 export class ContainerService {
@@ -47,7 +48,7 @@ export class ContainerService {
   private createContainer = async (username: IUser['username'], projectName: IProject['name']): Promise<String> => {
     try {
       const _container = await docker.container.create({
-        Image: process.env.DOCKER_IMAGE,
+        Image: config.dockerImage,
         WorkingDir: `/${username}/${projectName}`,
         HostConfig: {
           Binds: [

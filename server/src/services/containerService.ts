@@ -58,7 +58,7 @@ export class ContainerService {
         },
       });
       await this.containerRepositoryInstance.createContainerRecord(username, projectName, _container.data['Id']);
-      _container.start();
+      await _container.start();
       return _container.data['Id'];
     } catch (err) {
       throw err;

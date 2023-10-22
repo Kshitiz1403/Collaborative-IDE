@@ -65,4 +65,6 @@ export default {
     port: process.env.ORACLE_EMAIL_PORT,
     host: process.env.ORACLE_EMAIL_HOST,
   },
+
+  dockerImage: process.env.DOCKER_IMAGE
 };

@@ -40,7 +40,7 @@ export default class AuthService {
         userInputDTO,
         salt.toString('hex'),
         hashedPassword,
-        signedUpIP
+        signedUpIP,
       );
 
       this.logger.silly('Generating JWT');

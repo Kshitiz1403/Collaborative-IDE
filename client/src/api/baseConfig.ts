@@ -10,7 +10,7 @@ interface config {
 }
 
 const config = {
-    baseURL: '/api',
+    baseURL: 'http://localhost:4000/api',
     headers: {
         'Content-Type': 'application/json',
     },

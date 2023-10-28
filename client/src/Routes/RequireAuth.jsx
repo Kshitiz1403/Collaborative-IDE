@@ -1,4 +1,3 @@
-import React from 'react'
 import CircularProgress from '@mui/material/CircularProgress';
 import { Navigate, useLocation } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
@@ -6,9 +5,9 @@ import colors from '../constants/colors';
 
 const RequireAuth = ({ children }) => {
     const location = useLocation()
-    const { isAuthenticated, loggingIn } = useAuth();
+    const { isAuthenticated, isLoading } = useAuth();
 
-    if (loggingIn) {
+    if (isLoading) {
         return <div
             style={{
                 display: 'flex',
@@ -23,7 +22,6 @@ const RequireAuth = ({ children }) => {
             <CircularProgress />
         </div>
     }
-
     return (isAuthenticated ? children : <Navigate to="/auth" replace state={{ path: location.pathname }} />)
 }
 

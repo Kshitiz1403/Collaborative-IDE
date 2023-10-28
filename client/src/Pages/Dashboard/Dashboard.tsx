@@ -1,33 +1,26 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/system/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Snacker from '../../Components/Snacker/Snacker';
 import CreateLanguageBox from '../../Components/ProjectBox/CreateProjectBox';
-import useAuth from '../../hooks/useAuth';
 import colors from '../../constants/colors';
 import RecentBox from '../../Components/ProjectBox/RecentBox';
-import useProjectService from '../../api/projectService';
 import { TbLogout } from 'react-icons/tb';
+import useAuthService from '../../hooks/api/authService';
+import useProjectService from '../../hooks/api/projectService';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
-   const navigate = useNavigate();
-
-   const { username, setIsAuthenticated } = useAuth();
    const [isOpen, setIsOpen] = useState(false);
    const [selectedLanguage, setSelectedLanguage] = useState('');
    const [projectName, setProjectName] = useState('');
-   const [isSuccess, setIsSuccess] = useState(false);
-   const [isError, setIsError] = useState(false);
-   const [successMsg, setSuccessMsg] = useState('');
-   const [errorMsg, setErrorMsg] = useState('');
-   const [myProjects, setMyProjects] = useState([]);
 
    const projectService = useProjectService();
+   const authService = useAuthService();
+   const myProjects = useSelector(state => state['project'].projects);
 
    const handleClose = () => {
       setIsOpen(false);
@@ -38,41 +31,15 @@ const Dashboard = () => {
       setIsOpen(true);
    };
 
-   const handleCreateProject = async () => {
-      try {
-         const createdProject = await projectService.createProject({
-            name: projectName,
-            language: selectedLanguage,
-         });
-         setSuccessMsg('Project created successfully');
-         setIsSuccess(true);
-         setTimeout(() => {
-            navigate(`/@${username}/${projectName}`);
-         }, 1000);
-      } catch (err) {
-         setErrorMsg(err);
-         setIsError(true);
-      }
-   };
+   const handleCreateProject = () => projectService.createProject({ language: selectedLanguage, name: projectName });
 
-   const getAllProjects = async () => {
-      try {
-         const projects = await projectService.getAllProjects();
-         setMyProjects(projects);
-      } catch (err) {
-         setIsError(true);
-         setErrorMsg(err);
-      }
-   };
+   const getAllProjects = () => projectService.getAllProjects();
 
-   const logout = () => {
-      localStorage.removeItem('ACCESS_TOKEN');
-      setIsAuthenticated(false);
-   };
+   const logout = () => authService.logout();
 
    useEffect(() => {
-      getAllProjects();
       document.title = 'Dashboard';
+      getAllProjects();
    }, []);
 
    return (
@@ -132,19 +99,7 @@ const Dashboard = () => {
                         <TbLogout size={20} onClick={logout} style={{ cursor: 'pointer' }} />
                      </abbr>
                   </div>
-                  <Snacker
-                     open={isSuccess}
-                     autoHideDuration={3000}
-                     onClose={() => setIsSuccess(false)}
-                     severity="success"
-                     message={successMsg}
-                  />
-                  <Snacker
-                     open={isError}
-                     message={errorMsg}
-                     autoHideDuration={3000}
-                     onClose={() => setIsError(false)}
-                  />
+
                   <CreateLanguageBox
                      languages={[
                         { language: 'c++', onClick: () => handleOpen('c++') },

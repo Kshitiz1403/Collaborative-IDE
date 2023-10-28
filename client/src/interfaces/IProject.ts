@@ -12,4 +12,5 @@ export interface IProjectCreate extends Omit<IProject, 'updatedAt'> {}
 export interface IProjectGet extends Omit<IProject, 'updatedAt'> {
     slug: string;
     username: string;
+    defaultFile:string;
 }

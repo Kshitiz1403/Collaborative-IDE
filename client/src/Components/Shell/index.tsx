@@ -1,10 +1,9 @@
-import React from 'react';
 import colors from '../../constants/colors';
 import useEditor from '../../hooks/useEditor';
 import playgroundStyles from '../../Pages/Playground/playground.module.css';
 
 const Shell = () => {
-   const { editorData } = useEditor();
+   const { console } = useEditor();
 
    return (
       <div style={{ color: 'whitesmoke', height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -22,7 +21,7 @@ const Shell = () => {
                overflowY: 'auto',
             }}
          >
-            {editorData.console}
+            {console}
          </div>
       </div>
    );

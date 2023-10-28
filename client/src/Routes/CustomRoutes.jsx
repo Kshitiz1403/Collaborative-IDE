@@ -1,9 +1,11 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import useAuth from '../hooks/useAuth'
 import Loading from '../Components/Loading'
 import ErrorPage from '../Pages/ErrorPage'
 import RequireAuth from './RequireAuth'
+import { useDispatch, useSelector } from 'react-redux'
+import useAuth from '../hooks/useAuth'
+import useFileService from '../hooks/api/fileService'
 
 const HomePage = React.lazy(() => import('../Pages/HomePage'))
 const Join = React.lazy(() => import('../Pages/Join/Join'))
@@ -15,7 +17,15 @@ const Forgot = React.lazy(() => import('../Pages/ForgotPassword'))
 
 
 const CustomRoutes = () => {
-  const { loggingIn, isAuthenticated } = useAuth();
+  const dispatch = useDispatch()
+  const loggingIn = useSelector(state => state['auth']['isLoading'])
+  const isAuthenticated = useSelector(state => state['auth']['isLoggedIn'])
+
+  const { getUser } = useAuth();
+  useEffect(() => {
+    getUser();
+  }, []);
+
 
   return (
     <BrowserRouter>

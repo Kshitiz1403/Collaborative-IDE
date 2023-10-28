@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import useProjectService from '../../api/projectService';
-import Snacker from '../Snacker/Snacker';
+import { useEffect, useState } from 'react';
+import useProjectService from '../../hooks/api/projectService';
 import colors from '../../constants/colors';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -8,26 +7,28 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { BiLink } from 'react-icons/bi';
+import useSnack from '../../hooks/useSnack';
 
 const ShareModal = ({ open, setOpen }) => {
    const [inviteLink, setInviteLink] = useState('');
-   const [invitationAlert, setInvitationAlert] = useState(false);
 
-   const { addOrGetSlug } = useProjectService();
+   const snackService = useSnack();
+   const { addOrGetSlug, slug } = useProjectService();
 
    const copyInviteLink = () => {
-      navigator.clipboard.writeText(inviteLink).then(() => setInvitationAlert(true));
+      navigator.clipboard
+         .writeText(inviteLink)
+         .then(() => snackService.setSuccess({ message: 'Invitation URL copied', timeout: 3000 }));
    };
 
    useEffect(() => {
       let domain = new URL(window.location.href).host;
 
-      if (open) {
-         (async () => {
-            const slug = await addOrGetSlug();
-            setInviteLink(`${domain}/join/${slug}`);
-         })();
-      }
+      setInviteLink(`${domain}/join/${slug}`);
+   }, [slug]);
+
+   useEffect(() => {
+      if (open) addOrGetSlug();
    }, [open]);
 
    const DarkerDisabledTextField = styled(TextField)({
@@ -41,13 +42,6 @@ const ShareModal = ({ open, setOpen }) => {
 
    return (
       <>
-         <Snacker
-            message={'Invitation URL copied'}
-            open={invitationAlert}
-            severity="success"
-            autoHideDuration={3000}
-            onClose={() => setInvitationAlert(false)}
-         />
          <Modal open={open} onClose={() => setOpen(false)}>
             <Box
                sx={{

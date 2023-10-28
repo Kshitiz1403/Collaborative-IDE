@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import AuthProvider from './contexts/AuthContext';
-import ProjectProvider from './contexts/ProjectContext';
-import EditorProvider from './contexts/EditorContext';
 import CustomRoutes from './Routes/CustomRoutes';
-
+import Snacker from './Components/Snacker/Snacker';
+import { useSelector } from 'react-redux';
 
 function App() {
-  return (
-    <div>
-      <AuthProvider>
-        <ProjectProvider>
-          <EditorProvider>
-            <CustomRoutes />
-          </EditorProvider>
-        </ProjectProvider>
-      </AuthProvider>
-    </div>
-  );
+   const snackerState = useSelector(state => state['snack']);
+   return (
+      <>
+         <Snacker
+            message={snackerState['message']}
+            open={snackerState['isOpen']}
+            autoHideDuration={snackerState['timeout']}
+            severity={snackerState['severity']}
+         />
+         <CustomRoutes />
+      </>
+   );
 }
 
 export default App;

@@ -5,21 +5,25 @@ import { Inject, Service } from 'typedi';
 import { Logger } from 'winston';
 import FileService from './fileService';
 import ProjectUtilService from './projectUtilService';
+import ContainerUtilService from './containerUtilService';
 
 @Service()
 export default class ProjectService {
   protected projectRepositoryInstance: ProjectRepository;
   protected fileServiceInstance: FileService;
   protected projectUtilInstance: ProjectUtilService;
+  protected containerUtilInstance: ContainerUtilService
   constructor(
     @Inject('logger') private logger: Logger,
     projectRepository: ProjectRepository,
     projectUtilService: ProjectUtilService,
     fileService: FileService,
+    containerUtilService: ContainerUtilService
   ) {
     this.projectRepositoryInstance = projectRepository;
     this.fileServiceInstance = fileService;
     this.projectUtilInstance = projectUtilService;
+    this.containerUtilInstance = containerUtilService;
   }
 
   public createProject = async (projectInputDTO: IProjectInputDTO): Promise<IProject> => {
@@ -74,8 +78,9 @@ export default class ProjectService {
     try {
       this.logger.silly('Getting project by name for user');
       const projectRecord = await this.projectRepositoryInstance.findProjectByNameForUser(username, name);
+      const defaultFile = this.containerUtilInstance.getDefaultFile(projectRecord.language)
 
-      const project = projectRecord;
+      const project = {...projectRecord, defaultFile};
 
       Reflect.deleteProperty(project, 'slug_expiry');
       Reflect.deleteProperty(project, 'createdAt');
@@ -144,7 +149,8 @@ export default class ProjectService {
       const now = new Date();
       if (slug_expiry < now) throw 'The project link has expired, kindly request the project owner for a new link';
 
-      const project = projectRecord;
+      const defaultFile = this.containerUtilInstance.getDefaultFile(projectRecord.language)
+      const project = {...projectRecord, defaultFile};
       Reflect.deleteProperty(project, 'createdAt');
       Reflect.deleteProperty(project, 'updatedAt');
       Reflect.deleteProperty(project, 'slug_expiry');

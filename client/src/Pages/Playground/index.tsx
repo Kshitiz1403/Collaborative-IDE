@@ -1,29 +1,32 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useLocation } from 'react-router-dom';
-import useFileService from '../../api/fileService';
-import useProjectService from '../../api/projectService';
+import useFileService from '../../hooks/api/fileService';
+import useProjectService from '../../hooks/api/projectService';
 import Navbar from '../../Components/Collaborate/Navbar';
 import Main from '../../Components/FolderTree/Main';
 import Monaco from '../../Components/Monaco/Monaco';
 import colors from '../../constants/colors';
 import useEditor from '../../hooks/useEditor';
-import useSaveFile from '../../hooks/useSaveFile';
 import { joinUtil } from '../../utils/projectUtils';
 import styles from './playground.module.css';
 import Shell from '../../Components/Shell';
+import useFile from '../../hooks/useFile';
+import useInitializePlayground from '../../hooks/runOnce';
 
 const Playground = ({ slug }) => {
+   useInitializePlayground();
+
    const [treeLoading, setTreeLoading] = useState(true);
    const [treeState, setTreeState] = useState([]);
 
    const { getTree } = useFileService();
+   const { handleFileSave } = useFile();
    const { activeProjectName } = useProjectService();
-   const { editorData, resetEditorData } = useEditor();
-   const { handleFileSave, FileSaveAlert } = useSaveFile();
+   const { resetEditor, filePath, fileName, saved } = useEditor();
    const location = useLocation();
    const [navbarHeight, setNavbarHeight] = useState(0);
-   const [parentHeight, setParentHeight] = useState(0);
+   // const [parentHeight, setParentHeight] = useState(0);
    const [mainHeight, setMainHeight] = useState(0);
    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
@@ -49,7 +52,7 @@ const Playground = ({ slug }) => {
    });
 
    useEffect(() => {
-      resetEditorData();
+      resetEditor();
    }, []);
 
    useEffect(() => {
@@ -67,7 +70,7 @@ const Playground = ({ slug }) => {
       };
       document.addEventListener('keydown', ctrlS);
       return () => document.removeEventListener('keydown', ctrlS);
-   }, [editorData]);
+   });
 
    const handleGetTree = async () => {
       const tree = await getTree();
@@ -77,9 +80,8 @@ const Playground = ({ slug }) => {
 
    return (
       <div style={{ backgroundColor: colors.dark }} className={styles.wrapper}>
-         <FileSaveAlert />
          <div className={styles.navbarWrapper} ref={navbarRef}>
-            <Navbar projectName={activeProjectName} />
+            <Navbar />
          </div>
          {treeLoading && <CircularProgress />}
          {!treeLoading && (
@@ -87,16 +89,17 @@ const Playground = ({ slug }) => {
                <div style={{ backgroundColor: colors.light }} className={styles.treeWrapper}>
                   <Main initialTreeState={treeState} />
                </div>
-               {editorData.filePath && (
+               {filePath && (
                   <>
                      <div style={{ flex: 1 }}>
                         <div style={{ backgroundColor: colors.light }} className={styles.selectedFile}>
-                           <abbr title={editorData.filePath} style={{ textDecoration: 'none' }}>
-                              {!editorData.saved ? '● ' : ''}
-                              {editorData.fileName}
+                           <abbr title={filePath} style={{ textDecoration: 'none' }}>
+                              {!saved ? '● ' : ''}
+                              {fileName}
                            </abbr>
                         </div>
-                        <Monaco roomId={slug} key={editorData.filePath} height={window.innerHeight - navbarHeight} />
+                        {/* Adding a key as file path ensures monaco is realoaded every time the filepath changes */}
+                        <Monaco roomId={slug} key={filePath} height={window.innerHeight - navbarHeight} />
                      </div>
                      <div style={{ height: mainHeight - 10 }} className={styles.shellWrapper}>
                         <Shell />

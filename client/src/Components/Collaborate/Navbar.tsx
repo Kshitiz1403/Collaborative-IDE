@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import { AiTwotoneSave } from "react-icons/ai";
+import { AiTwotoneSave } from 'react-icons/ai';
 import { TbUserPlus } from 'react-icons/tb';
 import { BsFillPlayFill } from 'react-icons/bs';
 import ClockLoader from 'react-spinners/ClockLoader';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useNavigate } from 'react-router-dom';
 import colors from '../../constants/colors';
 import ShareModal from './ShareModal';
-import useSaveFile from '../../hooks/useSaveFile';
+import useFileService from '../../hooks/api/fileService';
 import useEditor from '../../hooks/useEditor';
-import useCompileService from '../../api/compileService';
+import useCompileService from '../../hooks/api/compileService';
+import useProjectService from '../../hooks/api/projectService';
+import useFile from '../../hooks/useFile';
 
-const Navbar = ({ projectName: projectName, showInvite = true }) => {
+const Navbar = ({ showInvite = true }) => {
    const [isInviteModalActive, setIsInviteModalActive] = useState(false);
-   const navigate = useNavigate();
-   const { handleFileSave, FileSaveAlert, isSaving } = useSaveFile();
-   const { editorData, setEditorData } = useEditor();
-   const { compileProject, CompileAlert } = useCompileService();
+   const { isSaving } = useFileService();
+   const { handleFileSave } = useFile();
+   const { filePath, setConsole } = useEditor();
+   const { compileProject } = useCompileService();
+   const { activeProjectName } = useProjectService();
 
    const run = async () => {
       const output = await compileProject();
-      setEditorData(prev => {
-         return { ...prev, console: output };
-      });
+      setConsole(output);
    };
 
    return (
@@ -44,13 +44,13 @@ const Navbar = ({ projectName: projectName, showInvite = true }) => {
                paddingTop: 5,
             }}
          >
-            <div style={{ fontWeight: 'bold', marginLeft: 10 }}>{projectName}</div>
+            <div style={{ fontWeight: 'bold', marginLeft: 10 }}>{activeProjectName}</div>
             <div style={{ width: '100%', position: 'fixed', textAlign: 'center' }}>
                <Button
-                  onClick={editorData.filePath ? run : () => {}}
+                  onClick={filePath ? run : () => {}}
                   variant="contained"
                   size="large"
-                  disabled={!editorData.filePath}
+                  disabled={!filePath}
                   sx={{
                      borderRadius: 2,
                      backgroundColor: '#044A10',
@@ -69,7 +69,7 @@ const Navbar = ({ projectName: projectName, showInvite = true }) => {
                      },
                   }}
                >
-                  {!editorData.filePath ? (
+                  {!filePath ? (
                      <>
                         <CircularProgress size={12} style={{ color: 'whitesmoke', marginRight: 4 }} />
                         <div style={{ marginLeft: 4 }}>Working</div>
@@ -102,8 +102,6 @@ const Navbar = ({ projectName: projectName, showInvite = true }) => {
                      Invite
                   </Button>
                )}
-               <FileSaveAlert />
-               <CompileAlert />
             </div>
          </div>
       </>

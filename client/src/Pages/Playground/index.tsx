@@ -73,8 +73,8 @@ const Playground = ({ slug }) => {
    });
 
    const handleGetTree = async () => {
-      const tree = await getTree();
-      setTreeState([tree]);
+      const tree = [await getTree()] || [];
+      setTreeState(tree);
       setTreeLoading(false);
    };
 
@@ -86,7 +86,7 @@ const Playground = ({ slug }) => {
          {treeLoading && <CircularProgress />}
          {!treeLoading && (
             <div style={{ display: 'flex', height: mainHeight }}>
-               <div style={{ backgroundColor: colors.light }} className={styles.treeWrapper}>
+               <div style={{ backgroundColor: colors.light, flex: 0.3 }} className={styles.treeWrapper}>
                   <Main initialTreeState={treeState} />
                </div>
                {filePath && (
@@ -101,7 +101,7 @@ const Playground = ({ slug }) => {
                         {/* Adding a key as file path ensures monaco is realoaded every time the filepath changes */}
                         <Monaco roomId={slug} key={filePath} height={window.innerHeight - navbarHeight} />
                      </div>
-                     <div style={{ height: mainHeight - 10 }} className={styles.shellWrapper}>
+                     <div style={{ height: mainHeight - 10, flex: 0.2 }} className={styles.shellWrapper}>
                         <Shell />
                      </div>
                   </>

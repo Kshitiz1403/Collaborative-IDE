@@ -11,6 +11,21 @@ const isProjectAuth = async (req: IProjectRequest, res: Response, next: NextFunc
     const slug: string = req.body['slug'] || req.query['slug'];
     const projectRepositoryInstance = Container.get(ProjectRepository);
 
+    const tokenFromHeader = getTokenFromHeader(req);
+    if (tokenFromHeader) {
+      const user = checkToken(tokenFromHeader);
+      req.username = user.username;
+
+      const projectName = req.query.project as string;
+      if (!projectName) throw 'Project name not provided';
+
+      logger.silly(`Authorizing request for user ${user.username}`);
+      const project = await projectRepositoryInstance.findProjectByNameForUser(user.username, projectName);
+      req.project = project;
+
+      return next();
+    }
+
     if (slug) {
       const project = await projectRepositoryInstance.findProjectBySlug(slug);
       const { username, slug_expiry, name } = project;
@@ -20,21 +35,6 @@ const isProjectAuth = async (req: IProjectRequest, res: Response, next: NextFunc
 
       req.username = username;
       req.project = project;
-      return next();
-    }
-
-    const tokenFromHeader = getTokenFromHeader(req);
-    if (tokenFromHeader) {
-      const user = checkToken(tokenFromHeader);
-      req.username = user.username;
-
-      const projectName = req.query.project as string;
-      if (!projectName) throw 'Project name not provided';
-      
-      logger.silly(`Authorizing request for user ${user.username}`);
-      const project = await projectRepositoryInstance.findProjectByNameForUser(user.username, projectName);
-      req.project = project;
-
       return next();
     }
 

@@ -1,4 +1,4 @@
-import React, { useReducer, useLayoutEffect } from 'react';
+import { useReducer, useLayoutEffect } from 'react';
 import { v4 } from 'uuid';
 import { ThemeProvider } from 'styled-components';
 
@@ -10,7 +10,7 @@ import { Folder } from './Folder/TreeFolder';
 import { File } from './File/TreeFile';
 
 
-const Tree= ({ children, data, onNodeClick, onUpdate }) => {
+const Tree = ({ children, data, onNodeClick, onUpdate }) => {
     const [state, dispatch] = useReducer(reducer, data);
 
     useLayoutEffect(() => {

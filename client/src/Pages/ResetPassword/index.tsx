@@ -1,31 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import colors from '../../constants/colors';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Snacker from '../../Components/Snacker/Snacker';
 import Box from '@mui/material/Box';
-import { ISnacker } from '../../interfaces/ISnacker';
 import { useNavigate, useParams } from 'react-router-dom';
-import { checkResetToken, reset } from '../../api/authService';
 import Loading from '../../Components/Loading';
+import useAuthService from '../../hooks/api/authService';
 
 const Reset = () => {
-   const onCloseSnacker = () => {
-      setSnackerData(prev => {
-         return { ...prev, open: false };
-      });
-   };
+   const authService = useAuthService();
 
    const [password, setPassword] = useState('');
    const [loading, setLoading] = useState(true);
    const [token, setToken] = useState('');
-
-   const [snackerData, setSnackerData] = useState<ISnacker>({
-      open: false,
-      onClose: onCloseSnacker,
-      message: '',
-      severity: 'error',
-   });
 
    const params = useParams();
    const navigate = useNavigate();
@@ -35,7 +22,7 @@ const Reset = () => {
       setToken(resetToken);
       (async () => {
          try {
-            await checkResetToken(resetToken);
+            await authService.checkResetToken(resetToken);
             setLoading(false);
          } catch (err) {
             navigate('/404', { state: { error: err } });
@@ -44,34 +31,10 @@ const Reset = () => {
    }, [params]);
 
    const resetPassword = async () => {
-      try {
-         await reset(token, password);
-         setSnackerData(prev => {
-            return {
-               ...prev,
-               open: true,
-               message: 'Password has been reset, please login in again with your new password',
-               severity: 'success',
-               onClose: () => navigate('/auth'),
-            };
-         });
-      } catch (err) {
-         setSnackerData(prev => {
-            return {
-               ...prev,
-               open: true,
-               message: err,
-               severity: 'error',
-               onClose: onCloseSnacker,
-            };
-         });
-      }
+      authService.resetPassword(token, password);
    };
 
-   if (loading)
-      return (
-         <Loading/>
-      );
+   if (loading) return <Loading />;
    return (
       <div
          style={{
@@ -84,12 +47,6 @@ const Reset = () => {
             color: 'whitesmoke',
          }}
       >
-         <Snacker
-            message={snackerData.message}
-            onClose={snackerData.onClose}
-            open={snackerData.open}
-            severity={snackerData.severity}
-         />
          <form
             id="send-reset"
             onSubmit={e => {

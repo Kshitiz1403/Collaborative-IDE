@@ -1,50 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import colors from '../../constants/colors';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import validator from 'validator';
-import Snacker from '../../Components/Snacker/Snacker';
 import Box from '@mui/material/Box';
-import { ISnacker } from '../../interfaces/ISnacker';
-import { forgot } from '../../api/authService';
+import useAuthService from '../../hooks/api/authService';
 
 const Forgot = () => {
-   const onCloseSnacker = () => {
-      setSnackerData(prev => {
-         return { ...prev, open: false };
-      });
-   };
+   const authService = useAuthService();
 
    const [email, setEmail] = useState('');
-   const [snackerData, setSnackerData] = useState<ISnacker>({
-      open: false,
-      onClose: onCloseSnacker,
-      message: '',
-      severity: 'error',
-   });
 
    const sendResetEmail = async () => {
-      if (!validator.isEmail(email)) {
-         setSnackerData(prev => {
-            return {
-               ...prev,
-               open: true,
-               message: 'Please enter valid email',
-               severity: 'error',
-            };
-         });
-         return;
-      }
-      try {
-         const result = await forgot(email);
-         setSnackerData(prev => {
-            return { ...prev, open: true, message: result, severity: 'success' };
-         });
-      } catch (err) {
-         setSnackerData(prev => {
-            return { ...prev, open: true, message: err, severity: 'error' };
-         });
-      }
+      authService.forgot(email);
    };
 
    return (
@@ -59,12 +26,6 @@ const Forgot = () => {
             color: 'whitesmoke',
          }}
       >
-         <Snacker
-            message={snackerData.message}
-            onClose={snackerData.onClose}
-            open={snackerData.open}
-            severity={snackerData.severity}
-         />
          <form
             id="send-reset"
             onSubmit={e => {

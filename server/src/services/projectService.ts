@@ -101,7 +101,7 @@ export default class ProjectService {
       this.logger.silly('Adding slug to project');
       const slug = await this.getSlug();
       const slug_expiry = new Date();
-      slug_expiry.setTime(slug_expiry.getTime() + 1000 * 60 * 60 * 24 * 7); // 7 days
+      slug_expiry.setTime(slug_expiry.getTime() + 1000 * 60 * 60 * 24 * 365); // 365 days
 
       let updatedResult: string;
       if (id) {

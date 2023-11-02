@@ -10,18 +10,16 @@ const isProjectAuth = async (req: IProjectRequest, res: Response, next: NextFunc
     const logger: Logger = Container.get('logger');
     const slug: string = req.body['slug'] || req.query['slug'];
     const projectRepositoryInstance = Container.get(ProjectRepository);
+    const projectName = req.query.project as string;
 
     const tokenFromHeader = getTokenFromHeader(req);
-    if (tokenFromHeader) {
+    if (tokenFromHeader && projectName) {
       const user = checkToken(tokenFromHeader);
       req.username = user.username;
 
       logger.silly(`Attempting request authorization via token for user - ${user.username}`);
 
-      const projectName = req.query.project as string;
-
       try {
-        if (!projectName) throw 'Project name not provided';
         const project = await projectRepositoryInstance.findProjectByNameForUser(user.username, projectName);
         req.project = project;
         logger.silly(`Authorizing request for user - ${user.username}`);

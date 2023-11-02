@@ -66,6 +66,7 @@ const Monaco = ({ roomId, height, loadingComponent = <CircularProgress /> }) => 
          height={height}
          onMount={handleEditorMount}
          defaultLanguage={language == 'nodejs' ? 'javascript' : language == 'python' ? 'python' : languageMap[language]}
+         language={language == 'nodejs' ? 'javascript' : language == 'python' ? 'python' : languageMap[language]}
          theme="customTheme"
          loading={loadingComponent}
          beforeMount={handleWillMount}

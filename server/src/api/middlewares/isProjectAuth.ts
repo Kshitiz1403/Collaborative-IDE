@@ -16,6 +16,8 @@ const isProjectAuth = async (req: IProjectRequest, res: Response, next: NextFunc
       const user = checkToken(tokenFromHeader);
       req.username = user.username;
 
+      logger.silly(`Attempting request authorization via token for user - ${user.username}`);
+
       const projectName = req.query.project as string;
 
       try {

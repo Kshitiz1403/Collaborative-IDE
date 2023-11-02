@@ -17,16 +17,18 @@ const isProjectAuth = async (req: IProjectRequest, res: Response, next: NextFunc
       req.username = user.username;
 
       const projectName = req.query.project as string;
-      if (!projectName) throw 'Project name not provided';
 
-      logger.silly(`Authorizing request for user ${user.username}`);
-      const project = await projectRepositoryInstance.findProjectByNameForUser(user.username, projectName);
-      req.project = project;
-
-      return next();
+      try {
+        if (!projectName) throw 'Project name not provided';
+        const project = await projectRepositoryInstance.findProjectByNameForUser(user.username, projectName);
+        req.project = project;
+        logger.silly(`Authorizing request for user - ${user.username}`);
+        return next();
+      } catch (error) {}
     }
 
     if (slug) {
+      logger.silly(`Attempting request authorization via slug for slug - ${slug}`);
       const project = await projectRepositoryInstance.findProjectBySlug(slug);
       const { username, slug_expiry, name } = project;
       const now = new Date();

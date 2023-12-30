@@ -53,7 +53,7 @@ export default class AuthService {
       const refreshTokenRecord = await this.generateRefreshToken(userRecord);
 
       this.logger.silly('Sending welcome email');
-      this.mailServiceInstance.sendWelcomeEmail(userRecord.email, userRecord.name);
+      // this.mailServiceInstance.sendWelcomeEmail(userRecord.email, userRecord.name);
 
       /**
        * @TODO This is not the best way to deal with this

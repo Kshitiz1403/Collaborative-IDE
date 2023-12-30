@@ -1,12 +1,4 @@
-import dotenv from 'dotenv';
 import { Region } from 'oci-common';
-
-const envFound = dotenv.config();
-if (envFound.error) {
-  // This error should crash whole process
-
-  throw new Error("⚠️  Couldn't find .env file  ⚠️");
-}
 
 export default {
   node_env: process.env.NODE_ENV || 'development',
@@ -23,10 +15,10 @@ export default {
 
   databaseName: process.env.DB_NAME,
 
-  /**
-   * That long string from mlab
-   */
-  databaseURL: process.env.MONGODB_URI,
+  cache: {
+    host: process.env.REDIS_HOST,
+    port: +process.env.REDIS_PORT,
+  },
 
   /**
    * Your secret sauce
@@ -66,5 +58,5 @@ export default {
     host: process.env.ORACLE_EMAIL_HOST,
   },
 
-  dockerImage: process.env.DOCKER_IMAGE
+  dockerImage: process.env.DOCKER_IMAGE,
 };

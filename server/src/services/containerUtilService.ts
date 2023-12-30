@@ -3,22 +3,23 @@ import { Service } from 'typedi';
 
 @Service()
 export default class ContainerUtilService {
-  public getDefaultFile = (language:IProject["language"]) =>{
-    switch (language){
+  public getDefaultFile = (language: IProject['language']) => {
+    switch (language) {
       case 'c++':
-        return "main.cpp"
+        return 'main.cpp';
       case 'java':
-        return "Main.java"
-      case "python":
-        return "main.py"
-      case "nodejs":
-        return "index.js"
+        return 'Main.java';
+      case 'python':
+        return 'main.py';
+      case 'nodejs':
+        return 'index.js';
       default:
-        return null
+        return null;
     }
-  }
-  public getLanguageCompile = (language:IProject["language"]) => {
-    const defaultFile = this.getDefaultFile(language)
+  };
+  public getLanguageCompile = (language: IProject['language']) => {
+    const defaultFile = this.getDefaultFile(language);
+    console.log(defaultFile);
     switch (language) {
       case 'c++':
         return `g++ ${defaultFile} -o main && ./main && rm main`;

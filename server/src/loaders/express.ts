@@ -24,7 +24,7 @@ export default ({ app }: { app: express.Application }) => {
   // The magic package that prevents frontend developers going nuts
   // Alternate description:
   // Enable Cross Origin Resource Sharing to all origins by default
-
+  app.use(cors());
   // Some sauce that always add since 2014
   // "Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it."
   // Maybe not needed anymore ?
@@ -34,12 +34,6 @@ export default ({ app }: { app: express.Application }) => {
   app.use(express.json());
   // Load API routes
   app.use(config.api.prefix, routes());
-
-  // Serve front-end
-  const clientBuildFolder = path.join(__dirname, '..', '..', '..', 'client', 'build');
-  app.use(express.static(clientBuildFolder));
-
-  app.get('*', (req, res) => res.sendFile(path.resolve(clientBuildFolder, 'index.html')));
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {

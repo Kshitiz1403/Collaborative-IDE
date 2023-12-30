@@ -10,6 +10,22 @@ const isProjectAuth = async (req: IProjectRequest, res: Response, next: NextFunc
     const logger: Logger = Container.get('logger');
     const slug: string = req.body['slug'] || req.query['slug'];
     const projectRepositoryInstance = Container.get(ProjectRepository);
+    const projectName = req.query.project as string;
+
+    const tokenFromHeader = getTokenFromHeader(req);
+    if (tokenFromHeader && projectName) {
+      const user = checkToken(tokenFromHeader);
+      req.username = user.username;
+
+      logger.silly(`Attempting request authorization via token for user - ${user.username}`);
+
+      try {
+        const project = await projectRepositoryInstance.findProjectByNameForUser(user.username, projectName);
+        req.project = project;
+        logger.silly(`Authorizing request for user - ${user.username}`);
+        return next();
+      } catch (error) {}
+    }
 
     const tokenFromHeader = getTokenFromHeader(req);
     if (tokenFromHeader) {
@@ -27,6 +43,7 @@ const isProjectAuth = async (req: IProjectRequest, res: Response, next: NextFunc
     }
 
     if (slug) {
+      logger.silly(`Attempting request authorization via slug for slug - ${slug}`);
       const project = await projectRepositoryInstance.findProjectBySlug(slug);
       const { username, slug_expiry, name } = project;
       const now = new Date();

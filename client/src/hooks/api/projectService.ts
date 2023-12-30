@@ -51,7 +51,6 @@ const useProjectService = () => {
    };
 
    const initializeProject = (data: IProjectGet) => {
-      console.log(data);
       dispatch(setProject(data));
 
       dispatch(setSlugValid());

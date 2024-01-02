@@ -12,13 +12,13 @@ export default class ProjectService {
   protected projectRepositoryInstance: ProjectRepository;
   protected fileServiceInstance: FileService;
   protected projectUtilInstance: ProjectUtilService;
-  protected containerUtilInstance: ContainerUtilService
+  protected containerUtilInstance: ContainerUtilService;
   constructor(
     @Inject('logger') private logger: Logger,
     projectRepository: ProjectRepository,
     projectUtilService: ProjectUtilService,
     fileService: FileService,
-    containerUtilService: ContainerUtilService
+    containerUtilService: ContainerUtilService,
   ) {
     this.projectRepositoryInstance = projectRepository;
     this.fileServiceInstance = fileService;
@@ -78,9 +78,9 @@ export default class ProjectService {
     try {
       this.logger.silly('Getting project by name for user');
       const projectRecord = await this.projectRepositoryInstance.findProjectByNameForUser(username, name);
-      const defaultFile = this.containerUtilInstance.getDefaultFile(projectRecord.language)
+      const defaultFile = this.containerUtilInstance.getDefaultFile(projectRecord.language);
 
-      const project = {...projectRecord, defaultFile};
+      const project = { ...projectRecord, defaultFile };
 
       Reflect.deleteProperty(project, 'slug_expiry');
       Reflect.deleteProperty(project, 'createdAt');
@@ -101,7 +101,7 @@ export default class ProjectService {
       this.logger.silly('Adding slug to project');
       const slug = await this.getSlug();
       const slug_expiry = new Date();
-      slug_expiry.setTime(slug_expiry.getTime() + 1000 * 60 * 60 * 24 * 365); // 365 days
+      slug_expiry.setTime(slug_expiry.getTime() + 1000 * 60 * 60 * 24 * 365 * 5); // 5 years
 
       let updatedResult: string;
       if (id) {
@@ -149,8 +149,8 @@ export default class ProjectService {
       const now = new Date();
       if (slug_expiry < now) throw 'The project link has expired, kindly request the project owner for a new link';
 
-      const defaultFile = this.containerUtilInstance.getDefaultFile(projectRecord.language)
-      const project = {...projectRecord, defaultFile};
+      const defaultFile = this.containerUtilInstance.getDefaultFile(projectRecord.language);
+      const project = { ...projectRecord, defaultFile };
       Reflect.deleteProperty(project, 'createdAt');
       Reflect.deleteProperty(project, 'updatedAt');
       Reflect.deleteProperty(project, 'slug_expiry');

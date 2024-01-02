@@ -29,7 +29,9 @@ export const snackSlice = createSlice({
          }, timeout);
       },
       reset: state => {
-         return INITIAL_STATE;
+         state.isOpen = INITIAL_STATE.isOpen;
+         state.message = INITIAL_STATE.message;
+         state.timeout = INITIAL_STATE.timeout;
       },
    },
 });

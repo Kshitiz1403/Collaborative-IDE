@@ -27,7 +27,6 @@ const isProjectAuth = async (req: IProjectRequest, res: Response, next: NextFunc
       } catch (error) {}
     }
 
-    const tokenFromHeader = getTokenFromHeader(req);
     if (tokenFromHeader) {
       const user = checkToken(tokenFromHeader);
       req.username = user.username;

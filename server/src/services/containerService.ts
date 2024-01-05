@@ -37,7 +37,7 @@ export class ContainerService {
         const result = await this.executeInContainer(username, projectName, command);
         return result;
       } finally {
-        this.stopAndDeleteContainer(username, projectName);
+        // this.stopAndDeleteContainer(username, projectName);
         this.projectRepositoryInstance.updateLastUpdated(username, projectName);
       }
     } catch (err) {
@@ -51,9 +51,7 @@ export class ContainerService {
         Image: config.dockerImage,
         WorkingDir: `/${username}/${projectName}`,
         HostConfig: {
-          Binds: [
-            `${path.join(__dirname, '..', '..', '..', 'projects', username, projectName)}:/${username}/${projectName}`,
-          ],
+          Binds: [`/projects/${username}/${projectName}:/${username}/${projectName}`],
           Memory: 2e8,
           CpuQuota: 100 * 1000, // 100%
         },

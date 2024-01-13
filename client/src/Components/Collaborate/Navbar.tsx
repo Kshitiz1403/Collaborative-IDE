@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { AiTwotoneSave } from 'react-icons/ai';
@@ -21,11 +21,22 @@ const Navbar = ({ showInvite = true }) => {
    const { filePath, setConsole } = useEditor();
    const { compileProject } = useCompileService();
    const { activeProjectName } = useProjectService();
+   const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 
    const run = async () => {
+      if (!filePath) return;
       const output = await compileProject();
       setConsole(output);
    };
+
+   const handleKeyComboPress = (event: KeyboardEvent) => {
+      const commandKey = isMac ? event.metaKey : event.ctrlKey;
+      if (commandKey && event.key == 'Enter') run();
+   };
+   useEffect(() => {
+      document.addEventListener('keydown', handleKeyComboPress);
+      return () => document.removeEventListener('keydown', handleKeyComboPress);
+   }, [filePath]);
 
    return (
       <>
@@ -47,7 +58,7 @@ const Navbar = ({ showInvite = true }) => {
             <div style={{ fontWeight: 'bold', marginLeft: 10 }}>{activeProjectName}</div>
             <div style={{ width: '100%', position: 'fixed', textAlign: 'center' }}>
                <Button
-                  onClick={filePath ? run : () => {}}
+                  onClick={run}
                   variant="contained"
                   size="large"
                   disabled={!filePath}

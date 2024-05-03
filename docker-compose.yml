@@ -1,0 +1,14 @@
+version: '3'
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+  signalling-server:
+    build:
+      context: ./signalling-server
+      dockerfile: Dockerfile
+    ports:
+      - 4444:4444

@@ -10,7 +10,7 @@ interface config {
 }
 
 const config = {
-    baseURL: '/api',
+    baseURL: 'https://ide.kshitizagrawal.in/api',
     headers: {
         'Content-Type': 'application/json',
     },

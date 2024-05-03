@@ -4,4 +4,5 @@ WORKDIR /
 
 COPY . .
 
-RUN yarn install && yarn start
+RUN yarn install 
+ENTRYPOINT [ "yarn","start" ]

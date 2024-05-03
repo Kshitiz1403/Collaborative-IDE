@@ -4,4 +4,5 @@ WORKDIR /
 
 COPY . .
 
-RUN npm i && node index.js
+RUN npm i 
+ENTRYPOINT [ "node", "index.js" ]

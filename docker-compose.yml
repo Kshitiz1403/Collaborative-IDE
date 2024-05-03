@@ -8,7 +8,7 @@ services:
       - 3000:3000
   signalling-server:
     build:
-      context: ./signalling-server
+      context: ./signalling
       dockerfile: Dockerfile
     ports:
       - 4444:4444

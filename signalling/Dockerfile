@@ -4,4 +4,4 @@ WORKDIR /
 
 COPY . .
 
-RUN node index.js
+RUN npm i && node index.js
